@@ -67,6 +67,24 @@ export async function getSystemSender() {
   });
 }
 
+/**
+ * "MobileMoney" sender — all withdrawal messages arrive here, mirroring the
+ * familiar MoMo SMS experience. Auto-created; admin can restyle it.
+ */
+async function getMobileMoneySender() {
+  const existing = await prisma.messageSender.findFirst({ where: { name: 'MobileMoney' } });
+  if (existing) return existing;
+  return prisma.messageSender.create({
+    data: { name: 'MobileMoney', avatarType: 'HUMAN', allowReplies: false },
+  });
+}
+
+/** Pick the conversation sender for a notification kind. */
+async function senderForKind(kind: TemplateKind) {
+  if (kind.startsWith('withdrawal_')) return getMobileMoneySender();
+  return getSystemSender();
+}
+
 export async function getTemplates(): Promise<Record<TemplateKind, Template>> {
   const row = await prisma.setting.findUnique({ where: { key: 'messages_templates' } });
   const overrides = (row?.value ?? {}) as Partial<Record<TemplateKind, Template>>;
@@ -217,7 +235,7 @@ export async function notifyUser(userId: string, opts: NotifyOptions) {
   // 1-3. In-app message + push — only for users with active Messages access.
   const account = await prisma.messagesAccount.findUnique({ where: { userId } });
   if (account && !account.suspended) {
-    const sysSender = await getSystemSender();
+    const sysSender = await senderForKind(opts.kind);
     const conversation = await prisma.conversation.upsert({
       where: { userId_name: { userId, name: sysSender.name } },
       update: { updatedAt: new Date(), senderId: sysSender.id },
@@ -225,7 +243,7 @@ export async function notifyUser(userId: string, opts: NotifyOptions) {
     });
 
     const push = await pushToUser(userId, {
-      title: `CediX Trading`,
+      title: sysSender.name,
       body: `${title} — ${body.split('\n')[0]}`,
       url: '/messages',
     });

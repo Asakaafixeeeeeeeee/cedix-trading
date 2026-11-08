@@ -28,8 +28,9 @@ export async function POST(req: Request) {
     const fiatMethod = ['MOMO', 'CARD', 'BANK'].includes(method) ? method : 'MOMO';
 
     const fx = await getFx();
-    const assetPrice = await getBaseAssetPrice(asset);
-    if (!assetPrice) throw new Error('Unsupported asset');
+    // GHS = fiat wallet deposit (1 GHS); crypto priced live
+    const assetPrice = asset === 'GHS' ? 1 / fx.rate : await getBaseAssetPrice(asset);
+    if (!assetPrice) throw new Error('Live price unavailable for this asset — please try again in a moment');
     const amountUSD = amt / fx.rate;
     const amountAsset = amountUSD / assetPrice;
 

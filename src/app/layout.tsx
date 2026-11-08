@@ -19,6 +19,10 @@ export const metadata: Metadata = {
   title: { default: "CediX — Crypto Trading for Ghana", template: "%s | CediX" },
   description:
     "Trade crypto with Ghanaian Cedis. Spot trading, P2P, instant MoMo deposits & fiat withdrawals via Payteller, staking, savings and the Orbit community.",
+  icons: {
+    icon: "/icon.png",
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

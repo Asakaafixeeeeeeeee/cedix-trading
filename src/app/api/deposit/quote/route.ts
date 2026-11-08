@@ -9,8 +9,9 @@ export async function GET(req: Request) {
     const asset = url.searchParams.get('asset') ?? 'USDT';
     const amountGHS = parseFloat(url.searchParams.get('amountGHS') ?? '0');
     const fx = await getFx();
-    const assetPrice = await getBaseAssetPrice(asset);
-    if (!assetPrice) throw new Error('Unsupported asset');
+    // GHS = fiat wallet deposit (1 GHS); crypto priced live
+    const assetPrice = asset === 'GHS' ? 1 / fx.rate : await getBaseAssetPrice(asset);
+    if (!assetPrice) throw new Error('Live price unavailable for this asset — please try again in a moment');
     const amountUSD = amountGHS / fx.rate;
     const amountAsset = amountUSD / assetPrice;
     return {
