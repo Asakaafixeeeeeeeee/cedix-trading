@@ -89,13 +89,13 @@ export default function MessagesThread({ id }: { id: string }) {
   return (
     <div className="flex min-h-dvh flex-col bg-[#f7f7f8]" style={{ animation: 'msg-slide-in .22s ease-out' }}>
       <style>{'@keyframes msg-slide-in{from{opacity:.4;transform:translateX(24px)}to{opacity:1;transform:translateX(0)}}'}</style>
-      {/* Header — blurred, rounded back pill + large avatar + name pill (screenshots 2-3) */}
-      <header className="sticky top-0 z-10 bg-[#f7f7f8]/85 px-3 pb-1.5 pt-[calc(8px+env(safe-area-inset-top))] backdrop-blur-xl">
-        <div className="relative flex flex-col items-center">
+      {/* Header — floating glass controls over the scrolling conversation */}
+      <header className="pointer-events-none sticky top-0 z-10 px-3 pb-1.5 pt-[calc(8px+env(safe-area-inset-top))]">
+        <div className="pointer-events-auto relative flex flex-col items-center">
           <Link
             href="/messages"
             aria-label="Back to messages"
-            className={`absolute left-0 top-1 flex items-center gap-2 rounded-full border border-[#ffffff]/70 bg-[#ffffff]/65 py-[7px] pl-3 shadow-[0_2px_12px_rgba(0,0,0,0.10)] backdrop-blur-xl ${otherUnread > 0 ? 'pr-[7px]' : 'pr-3'}`}
+            className={`msg-glass absolute left-0 top-1 flex items-center gap-2 rounded-full py-[8px] pl-3 ${otherUnread > 0 ? 'pr-[8px]' : 'pr-3'}`}
           >
             <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
               <path d="M15 4.5L7.5 12l7.5 7.5" />
@@ -107,7 +107,7 @@ export default function MessagesThread({ id }: { id: string }) {
             )}
           </Link>
           <ConversationAvatar sender={thread?.sender ?? null} size={62} />
-          <span className="-mt-2 flex items-center gap-0.5 rounded-full bg-[#ffffff]/95 px-3 py-1 shadow-[0_1px_4px_rgba(0,0,0,0.1)]">
+          <span className="msg-glass-soft -mt-2 flex items-center gap-0.5 rounded-full px-3 py-1">
             <span className="max-w-[180px] truncate text-[13px] font-semibold text-[#111]">{thread?.name ?? ''}</span>
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" strokeWidth="3" strokeLinecap="round">
               <path d="M9 6l6 6-6 6" />
@@ -141,21 +141,21 @@ export default function MessagesThread({ id }: { id: string }) {
         <div ref={bottomRef} />
       </main>
 
-      {/* Composer (admin-enabled senders) or matching read-only SMS bar */}
-      <footer className="sticky bottom-0 bg-[#f7f7f8]/85 px-3 pb-[calc(10px+env(safe-area-inset-bottom))] pt-2 backdrop-blur-xl">
+      {/* Composer (admin-enabled senders) or matching read-only SMS bar — glass */}
+      <footer className="pointer-events-none sticky bottom-0 px-3 pb-[calc(12px+env(safe-area-inset-bottom))] pt-2">
         {canReply ? (
-          <form onSubmit={sendReply} className="flex items-center gap-2">
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#d9d9de] bg-[#ffffff]">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5b5b60" strokeWidth="2.5" strokeLinecap="round">
+          <form onSubmit={sendReply} className="pointer-events-auto flex items-center gap-2">
+            <span className="msg-glass flex h-10 w-10 shrink-0 items-center justify-center rounded-full">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round">
                 <path d="M12 5v14M5 12h14" />
               </svg>
             </span>
-            <div className="flex flex-1 items-center rounded-full border border-[#d9d9de] bg-[#ffffff] py-1.5 pl-4 pr-1.5">
+            <div className="msg-glass flex flex-1 items-center rounded-full py-2 pl-4 pr-1.5">
               <input
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}
                 placeholder="Text Message"
-                className="w-full bg-transparent text-[14px] text-[#111] outline-none placeholder:text-[#b8b8bd]"
+                className="w-full bg-transparent text-[14px] text-[#111] outline-none placeholder:text-[#8e8e93]"
               />
               <button
                 type="submit"
@@ -171,15 +171,15 @@ export default function MessagesThread({ id }: { id: string }) {
           </form>
         ) : (
           /* Visual match of the iOS SMS bar — intentionally non-interactive */
-          <div className="flex items-center gap-2" aria-disabled title={`${thread?.name ?? 'These'} notifications are read-only`}>
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#d9d9de] bg-[#ffffff]">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" strokeWidth="2.5" strokeLinecap="round">
+          <div className="pointer-events-auto flex items-center gap-2" aria-disabled title={`${thread?.name ?? 'These'} notifications are read-only`}>
+            <span className="msg-glass flex h-10 w-10 shrink-0 items-center justify-center rounded-full">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round">
                 <path d="M12 5v14M5 12h14" />
               </svg>
             </span>
-            <div className="flex flex-1 items-center justify-between rounded-full border border-[#d9d9de] bg-[#ffffff] py-2 pl-4 pr-3.5">
-              <span className="text-[14px] text-[#b8b8bd]">Text Message · SMS</span>
-              <svg width="15" height="13" viewBox="0 0 22 16" fill="#b8b8bd" className="shrink-0">
+            <div className="msg-glass flex flex-1 items-center justify-between rounded-full py-[10px] pl-4 pr-3.5">
+              <span className="text-[14px] text-[#8e8e93]">Text Message · SMS</span>
+              <svg width="15" height="13" viewBox="0 0 22 16" fill="#8e8e93" className="shrink-0">
                 <rect x="0" y="5" width="2.4" height="6" rx="1.2" />
                 <rect x="4.8" y="2" width="2.4" height="12" rx="1.2" />
                 <rect x="9.6" y="0" width="2.4" height="16" rx="1.2" />

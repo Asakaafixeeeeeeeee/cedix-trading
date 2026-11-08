@@ -49,7 +49,10 @@ export async function POST(req: Request) {
       },
     });
 
-    const origin = new URL(req.url).origin;
+    // Public origin (Render terminates TLS at the proxy, so req.url can carry
+    // the wrong protocol/port — Payteller requires a clean public HTTPS URL).
+    const rawHost = (req.headers.get('x-forwarded-host') ?? req.headers.get('host') ?? '').split(',')[0].trim().replace(/:\d+$/, '');
+    const isLocal = !rawHost || rawHost === 'localhost' || rawHost.startsWith('127.') || rawHost.startsWith('192.168.');
     const payment = await createPayment({
       reference: intent.id,
       amountGHS: amt,
@@ -57,7 +60,7 @@ export async function POST(req: Request) {
       description: `CediX deposit - ${amountAsset.toFixed(8)} ${asset}`,
       // Customer returns here after checkout records an outcome. Returning is
       // NEVER proof of payment — the page only polls our verified status.
-      returnUrl: `${origin}/m/deposit/status/${intent.id}`,
+      returnUrl: isLocal ? undefined : `https://${rawHost}/m/deposit/status/${intent.id}`,
     });
 
     await prisma.depositIntent.update({

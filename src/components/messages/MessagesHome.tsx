@@ -188,11 +188,11 @@ export default function MessagesHome() {
         )}
       </main>
 
-      {/* Bottom search bar + compose (iOS style) */}
-      <div className="fixed inset-x-0 bottom-0 z-10 mx-auto w-full max-w-md bg-[#ffffff]/95 px-4 pb-[calc(10px+env(safe-area-inset-bottom))] pt-2 backdrop-blur">
-        <div className="flex items-center gap-2.5">
-          <div className="flex flex-1 items-center gap-2 rounded-full bg-[#eeeef0] px-3.5 py-[7px]">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" strokeWidth="2" strokeLinecap="round">
+      {/* Bottom search bar + compose — floating Liquid Glass (content scrolls beneath) */}
+      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-10 mx-auto w-full max-w-md px-4 pb-[calc(12px+env(safe-area-inset-bottom))] pt-2">
+        <div className="pointer-events-auto flex items-center gap-2.5">
+          <div className="msg-glass flex flex-1 items-center gap-2 rounded-full px-4 py-[9px]">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.2" strokeLinecap="round">
               <circle cx="11" cy="11" r="7" />
               <path d="M21 21l-4.3-4.3" />
             </svg>
@@ -200,10 +200,10 @@ export default function MessagesHome() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search"
-              className="w-full bg-transparent text-[14px] outline-none placeholder:text-[#8e8e93]"
+              className="w-full bg-transparent text-[14px] text-[#111] outline-none placeholder:text-[#8e8e93]"
             />
             {/* Microphone (visual, per iOS reference) */}
-            <svg width="13" height="16" viewBox="0 0 24 28" fill="none" stroke="#8e8e93" strokeWidth="2" strokeLinecap="round" className="shrink-0">
+            <svg width="13" height="16" viewBox="0 0 24 28" fill="none" stroke="#111" strokeWidth="2" strokeLinecap="round" className="shrink-0">
               <rect x="9" y="2" width="6" height="13" rx="3" />
               <path d="M5 13a7 7 0 0014 0M12 20v5M8.5 25h7" />
             </svg>
@@ -212,9 +212,9 @@ export default function MessagesHome() {
             aria-label="Compose (read-only inbox)"
             title="CediX notifications are read-only"
             onClick={() => {}}
-            className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full bg-[#eeeef0]"
+            className="msg-glass flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-full"
           >
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#b9b9be" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-6" />
               <path d="M17.3 3.7a2.1 2.1 0 013 3L11 16l-4 1 1-4 9.3-9.3z" />
             </svg>
