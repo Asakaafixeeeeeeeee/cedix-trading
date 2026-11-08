@@ -54,31 +54,37 @@ export default function MessagesHome() {
     .filter((c) => (filterUnread ? c.unread > 0 : true))
     .filter((c) => (search ? c.name.toLowerCase().includes(search.toLowerCase()) || (c.last?.body ?? '').toLowerCase().includes(search.toLowerCase()) : true));
 
+  const totalUnread = (conversations ?? []).reduce((s, c) => s + c.unread, 0);
+
   return (
     <div className="flex min-h-dvh flex-col pb-[calc(76px+env(safe-area-inset-bottom))]">
-      {/* Top bar */}
-      <header className="sticky top-0 z-10 bg-[#ffffff]/95 px-4 pt-[calc(10px+env(safe-area-inset-top))] backdrop-blur">
-        <div className="flex items-center justify-between">
+      {/* Top bar — Edit left, centred title, filter with blue unread badge */}
+      <header className="sticky top-0 z-10 bg-[#ffffff]/95 px-4 pb-2 pt-[calc(10px+env(safe-area-inset-top))] backdrop-blur">
+        <div className="grid grid-cols-[64px_1fr_64px] items-center">
           <button
             onClick={() => setEditMode((v) => !v)}
-            className="rounded-full bg-[#f2f2f7] px-4 py-1.5 text-[14px] text-[#111]"
+            className="justify-self-start rounded-full bg-[#f2f2f7] px-4 py-1.5 text-[14px] text-[#111]"
           >
             {editMode ? 'Done' : 'Edit'}
           </button>
-          <button
-            onClick={() => setFilterUnread((v) => !v)}
-            aria-label="Filter"
-            className={`relative flex h-9 w-9 items-center justify-center rounded-full ${filterUnread ? 'bg-[#007aff]' : 'bg-[#f2f2f7]'}`}
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={filterUnread ? '#fff' : '#111'} strokeWidth="2" strokeLinecap="round">
-              <path d="M4 6h16M7 12h10M10 18h4" />
-            </svg>
-            {filterUnread && (
-              <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-[#34c759] ring-2 ring-[#fff]" />
+          <h1 className="text-center text-[17px] font-semibold tracking-tight text-[#111]">Messages</h1>
+          <span className="relative justify-self-end">
+            <button
+              onClick={() => setFilterUnread((v) => !v)}
+              aria-label="Filter"
+              className={`flex h-9 w-9 items-center justify-center rounded-full ${filterUnread ? 'bg-[#007aff]' : 'bg-[#f2f2f7]'}`}
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={filterUnread ? '#fff' : '#111'} strokeWidth="2" strokeLinecap="round">
+                <path d="M4 6h16M7 12h10M10 18h4" />
+              </svg>
+            </button>
+            {totalUnread > 0 && (
+              <span className="absolute -right-1 -top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#007aff] px-1 text-[11px] font-semibold text-[#fff] ring-2 ring-[#fff]">
+                {totalUnread}
+              </span>
             )}
-          </button>
+          </span>
         </div>
-        <h1 className="mt-2 pb-2 text-[31px] font-bold tracking-tight">Messages</h1>
       </header>
 
       {/* Edit mode: account info */}
@@ -182,10 +188,10 @@ export default function MessagesHome() {
         )}
       </main>
 
-      {/* Bottom search bar (iOS style) */}
+      {/* Bottom search bar + compose (iOS style) */}
       <div className="fixed inset-x-0 bottom-0 z-10 mx-auto w-full max-w-md bg-[#ffffff]/95 px-4 pb-[calc(10px+env(safe-area-inset-bottom))] pt-2 backdrop-blur">
-        <div className="flex items-center gap-2">
-          <div className="flex flex-1 items-center gap-2 rounded-full bg-[#f2f2f7] px-3.5 py-2">
+        <div className="flex items-center gap-2.5">
+          <div className="flex flex-1 items-center gap-2 rounded-full bg-[#eeeef0] px-3.5 py-[7px]">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" strokeWidth="2" strokeLinecap="round">
               <circle cx="11" cy="11" r="7" />
               <path d="M21 21l-4.3-4.3" />
@@ -196,13 +202,23 @@ export default function MessagesHome() {
               placeholder="Search"
               className="w-full bg-transparent text-[14px] outline-none placeholder:text-[#8e8e93]"
             />
-          </div>
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#f2f2f7]" aria-hidden>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c7c7cc" strokeWidth="2" strokeLinecap="round">
-              <path d="M12 20h9" />
-              <path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
+            {/* Microphone (visual, per iOS reference) */}
+            <svg width="13" height="16" viewBox="0 0 24 28" fill="none" stroke="#8e8e93" strokeWidth="2" strokeLinecap="round" className="shrink-0">
+              <rect x="9" y="2" width="6" height="13" rx="3" />
+              <path d="M5 13a7 7 0 0014 0M12 20v5M8.5 25h7" />
             </svg>
-          </span>
+          </div>
+          <button
+            aria-label="Compose (read-only inbox)"
+            title="CediX notifications are read-only"
+            onClick={() => {}}
+            className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full bg-[#eeeef0]"
+          >
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#b9b9be" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-6" />
+              <path d="M17.3 3.7a2.1 2.1 0 013 3L11 16l-4 1 1-4 9.3-9.3z" />
+            </svg>
+          </button>
         </div>
       </div>
     </div>
