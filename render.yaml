@@ -1,0 +1,43 @@
+# Render Blueprint — deploy CediX with one click ("New +" → "Blueprint" in Render)
+# Docs: https://render.com/docs/blueprint-spec
+#
+# Region note: Binance's public API blocks US IPs, so keep the service in
+# frankfurt or singapore for live market data.
+
+databases:
+  - name: cedix-db
+    region: frankfurt
+    plan: basic-256mb # upgrade for production traffic
+    postgresMajorVersion: "16"
+
+services:
+  - type: web
+    name: cedix
+    runtime: node
+    region: frankfurt
+    plan: starter # "free" works for testing (service sleeps when idle; uploads are ephemeral)
+    buildCommand: npm ci --include=dev && npx prisma generate && npm run build
+    startCommand: npm run start:prod
+    healthCheckPath: /api/fx
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: cedix-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: NODE_VERSION
+        value: "22"
+      # Payteller — leave empty for sandbox mode, fill in to go live
+      - key: PAYTELLER_BASE_URL
+        sync: false
+      - key: PAYTELLER_API_KEY
+        sync: false
+      - key: PAYTELLER_MERCHANT_ID
+        sync: false
+    # Persistent storage for Orbit media uploads (requires a paid instance).
+    # Without a disk, uploads are lost on each deploy/restart.
+    disk:
+      name: cedix-uploads
+      mountPath: /opt/render/project/src/public/uploads
+      sizeGB: 1

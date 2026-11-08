@@ -1,0 +1,10 @@
+node_modules
+.next
+.pgdata
+.pgdata.log
+.git
+.env
+public/uploads/*
+!public/uploads/.gitkeep
+README.md
+DEPLOY.md

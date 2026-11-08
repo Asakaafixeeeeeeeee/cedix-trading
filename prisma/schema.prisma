@@ -1,0 +1,431 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─────────────────────────── Users & Auth ───────────────────────────
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  BLOCKED
+}
+
+model User {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  username     String     @unique
+  passwordHash String
+  displayName  String?
+  avatarUrl    String?
+  phone        String?
+  country      String     @default("GH")
+  role         Role       @default(USER)
+  status       UserStatus @default(ACTIVE)
+  kycLevel     Int        @default(0)
+  orbitBanned  Boolean    @default(false)
+  riskScore    Float      @default(0)
+  createdAt    DateTime   @default(now())
+  lastLoginAt  DateTime?
+
+  wallets          Wallet[]
+  transactions     Transaction[]
+  orders           Order[]
+  trades           Trade[]
+  depositIntents   DepositIntent[]
+  withdrawals      Withdrawal[]
+  p2pOffers        P2POffer[]
+  p2pOrdersAsBuyer P2POrder[]      @relation("P2PBuyer")
+  p2pOrdersAsSeller P2POrder[]     @relation("P2PSeller")
+  orbitPosts       OrbitPost[]
+  orbitComments    OrbitComment[]
+  orbitLikes       OrbitLike[]
+  positions        Position[]
+  favorites        Favorite[]
+  moderationEvents ModerationEvent[]
+  auditLogs        AuditLog[]      @relation("AdminActor")
+}
+
+// ─────────────────────────── Wallets & Transactions ───────────────────────────
+
+model Wallet {
+  id        String  @id @default(cuid())
+  userId    String
+  asset     String // BTC, ETH, USDT, SOL, ... or GHS
+  available Decimal @default(0) @db.Decimal(32, 12)
+  locked    Decimal @default(0) @db.Decimal(32, 12)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, asset])
+}
+
+enum TxType {
+  DEPOSIT
+  WITHDRAWAL
+  TRADE_BUY
+  TRADE_SELL
+  P2P_BUY
+  P2P_SELL
+  STAKE
+  UNSTAKE
+  EARN_INTEREST
+  FEE
+  ADMIN_ADJUST
+}
+
+enum TxStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+model Transaction {
+  id        String   @id @default(cuid())
+  userId    String
+  type      TxType
+  status    TxStatus @default(COMPLETED)
+  asset     String
+  amount    Decimal  @db.Decimal(32, 12)
+  fee       Decimal  @default(0) @db.Decimal(32, 12)
+  reference String   @unique @default(cuid())
+  note      String?
+  meta      Json?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+// ─────────────────────────── Spot Trading ───────────────────────────
+
+enum OrderSide {
+  BUY
+  SELL
+}
+
+enum OrderType {
+  MARKET
+  LIMIT
+}
+
+enum OrderStatus {
+  OPEN
+  FILLED
+  CANCELLED
+}
+
+model Order {
+  id           String      @id @default(cuid())
+  userId       String
+  symbol       String // e.g. BTCUSDT
+  side         OrderSide
+  type         OrderType
+  price        Decimal?    @db.Decimal(32, 12) // limit price
+  quantity     Decimal     @db.Decimal(32, 12) // base asset qty
+  filledQty    Decimal     @default(0) @db.Decimal(32, 12)
+  avgFillPrice Decimal?    @db.Decimal(32, 12)
+  status       OrderStatus @default(OPEN)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trades Trade[]
+
+  @@index([status, symbol])
+  @@index([userId, createdAt])
+}
+
+model Trade {
+  id        String    @id @default(cuid())
+  orderId   String
+  userId    String
+  symbol    String
+  side      OrderSide
+  price     Decimal   @db.Decimal(32, 12)
+  quantity  Decimal   @db.Decimal(32, 12)
+  fee       Decimal   @default(0) @db.Decimal(32, 12)
+  feeAsset  String    @default("USDT")
+  createdAt DateTime  @default(now())
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+// ─────────────────────────── Fiat Deposits / Withdrawals (Payteller) ───────────────────────────
+
+enum FiatMethod {
+  MOMO // mobile money (MTN, Vodafone, AirtelTigo)
+  CARD
+  BANK
+}
+
+enum GatewayStatus {
+  INITIATED
+  AWAITING_PAYMENT
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+model DepositIntent {
+  id          String        @id @default(cuid())
+  userId      String
+  asset       String // crypto the user receives
+  amountGHS   Decimal       @db.Decimal(32, 2)
+  amountUSD   Decimal       @db.Decimal(32, 2)
+  amountAsset Decimal       @db.Decimal(32, 12)
+  rateGHSUSD  Decimal       @db.Decimal(18, 6) // GHS per USD applied
+  assetPrice  Decimal       @db.Decimal(32, 12) // USD per asset applied
+  method      FiatMethod
+  status      GatewayStatus @default(INITIATED)
+  gateway     String        @default("payteller")
+  gatewayRef  String?       @unique
+  payerPhone  String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+model Withdrawal {
+  id          String        @id @default(cuid())
+  userId      String
+  asset       String // crypto being sold down (or GHS for fiat wallet)
+  amountAsset Decimal       @db.Decimal(32, 12)
+  amountUSD   Decimal       @db.Decimal(32, 2)
+  amountGHS   Decimal       @db.Decimal(32, 2)
+  rateGHSUSD  Decimal       @db.Decimal(18, 6)
+  assetPrice  Decimal       @db.Decimal(32, 12)
+  method      FiatMethod
+  destination String // momo number or bank account
+  destName    String?
+  status      GatewayStatus @default(INITIATED)
+  gateway     String        @default("payteller")
+  gatewayRef  String?       @unique
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+// ─────────────────────────── P2P ───────────────────────────
+
+enum P2POrderStatus {
+  PENDING_PAYMENT
+  PAID
+  RELEASED
+  CANCELLED
+  DISPUTED
+}
+
+model P2POffer {
+  id             String   @id @default(cuid())
+  userId         String
+  side           OrderSide // BUY = maker buys crypto for GHS, SELL = maker sells crypto
+  asset          String
+  priceGHS       Decimal  @db.Decimal(32, 4) // GHS per unit of asset
+  minGHS         Decimal  @db.Decimal(32, 2)
+  maxGHS         Decimal  @db.Decimal(32, 2)
+  available      Decimal  @db.Decimal(32, 12)
+  paymentMethods Json // ["MTN MoMo", "Vodafone Cash", "Bank Transfer"]
+  terms          String?
+  active         Boolean  @default(true)
+  createdAt      DateTime @default(now())
+
+  user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orders P2POrder[]
+
+  @@index([side, asset, active])
+}
+
+model P2POrder {
+  id        String         @id @default(cuid())
+  offerId   String
+  buyerId   String
+  sellerId  String
+  asset     String
+  amount    Decimal        @db.Decimal(32, 12)
+  priceGHS  Decimal        @db.Decimal(32, 4)
+  totalGHS  Decimal        @db.Decimal(32, 2)
+  status    P2POrderStatus @default(PENDING_PAYMENT)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  offer  P2POffer @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  buyer  User     @relation("P2PBuyer", fields: [buyerId], references: [id], onDelete: Cascade)
+  seller User     @relation("P2PSeller", fields: [sellerId], references: [id], onDelete: Cascade)
+
+  @@index([buyerId])
+  @@index([sellerId])
+}
+
+// ─────────────────────────── Orbit (community) ───────────────────────────
+
+enum ContentStatus {
+  ACTIVE
+  FLAGGED
+  REMOVED
+}
+
+model OrbitPost {
+  id           String        @id @default(cuid())
+  authorId     String
+  content      String
+  mediaUrls    Json? // array of /uploads/... paths
+  mediaType    String? // image | video
+  status       ContentStatus @default(ACTIVE)
+  likeCount    Int           @default(0)
+  commentCount Int           @default(0)
+  modScore     Float         @default(0)
+  modReasons   Json?
+  createdAt    DateTime      @default(now())
+
+  author   User           @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  comments OrbitComment[]
+  likes    OrbitLike[]
+
+  @@index([status, createdAt])
+}
+
+model OrbitComment {
+  id        String        @id @default(cuid())
+  postId    String
+  authorId  String
+  content   String
+  status    ContentStatus @default(ACTIVE)
+  modScore  Float         @default(0)
+  createdAt DateTime      @default(now())
+
+  post   OrbitPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+model OrbitLike {
+  postId    String
+  userId    String
+  createdAt DateTime @default(now())
+
+  post OrbitPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([postId, userId])
+}
+
+enum ModAction {
+  NONE
+  FLAG
+  REMOVE
+  BLOCK_USER
+}
+
+model ModerationEvent {
+  id         String    @id @default(cuid())
+  targetType String // POST | COMMENT | USER
+  targetId   String
+  userId     String // affected user
+  score      Float
+  reasons    Json
+  action     ModAction @default(NONE)
+  automated  Boolean   @default(true)
+  resolved   Boolean   @default(false)
+  reviewedBy String?
+  createdAt  DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([resolved, createdAt])
+}
+
+// ─────────────────────────── Explore: Staking & Savings ───────────────────────────
+
+enum ProductType {
+  STAKING
+  SAVINGS
+}
+
+enum PositionStatus {
+  ACTIVE
+  REDEEMED
+}
+
+model Product {
+  id        String      @id @default(cuid())
+  type      ProductType
+  asset     String
+  name      String
+  apy       Decimal     @db.Decimal(8, 4) // e.g. 5.2500 = 5.25%
+  termDays  Int? // null = flexible
+  minAmount Decimal     @default(0) @db.Decimal(32, 12)
+  active    Boolean     @default(true)
+
+  positions Position[]
+}
+
+model Position {
+  id        String         @id @default(cuid())
+  userId    String
+  productId String
+  amount    Decimal        @db.Decimal(32, 12)
+  accrued   Decimal        @default(0) @db.Decimal(32, 12)
+  status    PositionStatus @default(ACTIVE)
+  startedAt DateTime       @default(now())
+  endsAt    DateTime?
+  updatedAt DateTime       @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+}
+
+// ─────────────────────────── Misc ───────────────────────────
+
+model Favorite {
+  userId    String
+  symbol    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, symbol])
+}
+
+model Setting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  adminId    String
+  action     String
+  targetType String?
+  targetId   String?
+  meta       Json?
+  createdAt  DateTime @default(now())
+
+  admin User @relation("AdminActor", fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
+}
