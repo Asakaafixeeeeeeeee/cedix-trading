@@ -14,7 +14,8 @@ import {
  * PAYTELLER webhook receiver (live payments).
  *
  * Destination URL to configure in the Payteller dashboard:
- *   https://cedix.onrender.com/api/webhooks/payteller
+ *   https://cedixtrading.com/api/webhooks/payteller
+ *   (https://cedix.onrender.com/api/webhooks/payteller also remains valid)
  *
  * Security model (per Payteller docs §04):
  *  1. The X-Payteller-Signature header (t=timestamp,v1=hex) is verified as

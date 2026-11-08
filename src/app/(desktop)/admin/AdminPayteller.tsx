@@ -86,7 +86,7 @@ export default function AdminPayteller() {
           Webhook secret: <span className="text-white">{data.webhookConfigured ? 'configured' : 'missing'}</span>
         </span>
         <span className="text-xs text-muted">
-          Webhook URL: <span className="select-all text-white">https://cedix.onrender.com/api/webhooks/payteller</span>
+          Webhook URL: <span className="select-all text-white">https://cedixtrading.com/api/webhooks/payteller</span>
         </span>
         <button
           onClick={testCreds}

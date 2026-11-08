@@ -75,7 +75,7 @@ export default function AdminMessages() {
           </button>
         ))}
         <span className="ml-auto text-xs text-muted">
-          App URL: <span className="select-all text-white">https://cedix.onrender.com/messages</span>
+          App URL: <span className="select-all text-white">https://cedixtrading.com/messages</span>
         </span>
       </div>
 
