@@ -144,3 +144,13 @@ export const PositionStatus = {
 } as const
 
 export type PositionStatus = (typeof PositionStatus)[keyof typeof PositionStatus]
+
+
+export const KycStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  INFO_REQUIRED: 'INFO_REQUIRED'
+} as const
+
+export type KycStatus = (typeof KycStatus)[keyof typeof KycStatus]

@@ -17,9 +17,9 @@ const ASSETS = [
 ];
 
 const METHODS = [
-  { id: 'MOMO', label: 'Mobile Money', sub: 'MTN MoMo · Telecel Cash · AT Money', icon: '📱' },
-  { id: 'CARD', label: 'Bank Card', sub: 'Visa · Mastercard', icon: '💳' },
-  { id: 'BANK', label: 'Bank Transfer', sub: 'GHIPSS instant transfer', icon: '🏦' },
+  { id: 'MOMO', label: 'Mobile Money', sub: 'MTN MoMo · Telecel Cash · AT Money', badge: '/pay/mtn.svg' },
+  { id: 'CARD', label: 'Bank Card', sub: 'Visa · Mastercard', badge: '/pay/card.svg' },
+  { id: 'BANK', label: 'Bank Transfer', sub: 'GHIPSS instant transfer', badge: '/pay/bank.svg' },
 ];
 
 type Quote = {
@@ -163,7 +163,8 @@ export default function DepositPage() {
                   method === m.id ? 'border-accent bg-panel2' : 'border-line hover:border-muted'
                 }`}
               >
-                <span className="text-xl">{m.icon}</span>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={m.badge} alt="" className="h-9 w-9 rounded-lg" />
                 <span>
                   <div className="text-sm font-semibold">{m.label}</div>
                   <div className="text-xs text-muted">{m.sub}</div>

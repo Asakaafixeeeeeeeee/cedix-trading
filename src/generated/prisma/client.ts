@@ -131,3 +131,18 @@ export type Setting = Prisma.SettingModel
  * 
  */
 export type AuditLog = Prisma.AuditLogModel
+/**
+ * Model KycApplication
+ * 
+ */
+export type KycApplication = Prisma.KycApplicationModel
+/**
+ * Model Banner
+ * 
+ */
+export type Banner = Prisma.BannerModel
+/**
+ * Model VerificationCode
+ * 
+ */
+export type VerificationCode = Prisma.VerificationCodeModel

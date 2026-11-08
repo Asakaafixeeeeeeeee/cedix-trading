@@ -1,4 +1,4 @@
-import { requireAdmin } from '@/lib/auth';
+import { requireElevatedAdmin } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { credit } from '@/lib/wallet';
 import { api } from '@/lib/api';
@@ -6,7 +6,7 @@ import { api } from '@/lib/api';
 /** Admin financial control: list and manage deposits & withdrawals. */
 export async function GET() {
   return api(async () => {
-    await requireAdmin();
+    await requireElevatedAdmin();
     const [deposits, withdrawals] = await Promise.all([
       prisma.depositIntent.findMany({
         include: { user: { select: { username: true, email: true } } },
@@ -26,7 +26,7 @@ export async function GET() {
 /** Admin override: force-complete, fail or cancel a deposit/withdrawal. */
 export async function PATCH(req: Request) {
   return api(async () => {
-    const admin = await requireAdmin();
+    const admin = await requireElevatedAdmin();
     const { kind, id, status } = await req.json();
     if (!['deposit', 'withdrawal'].includes(kind)) throw new Error('kind must be deposit|withdrawal');
     if (!['COMPLETED', 'FAILED', 'CANCELLED'].includes(status)) throw new Error('Invalid status');

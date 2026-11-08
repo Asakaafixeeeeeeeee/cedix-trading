@@ -132,9 +132,9 @@ function UserModal({ user, onClose, onChange }: { user: AdminUser; onClose: () =
 
         <h3 className="mt-5 text-sm font-semibold">Account Status</h3>
         <div className="mt-2 flex flex-wrap gap-2">
-          <button disabled={busy} onClick={() => patch({ status: 'ACTIVE' })} className={btn}>✓ Activate</button>
-          <button disabled={busy} onClick={() => patch({ status: 'SUSPENDED' })} className={btn}>⏸ Suspend</button>
-          <button disabled={busy} onClick={() => patch({ status: 'BLOCKED' })} className={`${btn} text-down`}>⛔ Block</button>
+          <button disabled={busy} onClick={() => patch({ status: 'ACTIVE' })} className={btn}>Activate</button>
+          <button disabled={busy} onClick={() => patch({ status: 'SUSPENDED' })} className={btn}>Suspend</button>
+          <button disabled={busy} onClick={() => patch({ status: 'BLOCKED' })} className={`${btn} text-down`}>Block</button>
           <button disabled={busy} onClick={() => patch({ orbitBanned: !user.orbitBanned })} className={btn}>
             {user.orbitBanned ? 'Unban from Orbit' : 'Ban from Orbit'}
           </button>

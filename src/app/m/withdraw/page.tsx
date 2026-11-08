@@ -36,7 +36,7 @@ export default function MobileWithdraw() {
     setMsg(null);
     try {
       const res = await post<{ netGHS: number }>('/api/withdraw', { asset, amountAsset: amt, method, destination });
-      setMsg({ ok: true, text: `${fmtGHS(res.netGHS)} sent to your ${method === 'MOMO' ? 'MoMo' : 'bank'} 🎉` });
+      setMsg({ ok: true, text: `${fmtGHS(res.netGHS)} sent to your ${method === 'MOMO' ? 'MoMo' : 'bank'}` });
       setAmount('');
       refresh();
     } catch (e) {
@@ -57,7 +57,7 @@ export default function MobileWithdraw() {
 
   return (
     <div className="px-4 pt-4">
-      <h1 className="text-xl font-bold">🏦 Withdraw to GH₵</h1>
+      <h1 className="text-xl font-bold">Withdraw to GH₵</h1>
       <p className="mt-1 text-xs text-muted">Cash out any crypto straight to MoMo or bank — no selling step.</p>
 
       <div className="-mx-1 mt-4 flex gap-1.5 overflow-x-auto px-1 [scrollbar-width:none]">
@@ -91,11 +91,15 @@ export default function MobileWithdraw() {
       </div>
 
       <div className="mt-3 grid grid-cols-2 gap-2">
-        <button onClick={() => setMethod('MOMO')} className={`rounded-xl border py-3 text-xs font-bold ${method === 'MOMO' ? 'border-accent bg-panel2' : 'border-line bg-panel text-muted'}`}>
-          📱 Mobile Money
+        <button onClick={() => setMethod('MOMO')} className={`flex items-center justify-center gap-2 rounded-xl border py-3 text-xs font-bold ${method === 'MOMO' ? 'border-accent bg-panel2' : 'border-line bg-panel text-muted'}`}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/pay/mtn.svg" alt="" className="h-5 w-5 rounded" />
+          Mobile Money
         </button>
-        <button onClick={() => setMethod('BANK')} className={`rounded-xl border py-3 text-xs font-bold ${method === 'BANK' ? 'border-accent bg-panel2' : 'border-line bg-panel text-muted'}`}>
-          🏦 Bank
+        <button onClick={() => setMethod('BANK')} className={`flex items-center justify-center gap-2 rounded-xl border py-3 text-xs font-bold ${method === 'BANK' ? 'border-accent bg-panel2' : 'border-line bg-panel text-muted'}`}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/pay/bank.svg" alt="" className="h-5 w-5 rounded" />
+          Bank
         </button>
       </div>
 

@@ -1,5 +1,5 @@
 // CediX mobile PWA service worker — network-first with offline fallback cache.
-const CACHE = 'cedix-v1';
+const CACHE = 'cedix-v2';
 const PRECACHE = ['/m', '/manifest.webmanifest', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', (event) => {

@@ -53,6 +53,7 @@ model User {
   favorites        Favorite[]
   moderationEvents ModerationEvent[]
   auditLogs        AuditLog[]      @relation("AdminActor")
+  kyc              KycApplication?
 }
 
 // ─────────────────────────── Wallets & Transactions ───────────────────────────
@@ -423,9 +424,70 @@ model AuditLog {
   targetType String?
   targetId   String?
   meta       Json?
+  ip         String?
   createdAt  DateTime @default(now())
 
   admin User @relation("AdminActor", fields: [adminId], references: [id], onDelete: Cascade)
 
   @@index([createdAt])
+  @@index([action])
+}
+
+// ─────────────────────────── Identity Verification (KYC) ───────────────────────────
+
+enum KycStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  INFO_REQUIRED
+}
+
+model KycApplication {
+  id         String    @id @default(cuid())
+  userId     String    @unique
+  status     KycStatus @default(PENDING)
+  legalName  String
+  dob        DateTime
+  country    String
+  address    String
+  idType     String    @default("GHANA_CARD")
+  idNumber   String
+  docFront   String // private storage path
+  docBack    String
+  selfie     String // live camera capture
+  note       String? // admin note / additional info request
+  reviewedBy String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([status, createdAt])
+}
+
+// ─────────────────────────── Promotional Banners ───────────────────────────
+
+model Banner {
+  id        String   @id @default(cuid())
+  title     String
+  body      String
+  link      String?
+  active    Boolean  @default(true)
+  sort      Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ─────────────────────────── Email Verification Codes ───────────────────────────
+
+model VerificationCode {
+  id        String   @id @default(cuid())
+  email     String
+  codeHash  String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  attempts  Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([email, createdAt])
 }

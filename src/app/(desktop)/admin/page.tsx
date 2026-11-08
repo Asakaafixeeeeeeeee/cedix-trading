@@ -1,11 +1,15 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { usePoll, useUser } from '@/lib/hooks';
 import { fmtGHS } from '@/lib/format';
 import AdminUsers from './AdminUsers';
 import AdminFinance from './AdminFinance';
 import AdminContent from './AdminContent';
 import AdminSettings from './AdminSettings';
+import AdminKyc from './AdminKyc';
+import AdminP2P from './AdminP2P';
+import AdminBanners from './AdminBanners';
 import Link from 'next/link';
 
 type Stats = {
@@ -23,25 +27,35 @@ type Stats = {
   openDisputes: number;
 };
 
-const TABS = ['Overview', 'Users', 'Finance', 'Orbit & Moderation', 'Settings & Audit'] as const;
+const TABS = ['Overview', 'Users', 'KYC', 'Finance', 'P2P', 'Orbit & Moderation', 'Banners', 'Settings & Audit'] as const;
 
 export default function AdminPage() {
   const { user, loading } = useUser();
   const [tab, setTab] = useState<(typeof TABS)[number]>('Overview');
+  const router = useRouter();
+  const { data: statsProbe, error: probeError } = usePoll<Stats>('/api/admin/stats', 0);
+
+  // Require PIN elevation: the stats probe returns 428 until unlocked
+  useEffect(() => {
+    if (probeError && /PIN/i.test(probeError)) router.replace('/admin/login');
+  }, [probeError, router]);
 
   if (!loading && (!user || user.role !== 'ADMIN')) {
     return (
       <div className="py-24 text-center">
         <h1 className="text-2xl font-bold">Admin Dashboard</h1>
         <p className="mt-2 text-muted">You need administrator access to view this page.</p>
-        <Link href="/login" className="mt-4 inline-block rounded-lg bg-white px-6 py-2.5 font-semibold text-black">Log in</Link>
+        <Link href="/login" className="mt-4 inline-block rounded-full bg-white px-6 py-2.5 font-semibold text-black">Log in</Link>
       </div>
     );
+  }
+  if (!statsProbe) {
+    return <div className="py-24 text-center text-muted">Checking admin session…</div>;
   }
 
   return (
     <div className="pt-6">
-      <h1 className="text-2xl font-bold">⚙️ Admin Dashboard</h1>
+      <h1 className="text-2xl font-bold">Admin Dashboard</h1>
       <p className="mt-1 text-sm text-muted">Total control over users, Orbit content and financial transactions.</p>
       <div className="mt-5 flex flex-wrap gap-1 border-b border-line">
         {TABS.map((t) => (
@@ -59,8 +73,11 @@ export default function AdminPage() {
       <div className="mt-6">
         {tab === 'Overview' && <Overview />}
         {tab === 'Users' && <AdminUsers />}
+        {tab === 'KYC' && <AdminKyc />}
         {tab === 'Finance' && <AdminFinance />}
+        {tab === 'P2P' && <AdminP2P />}
         {tab === 'Orbit & Moderation' && <AdminContent />}
+        {tab === 'Banners' && <AdminBanners />}
         {tab === 'Settings & Audit' && <AdminSettings />}
       </div>
     </div>
@@ -79,8 +96,8 @@ function Overview() {
         ['Deposits', `${data.depositCount}`, fmtGHS(data.depositVolumeGHS)],
         ['Withdrawals', `${data.withdrawalCount}`, fmtGHS(data.withdrawalVolumeGHS)],
         ['Orbit Posts', data.posts],
-        ['⚠ Pending Moderation', data.flagged],
-        ['⚠ P2P Disputes', data.openDisputes],
+        ['Pending Moderation', data.flagged],
+        ['P2P Disputes', data.openDisputes],
       ]
     : [];
   return (

@@ -143,15 +143,17 @@ function WithdrawInner() {
         <div className="mt-4 grid grid-cols-2 gap-2">
           {(
             [
-              ['MOMO', '📱 Mobile Money'],
-              ['BANK', '🏦 Bank Account'],
+              ['MOMO', 'Mobile Money', '/pay/mtn.svg'],
+              ['BANK', 'Bank Account', '/pay/bank.svg'],
             ] as const
-          ).map(([id, label]) => (
+          ).map(([id, label, badge]) => (
             <button
               key={id}
               onClick={() => setMethod(id)}
-              className={`rounded-lg border py-3 text-sm font-semibold ${method === id ? 'border-accent bg-panel2' : 'border-line text-muted hover:border-muted'}`}
+              className={`flex items-center justify-center gap-2 rounded-lg border py-3 text-sm font-semibold ${method === id ? 'border-accent bg-panel2' : 'border-line text-muted hover:border-muted'}`}
             >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={badge} alt="" className="h-6 w-6 rounded" />
               {label}
             </button>
           ))}

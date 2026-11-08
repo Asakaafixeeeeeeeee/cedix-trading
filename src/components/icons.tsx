@@ -180,3 +180,121 @@ export const IconP2P = (p: P) => (
     <path d="m17.5 8.5 2 1.5 1.5-2M6.5 15.5l-2-1.5L3 16" />
   </Base>
 );
+
+export const IconMenu = (p: P) => (
+  <Base {...p} strokeWidth={0}>
+    {[5.5, 12, 18.5].flatMap((y) =>
+      [5.5, 12, 18.5].map((x) => <circle key={`${x}${y}`} cx={x} cy={y} r="1.7" fill="currentColor" />),
+    )}
+  </Base>
+);
+
+export const IconScan = (p: P) => (
+  <Base {...p}>
+    <path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2" />
+    <path d="M4 12h16" />
+  </Base>
+);
+
+export const IconShield = (p: P) => (
+  <Base {...p}>
+    <path d="M12 3 5 5.8v5.4c0 4.4 3 8 7 9.3 4-1.3 7-4.9 7-9.3V5.8L12 3Z" />
+    <path d="m9 11.8 2.2 2.2L15.5 9.5" />
+  </Base>
+);
+
+export const IconIdCard = (p: P) => (
+  <Base {...p}>
+    <rect x="3" y="5.5" width="18" height="13" rx="2" />
+    <circle cx="8.5" cy="11" r="2" />
+    <path d="M5.8 15.8c.5-1.5 1.5-2.3 2.7-2.3s2.2.8 2.7 2.3M14 9.5h4.5M14 12.5h4.5M14 15.5h2.8" />
+  </Base>
+);
+
+export const IconCamera = (p: P) => (
+  <Base {...p}>
+    <path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2l1.5-2.2h6L16.5 7h2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5v-9Z" />
+    <circle cx="12" cy="12.8" r="3.4" />
+  </Base>
+);
+
+export const IconCheckCircle = (p: P) => (
+  <Base {...p}>
+    <circle cx="12" cy="12" r="8.5" />
+    <path d="m8.3 12.2 2.5 2.5 5-5.2" />
+  </Base>
+);
+
+export const IconAlertCircle = (p: P) => (
+  <Base {...p}>
+    <circle cx="12" cy="12" r="8.5" />
+    <path d="M12 8v5M12 16.2v.3" />
+  </Base>
+);
+
+export const IconUpload = (p: P) => (
+  <Base {...p}>
+    <path d="M12 15V5M8 8.5 12 4.5l4 4" />
+    <path d="M5 15v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3" />
+  </Base>
+);
+
+export const IconLock = (p: P) => (
+  <Base {...p}>
+    <rect x="5.5" y="10.5" width="13" height="9.5" rx="2" />
+    <path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" />
+    <circle cx="12" cy="15.2" r="1.2" fill="currentColor" stroke="none" />
+  </Base>
+);
+
+export const IconMail = (p: P) => (
+  <Base {...p}>
+    <rect x="3.5" y="5.5" width="17" height="13" rx="2" />
+    <path d="m4.5 7.5 7.5 6 7.5-6" />
+  </Base>
+);
+
+export const IconFilter = (p: P) => (
+  <Base {...p}>
+    <path d="M4 6.5h16M7 12h10M10 17.5h4" />
+  </Base>
+);
+
+export const IconArrowLeft = (p: P) => (
+  <Base {...p}>
+    <path d="M19 12H5M11 6l-6 6 6 6" />
+  </Base>
+);
+
+export const IconImage = (p: P) => (
+  <Base {...p}>
+    <rect x="3.5" y="4.5" width="17" height="15" rx="2" />
+    <circle cx="9" cy="10" r="1.8" />
+    <path d="m5 18 5-5 3 3 3.5-3.5L20.5 16" />
+  </Base>
+);
+
+export const IconVideo = (p: P) => (
+  <Base {...p}>
+    <rect x="3" y="6.5" width="13" height="11" rx="2" />
+    <path d="m16 10.5 5-2.8v8.6l-5-2.8" />
+  </Base>
+);
+
+export const IconHeart = (p: P & { filled?: boolean }) => (
+  <svg width={p.size ?? 20} height={p.size ?? 20} viewBox="0 0 24 24" fill={p.filled ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className={p.className} aria-hidden>
+    <path d="M12 20.5s-7.5-4.8-9.5-9.3C1.2 8.3 3 5 6.3 5c2 0 3.7 1.1 4.7 2.8l1 1.7 1-1.7C14 6.1 15.7 5 17.7 5 21 5 22.8 8.3 21.5 11.2c-2 4.5-9.5 9.3-9.5 9.3Z" />
+  </svg>
+);
+
+export const IconComment = (p: P) => (
+  <Base {...p}>
+    <path d="M20 11.6c0 4-3.6 7.1-8 7.1-1 0-2-.2-2.9-.5L4 19.5l1.4-3.4A6.7 6.7 0 0 1 4 11.6c0-4 3.6-7.1 8-7.1s8 3.2 8 7.1Z" />
+  </Base>
+);
+
+export const IconStar = (p: P & { filled?: boolean }) => (
+  <svg width={p.size ?? 20} height={p.size ?? 20} viewBox="0 0 24 24" fill={p.filled ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" className={p.className} aria-hidden>
+    <path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9L3.5 9.7l5.9-.9L12 3.5Z" />
+  </svg>
+);

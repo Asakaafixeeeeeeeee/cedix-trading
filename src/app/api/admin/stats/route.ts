@@ -1,10 +1,10 @@
-import { requireAdmin } from '@/lib/auth';
+import { requireElevatedAdmin } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { api } from '@/lib/api';
 
 export async function GET() {
   return api(async () => {
-    await requireAdmin();
+    await requireElevatedAdmin();
     const dayAgo = new Date(Date.now() - 24 * 3600 * 1000);
     const [users, activeUsers, newUsers24h, orders, trades24h, deposits, withdrawals, posts, flagged, openDisputes] =
       await Promise.all([

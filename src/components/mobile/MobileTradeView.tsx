@@ -47,9 +47,9 @@ export default function MobileTradeView({ symbol }: { symbol: string }) {
       <div className="mt-3 grid grid-cols-3 gap-1 px-4">
         {(
           [
-            ['chart', '📈 Chart'],
-            ['book', '📖 Book'],
-            ['trade', '⚡ Trade'],
+            ['chart', 'Chart'],
+            ['book', 'Order Book'],
+            ['trade', 'Trade'],
           ] as const
         ).map(([id, label]) => (
           <button

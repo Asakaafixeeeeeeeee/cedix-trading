@@ -1,11 +1,11 @@
-import { requireAdmin } from '@/lib/auth';
+import { requireElevatedAdmin } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { api } from '@/lib/api';
 
 /** Admin: set a post's status (restore / flag / remove). */
 export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }> }) {
   return api(async () => {
-    const admin = await requireAdmin();
+    const admin = await requireElevatedAdmin();
     const { id } = await ctx.params;
     const { status } = await req.json();
     if (!['ACTIVE', 'FLAGGED', 'REMOVED'].includes(status)) throw new Error('Invalid status');

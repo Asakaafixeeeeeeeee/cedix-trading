@@ -1,22 +1,30 @@
 import { prisma } from '@/lib/db';
 import { hashPassword, setSessionCookie } from '@/lib/auth';
+import { verifyEmailCode } from '@/lib/verification';
 import { api } from '@/lib/api';
 
 export async function POST(req: Request) {
   return api(async () => {
-    const { email, username, password, phone } = await req.json();
+    const { email, username, password, phone, country, code } = await req.json();
     if (!email || !username || !password) throw new Error('Email, username and password are required');
     if (String(password).length < 8) throw new Error('Password must be at least 8 characters');
     if (!/^[a-zA-Z0-9_]{3,20}$/.test(username)) throw new Error('Username must be 3-20 chars (letters, numbers, _)');
+
+    const addr = String(email).toLowerCase();
+    if (!code || !(await verifyEmailCode(addr, String(code)))) {
+      throw new Error('Invalid or expired verification code');
+    }
+
     const exists = await prisma.user.findFirst({
-      where: { OR: [{ email: email.toLowerCase() }, { username }] },
+      where: { OR: [{ email: addr }, { username }] },
     });
     if (exists) throw new Error('Email or username already in use');
     const user = await prisma.user.create({
       data: {
-        email: String(email).toLowerCase(),
+        email: addr,
         username,
         phone: phone || null,
+        country: typeof country === 'string' && country.length === 2 ? country.toUpperCase() : 'GH',
         passwordHash: await hashPassword(password),
         displayName: username,
       },

@@ -65,7 +65,7 @@ function Queue() {
     <div className="space-y-3">
       {events.length === 0 && (
         <div className="rounded-xl border border-line bg-panel py-12 text-center text-muted">
-          🎉 Moderation queue is clear — the AI handled everything.
+          Moderation queue is clear — the AI handled everything.
         </div>
       )}
       {events.map((e) => (
@@ -86,13 +86,13 @@ function Queue() {
           </div>
           <div className="mt-3 flex gap-2">
             <button disabled={busy === e.id} onClick={() => resolve(e.id, 'approve')} className="rounded border border-up/50 px-3 py-1.5 text-xs text-up disabled:opacity-40">
-              ✓ Approve & Restore
+              Approve & Restore
             </button>
             <button disabled={busy === e.id} onClick={() => resolve(e.id, 'remove')} className="rounded border border-line px-3 py-1.5 text-xs text-muted disabled:opacity-40">
               Remove Content
             </button>
             <button disabled={busy === e.id} onClick={() => resolve(e.id, 'block')} className="rounded border border-down/50 px-3 py-1.5 text-xs text-down disabled:opacity-40">
-              ⛔ Remove + Block User
+              Remove + Block User
             </button>
           </div>
         </div>
@@ -144,10 +144,10 @@ function Posts() {
                 {p.status}
               </span>
               {p.modScore > 0 && <span className="text-xs text-muted">AI score {p.modScore.toFixed(0)}</span>}
-              <span className="ml-auto text-xs text-muted">{timeAgo(p.createdAt)} · ❤️ {p.likeCount}</span>
+              <span className="ml-auto text-xs text-muted">{timeAgo(p.createdAt)} · {p.likeCount} likes</span>
             </div>
             <p className="mt-2 line-clamp-3 whitespace-pre-wrap text-sm text-foreground/90">{p.content}</p>
-            {(p.mediaUrls ?? []).length > 0 && <div className="mt-1 text-xs text-muted">📎 {(p.mediaUrls ?? []).length} media attachment(s)</div>}
+            {(p.mediaUrls ?? []).length > 0 && <div className="mt-1 text-xs text-muted">{(p.mediaUrls ?? []).length} media attachment(s)</div>}
             <div className="mt-3 flex gap-2">
               {p.status !== 'ACTIVE' && (
                 <button disabled={busy === p.id} onClick={() => setStatus(p.id, 'ACTIVE')} className="rounded border border-up/50 px-3 py-1 text-xs text-up disabled:opacity-40">

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { usePoll, post } from '@/lib/hooks';
 import { fmtGHS, fmtNum } from '@/lib/format';
+import { IconCheckCircle, IconAlertCircle } from '@/components/icons';
 
 type Deposit = {
   id: string;
@@ -86,14 +87,14 @@ export default function SandboxCheckout({ refId }: { refId: string }) {
                 disabled={!!busy}
                 className="w-full rounded-lg bg-up py-3 font-semibold text-white hover:brightness-110 disabled:opacity-50"
               >
-                {busy === 'success' ? 'Processing…' : '✓ Simulate Successful Payment'}
+                {busy === 'success' ? 'Processing…' : 'Simulate Successful Payment'}
               </button>
               <button
                 onClick={() => simulate('failed')}
                 disabled={!!busy}
                 className="w-full rounded-lg border border-down py-3 font-semibold text-down hover:bg-down/10 disabled:opacity-50"
               >
-                ✕ Simulate Failed Payment
+                Simulate Failed Payment
               </button>
             </div>
           </>
@@ -101,7 +102,7 @@ export default function SandboxCheckout({ refId }: { refId: string }) {
 
         {done === 'success' && (
           <div className="mt-8 text-center">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-up/15 text-3xl">✅</div>
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-up/15 text-up"><IconCheckCircle size={34} /></div>
             <h2 className="mt-4 text-xl font-bold">Payment Successful</h2>
             <p className="mt-2 text-sm text-muted">
               {dep ? `${fmtNum(Number(dep.amountAsset))} ${dep.asset} has been credited to your CediX account.` : ''}
@@ -114,7 +115,7 @@ export default function SandboxCheckout({ refId }: { refId: string }) {
 
         {done === 'failed' && (
           <div className="mt-8 text-center">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-down/15 text-3xl">❌</div>
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-down/15 text-down"><IconAlertCircle size={34} /></div>
             <h2 className="mt-4 text-xl font-bold">Payment Failed</h2>
             <p className="mt-2 text-sm text-muted">No funds were taken. You can try again anytime.</p>
             <button onClick={() => router.push('/deposit')} className="mt-6 w-full rounded-lg bg-white py-3 font-semibold text-black hover:bg-gray-200">

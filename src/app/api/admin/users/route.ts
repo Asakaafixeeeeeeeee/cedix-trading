@@ -1,10 +1,10 @@
-import { requireAdmin } from '@/lib/auth';
+import { requireElevatedAdmin } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { api } from '@/lib/api';
 
 export async function GET(req: Request) {
   return api(async () => {
-    await requireAdmin();
+    await requireElevatedAdmin();
     const url = new URL(req.url);
     const q = url.searchParams.get('q') ?? '';
     const users = await prisma.user.findMany({

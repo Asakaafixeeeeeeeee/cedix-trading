@@ -50,3 +50,6 @@ next-env.d.ts
 
 # allow env example
 !.env.example
+
+# private KYC documents
+/private-uploads

@@ -1,11 +1,11 @@
-import { requireAdmin } from '@/lib/auth';
+import { requireElevatedAdmin } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { api } from '@/lib/api';
 
 /** Resolve a moderation event: approve (restore content) or uphold removal. */
 export async function POST(req: Request, ctx: { params: Promise<{ id: string }> }) {
   return api(async () => {
-    const admin = await requireAdmin();
+    const admin = await requireElevatedAdmin();
     const { id } = await ctx.params;
     const { decision } = await req.json(); // 'approve' | 'remove' | 'block'
     const event = await prisma.moderationEvent.findUnique({ where: { id } });

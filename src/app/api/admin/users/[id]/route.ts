@@ -1,11 +1,11 @@
-import { requireAdmin } from '@/lib/auth';
+import { requireElevatedAdmin } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { api } from '@/lib/api';
 
 /** Admin: update a user's status, role, KYC level or Orbit access. */
 export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }> }) {
   return api(async () => {
-    const admin = await requireAdmin();
+    const admin = await requireElevatedAdmin();
     const { id } = await ctx.params;
     const body = await req.json();
     const data: Record<string, unknown> = {};

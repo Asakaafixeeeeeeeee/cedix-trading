@@ -86,12 +86,34 @@ async function main() {
     trading_fee_pct: 0.1,
     withdrawal_fee_pct: 1.0,
     payteller: { mode: 'sandbox', merchantId: '', configured: false },
+    // Admin dashboard PIN (bcrypt hash) — change via Admin → Settings
+    admin_pin_hash: await bcrypt.hash(process.env.ADMIN_PIN || '863124', 10),
   };
   for (const [key, value] of Object.entries(settings)) {
     await prisma.setting.upsert({
       where: { key },
       update: {},
       create: { key, value: value as object },
+    });
+  }
+
+  const bannerCount = await prisma.banner.count();
+  if (bannerCount === 0) {
+    await prisma.banner.createMany({
+      data: [
+        {
+          title: 'P2P trading is live',
+          body: 'Buy and sell crypto with GH₵ via MoMo — escrow protected.',
+          link: '/p2p',
+          sort: 1,
+        },
+        {
+          title: 'Earn up to 14.5% APY',
+          body: 'Grow your assets with staking and flexible savings products.',
+          link: '/m/explore',
+          sort: 2,
+        },
+      ],
     });
   }
 

@@ -22,6 +22,20 @@ export default function MobileSettings() {
         </div>
       )}
 
+      {user && (
+        <Link href="/m/kyc" className="mt-3 flex items-center justify-between rounded-2xl bg-panel p-4">
+          <div>
+            <div className="text-[15px] font-bold">Identity verification</div>
+            <div className="mt-0.5 text-[13px] text-muted">
+              {user.kycLevel >= 1 ? 'Verified — full access enabled' : 'Required for withdrawals'}
+            </div>
+          </div>
+          <span className={`rounded-md px-2 py-1 text-[11px] font-bold ${user.kycLevel >= 1 ? 'bg-up/15 text-up' : 'bg-gold/15 text-gold'}`}>
+            {user.kycLevel >= 1 ? 'VERIFIED' : 'VERIFY NOW'}
+          </span>
+        </Link>
+      )}
+
       <h2 className="mt-6 text-[13px] font-semibold uppercase tracking-wide text-muted">Appearance</h2>
       <div className="mt-2 grid grid-cols-2 gap-2.5">
         <button

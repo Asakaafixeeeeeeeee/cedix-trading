@@ -25,6 +25,9 @@ export async function GET() {
 export async function POST(req: Request) {
   return api(async () => {
     const user = await requireUser();
+    if (user.kycLevel < 1) {
+      throw new Error('Identity verification is required before withdrawing. Complete verification in your account.');
+    }
     const { asset, amountAsset, method, destination, destName } = await req.json();
     const qty = Number(amountAsset);
     if (!(qty > 0)) throw new Error('Amount must be positive');

@@ -1,10 +1,10 @@
-import { requireAdmin } from '@/lib/auth';
+import { requireElevatedAdmin } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { api } from '@/lib/api';
 
 export async function GET() {
   return api(async () => {
-    await requireAdmin();
+    await requireElevatedAdmin();
     const rows = await prisma.setting.findMany();
     const settings: Record<string, unknown> = {};
     for (const r of rows) settings[r.key] = r.value;
@@ -15,7 +15,7 @@ export async function GET() {
 /** Admin: update platform settings (FX override/margin, fees, Payteller config). */
 export async function PATCH(req: Request) {
   return api(async () => {
-    const admin = await requireAdmin();
+    const admin = await requireElevatedAdmin();
     const body = await req.json();
     const allowed = ['fx_margin_pct', 'fx_override', 'trading_fee_pct', 'withdrawal_fee_pct', 'payteller'];
     const updated: Record<string, unknown> = {};

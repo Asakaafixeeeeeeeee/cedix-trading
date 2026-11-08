@@ -316,6 +316,7 @@ export type UserWhereInput = {
   favorites?: Prisma.FavoriteListRelationFilter
   moderationEvents?: Prisma.ModerationEventListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
+  kyc?: Prisma.XOR<Prisma.KycApplicationNullableScalarRelationFilter, Prisma.KycApplicationWhereInput> | null
 }
 
 export type UserOrderByWithRelationInput = {
@@ -350,6 +351,7 @@ export type UserOrderByWithRelationInput = {
   favorites?: Prisma.FavoriteOrderByRelationAggregateInput
   moderationEvents?: Prisma.ModerationEventOrderByRelationAggregateInput
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
+  kyc?: Prisma.KycApplicationOrderByWithRelationInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -387,6 +389,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   favorites?: Prisma.FavoriteListRelationFilter
   moderationEvents?: Prisma.ModerationEventListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
+  kyc?: Prisma.XOR<Prisma.KycApplicationNullableScalarRelationFilter, Prisma.KycApplicationWhereInput> | null
 }, "id" | "email" | "username">
 
 export type UserOrderByWithAggregationInput = {
@@ -465,6 +468,7 @@ export type UserCreateInput = {
   favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -499,6 +503,7 @@ export type UserUncheckedCreateInput = {
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -533,6 +538,7 @@ export type UserUpdateInput = {
   favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -567,6 +573,7 @@ export type UserUncheckedUpdateInput = {
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -960,6 +967,20 @@ export type UserUpdateOneRequiredWithoutAuditLogsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.UserUpdateWithoutAuditLogsInput>, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
 }
 
+export type UserCreateNestedOneWithoutKycInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutKycInput, Prisma.UserUncheckedCreateWithoutKycInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutKycInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutKycNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutKycInput, Prisma.UserUncheckedCreateWithoutKycInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutKycInput
+  upsert?: Prisma.UserUpsertWithoutKycInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutKycInput, Prisma.UserUpdateWithoutKycInput>, Prisma.UserUncheckedUpdateWithoutKycInput>
+}
+
 export type UserCreateWithoutWalletsInput = {
   id?: string
   email: string
@@ -991,6 +1012,7 @@ export type UserCreateWithoutWalletsInput = {
   favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutWalletsInput = {
@@ -1024,6 +1046,7 @@ export type UserUncheckedCreateWithoutWalletsInput = {
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutWalletsInput = {
@@ -1073,6 +1096,7 @@ export type UserUpdateWithoutWalletsInput = {
   favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutWalletsInput = {
@@ -1106,6 +1130,7 @@ export type UserUncheckedUpdateWithoutWalletsInput = {
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTransactionsInput = {
@@ -1139,6 +1164,7 @@ export type UserCreateWithoutTransactionsInput = {
   favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTransactionsInput = {
@@ -1172,6 +1198,7 @@ export type UserUncheckedCreateWithoutTransactionsInput = {
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTransactionsInput = {
@@ -1221,6 +1248,7 @@ export type UserUpdateWithoutTransactionsInput = {
   favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTransactionsInput = {
@@ -1254,6 +1282,7 @@ export type UserUncheckedUpdateWithoutTransactionsInput = {
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutOrdersInput = {
@@ -1287,6 +1316,7 @@ export type UserCreateWithoutOrdersInput = {
   favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutOrdersInput = {
@@ -1320,6 +1350,7 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutOrdersInput = {
@@ -1369,6 +1400,7 @@ export type UserUpdateWithoutOrdersInput = {
   favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -1402,6 +1434,7 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTradesInput = {
@@ -1435,6 +1468,7 @@ export type UserCreateWithoutTradesInput = {
   favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTradesInput = {
@@ -1468,6 +1502,7 @@ export type UserUncheckedCreateWithoutTradesInput = {
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTradesInput = {
@@ -1517,6 +1552,7 @@ export type UserUpdateWithoutTradesInput = {
   favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTradesInput = {
@@ -1550,6 +1586,7 @@ export type UserUncheckedUpdateWithoutTradesInput = {
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutDepositIntentsInput = {
@@ -1583,6 +1620,7 @@ export type UserCreateWithoutDepositIntentsInput = {
   favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutDepositIntentsInput = {
@@ -1616,6 +1654,7 @@ export type UserUncheckedCreateWithoutDepositIntentsInput = {
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutDepositIntentsInput = {
@@ -1665,6 +1704,7 @@ export type UserUpdateWithoutDepositIntentsInput = {
   favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDepositIntentsInput = {
@@ -1698,6 +1738,7 @@ export type UserUncheckedUpdateWithoutDepositIntentsInput = {
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutWithdrawalsInput = {
@@ -1731,6 +1772,7 @@ export type UserCreateWithoutWithdrawalsInput = {
   favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutWithdrawalsInput = {
@@ -1764,6 +1806,7 @@ export type UserUncheckedCreateWithoutWithdrawalsInput = {
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutWithdrawalsInput = {
@@ -1813,6 +1856,7 @@ export type UserUpdateWithoutWithdrawalsInput = {
   favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutWithdrawalsInput = {
@@ -1846,6 +1890,7 @@ export type UserUncheckedUpdateWithoutWithdrawalsInput = {
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutP2pOffersInput = {
@@ -1879,6 +1924,7 @@ export type UserCreateWithoutP2pOffersInput = {
   favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutP2pOffersInput = {
@@ -1912,6 +1958,7 @@ export type UserUncheckedCreateWithoutP2pOffersInput = {
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutP2pOffersInput = {
@@ -1961,6 +2008,7 @@ export type UserUpdateWithoutP2pOffersInput = {
   favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutP2pOffersInput = {
@@ -1994,6 +2042,7 @@ export type UserUncheckedUpdateWithoutP2pOffersInput = {
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutP2pOrdersAsBuyerInput = {
@@ -2027,6 +2076,7 @@ export type UserCreateWithoutP2pOrdersAsBuyerInput = {
   favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutP2pOrdersAsBuyerInput = {
@@ -2060,6 +2110,7 @@ export type UserUncheckedCreateWithoutP2pOrdersAsBuyerInput = {
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutP2pOrdersAsBuyerInput = {
@@ -2098,6 +2149,7 @@ export type UserCreateWithoutP2pOrdersAsSellerInput = {
   favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutP2pOrdersAsSellerInput = {
@@ -2131,6 +2183,7 @@ export type UserUncheckedCreateWithoutP2pOrdersAsSellerInput = {
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutP2pOrdersAsSellerInput = {
@@ -2180,6 +2233,7 @@ export type UserUpdateWithoutP2pOrdersAsBuyerInput = {
   favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutP2pOrdersAsBuyerInput = {
@@ -2213,6 +2267,7 @@ export type UserUncheckedUpdateWithoutP2pOrdersAsBuyerInput = {
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutP2pOrdersAsSellerInput = {
@@ -2257,6 +2312,7 @@ export type UserUpdateWithoutP2pOrdersAsSellerInput = {
   favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutP2pOrdersAsSellerInput = {
@@ -2290,6 +2346,7 @@ export type UserUncheckedUpdateWithoutP2pOrdersAsSellerInput = {
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutOrbitPostsInput = {
@@ -2323,6 +2380,7 @@ export type UserCreateWithoutOrbitPostsInput = {
   favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutOrbitPostsInput = {
@@ -2356,6 +2414,7 @@ export type UserUncheckedCreateWithoutOrbitPostsInput = {
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutOrbitPostsInput = {
@@ -2405,6 +2464,7 @@ export type UserUpdateWithoutOrbitPostsInput = {
   favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOrbitPostsInput = {
@@ -2438,6 +2498,7 @@ export type UserUncheckedUpdateWithoutOrbitPostsInput = {
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutOrbitCommentsInput = {
@@ -2471,6 +2532,7 @@ export type UserCreateWithoutOrbitCommentsInput = {
   favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutOrbitCommentsInput = {
@@ -2504,6 +2566,7 @@ export type UserUncheckedCreateWithoutOrbitCommentsInput = {
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutOrbitCommentsInput = {
@@ -2553,6 +2616,7 @@ export type UserUpdateWithoutOrbitCommentsInput = {
   favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOrbitCommentsInput = {
@@ -2586,6 +2650,7 @@ export type UserUncheckedUpdateWithoutOrbitCommentsInput = {
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutOrbitLikesInput = {
@@ -2619,6 +2684,7 @@ export type UserCreateWithoutOrbitLikesInput = {
   favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutOrbitLikesInput = {
@@ -2652,6 +2718,7 @@ export type UserUncheckedCreateWithoutOrbitLikesInput = {
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutOrbitLikesInput = {
@@ -2701,6 +2768,7 @@ export type UserUpdateWithoutOrbitLikesInput = {
   favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOrbitLikesInput = {
@@ -2734,6 +2802,7 @@ export type UserUncheckedUpdateWithoutOrbitLikesInput = {
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutModerationEventsInput = {
@@ -2767,6 +2836,7 @@ export type UserCreateWithoutModerationEventsInput = {
   positions?: Prisma.PositionCreateNestedManyWithoutUserInput
   favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutModerationEventsInput = {
@@ -2800,6 +2870,7 @@ export type UserUncheckedCreateWithoutModerationEventsInput = {
   positions?: Prisma.PositionUncheckedCreateNestedManyWithoutUserInput
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutModerationEventsInput = {
@@ -2849,6 +2920,7 @@ export type UserUpdateWithoutModerationEventsInput = {
   positions?: Prisma.PositionUpdateManyWithoutUserNestedInput
   favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutModerationEventsInput = {
@@ -2882,6 +2954,7 @@ export type UserUncheckedUpdateWithoutModerationEventsInput = {
   positions?: Prisma.PositionUncheckedUpdateManyWithoutUserNestedInput
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPositionsInput = {
@@ -2915,6 +2988,7 @@ export type UserCreateWithoutPositionsInput = {
   favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPositionsInput = {
@@ -2948,6 +3022,7 @@ export type UserUncheckedCreateWithoutPositionsInput = {
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPositionsInput = {
@@ -2997,6 +3072,7 @@ export type UserUpdateWithoutPositionsInput = {
   favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPositionsInput = {
@@ -3030,6 +3106,7 @@ export type UserUncheckedUpdateWithoutPositionsInput = {
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutFavoritesInput = {
@@ -3063,6 +3140,7 @@ export type UserCreateWithoutFavoritesInput = {
   positions?: Prisma.PositionCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutFavoritesInput = {
@@ -3096,6 +3174,7 @@ export type UserUncheckedCreateWithoutFavoritesInput = {
   positions?: Prisma.PositionUncheckedCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutFavoritesInput = {
@@ -3145,6 +3224,7 @@ export type UserUpdateWithoutFavoritesInput = {
   positions?: Prisma.PositionUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFavoritesInput = {
@@ -3178,6 +3258,7 @@ export type UserUncheckedUpdateWithoutFavoritesInput = {
   positions?: Prisma.PositionUncheckedUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAuditLogsInput = {
@@ -3211,6 +3292,7 @@ export type UserCreateWithoutAuditLogsInput = {
   positions?: Prisma.PositionCreateNestedManyWithoutUserInput
   favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
+  kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -3244,6 +3326,7 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   positions?: Prisma.PositionUncheckedCreateNestedManyWithoutUserInput
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
+  kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -3293,6 +3376,7 @@ export type UserUpdateWithoutAuditLogsInput = {
   positions?: Prisma.PositionUpdateManyWithoutUserNestedInput
   favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
+  kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -3326,6 +3410,159 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   positions?: Prisma.PositionUncheckedUpdateManyWithoutUserNestedInput
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
+  kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
+}
+
+export type UserCreateWithoutKycInput = {
+  id?: string
+  email: string
+  username: string
+  passwordHash: string
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  country?: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  kycLevel?: number
+  orbitBanned?: boolean
+  riskScore?: number
+  createdAt?: Date | string
+  lastLoginAt?: Date | string | null
+  wallets?: Prisma.WalletCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  trades?: Prisma.TradeCreateNestedManyWithoutUserInput
+  depositIntents?: Prisma.DepositIntentCreateNestedManyWithoutUserInput
+  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutUserInput
+  p2pOffers?: Prisma.P2POfferCreateNestedManyWithoutUserInput
+  p2pOrdersAsBuyer?: Prisma.P2POrderCreateNestedManyWithoutBuyerInput
+  p2pOrdersAsSeller?: Prisma.P2POrderCreateNestedManyWithoutSellerInput
+  orbitPosts?: Prisma.OrbitPostCreateNestedManyWithoutAuthorInput
+  orbitComments?: Prisma.OrbitCommentCreateNestedManyWithoutAuthorInput
+  orbitLikes?: Prisma.OrbitLikeCreateNestedManyWithoutUserInput
+  positions?: Prisma.PositionCreateNestedManyWithoutUserInput
+  favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
+  moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+}
+
+export type UserUncheckedCreateWithoutKycInput = {
+  id?: string
+  email: string
+  username: string
+  passwordHash: string
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  country?: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  kycLevel?: number
+  orbitBanned?: boolean
+  riskScore?: number
+  createdAt?: Date | string
+  lastLoginAt?: Date | string | null
+  wallets?: Prisma.WalletUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  trades?: Prisma.TradeUncheckedCreateNestedManyWithoutUserInput
+  depositIntents?: Prisma.DepositIntentUncheckedCreateNestedManyWithoutUserInput
+  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutUserInput
+  p2pOffers?: Prisma.P2POfferUncheckedCreateNestedManyWithoutUserInput
+  p2pOrdersAsBuyer?: Prisma.P2POrderUncheckedCreateNestedManyWithoutBuyerInput
+  p2pOrdersAsSeller?: Prisma.P2POrderUncheckedCreateNestedManyWithoutSellerInput
+  orbitPosts?: Prisma.OrbitPostUncheckedCreateNestedManyWithoutAuthorInput
+  orbitComments?: Prisma.OrbitCommentUncheckedCreateNestedManyWithoutAuthorInput
+  orbitLikes?: Prisma.OrbitLikeUncheckedCreateNestedManyWithoutUserInput
+  positions?: Prisma.PositionUncheckedCreateNestedManyWithoutUserInput
+  favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
+  moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+}
+
+export type UserCreateOrConnectWithoutKycInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutKycInput, Prisma.UserUncheckedCreateWithoutKycInput>
+}
+
+export type UserUpsertWithoutKycInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutKycInput, Prisma.UserUncheckedUpdateWithoutKycInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutKycInput, Prisma.UserUncheckedCreateWithoutKycInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutKycInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutKycInput, Prisma.UserUncheckedUpdateWithoutKycInput>
+}
+
+export type UserUpdateWithoutKycInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  wallets?: Prisma.WalletUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  trades?: Prisma.TradeUpdateManyWithoutUserNestedInput
+  depositIntents?: Prisma.DepositIntentUpdateManyWithoutUserNestedInput
+  withdrawals?: Prisma.WithdrawalUpdateManyWithoutUserNestedInput
+  p2pOffers?: Prisma.P2POfferUpdateManyWithoutUserNestedInput
+  p2pOrdersAsBuyer?: Prisma.P2POrderUpdateManyWithoutBuyerNestedInput
+  p2pOrdersAsSeller?: Prisma.P2POrderUpdateManyWithoutSellerNestedInput
+  orbitPosts?: Prisma.OrbitPostUpdateManyWithoutAuthorNestedInput
+  orbitComments?: Prisma.OrbitCommentUpdateManyWithoutAuthorNestedInput
+  orbitLikes?: Prisma.OrbitLikeUpdateManyWithoutUserNestedInput
+  positions?: Prisma.PositionUpdateManyWithoutUserNestedInput
+  favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
+  moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+}
+
+export type UserUncheckedUpdateWithoutKycInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  wallets?: Prisma.WalletUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  trades?: Prisma.TradeUncheckedUpdateManyWithoutUserNestedInput
+  depositIntents?: Prisma.DepositIntentUncheckedUpdateManyWithoutUserNestedInput
+  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+  p2pOffers?: Prisma.P2POfferUncheckedUpdateManyWithoutUserNestedInput
+  p2pOrdersAsBuyer?: Prisma.P2POrderUncheckedUpdateManyWithoutBuyerNestedInput
+  p2pOrdersAsSeller?: Prisma.P2POrderUncheckedUpdateManyWithoutSellerNestedInput
+  orbitPosts?: Prisma.OrbitPostUncheckedUpdateManyWithoutAuthorNestedInput
+  orbitComments?: Prisma.OrbitCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  orbitLikes?: Prisma.OrbitLikeUncheckedUpdateManyWithoutUserNestedInput
+  positions?: Prisma.PositionUncheckedUpdateManyWithoutUserNestedInput
+  favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
+  moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 
@@ -3526,6 +3763,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   favorites?: boolean | Prisma.User$favoritesArgs<ExtArgs>
   moderationEvents?: boolean | Prisma.User$moderationEventsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
+  kyc?: boolean | Prisma.User$kycArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -3601,6 +3839,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   favorites?: boolean | Prisma.User$favoritesArgs<ExtArgs>
   moderationEvents?: boolean | Prisma.User$moderationEventsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
+  kyc?: boolean | Prisma.User$kycArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -3625,6 +3864,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     favorites: Prisma.$FavoritePayload<ExtArgs>[]
     moderationEvents: Prisma.$ModerationEventPayload<ExtArgs>[]
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
+    kyc: Prisma.$KycApplicationPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -4052,6 +4292,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   favorites<T extends Prisma.User$favoritesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$favoritesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FavoritePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   moderationEvents<T extends Prisma.User$moderationEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$moderationEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ModerationEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   auditLogs<T extends Prisma.User$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  kyc<T extends Prisma.User$kycArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$kycArgs<ExtArgs>>): Prisma.Prisma__KycApplicationClient<runtime.Types.Result.GetResult<Prisma.$KycApplicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4870,6 +5111,25 @@ export type User$auditLogsArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.AuditLogScalarFieldEnum | Prisma.AuditLogScalarFieldEnum[]
+}
+
+/**
+ * User.kyc
+ */
+export type User$kycArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the KycApplication
+   */
+  select?: Prisma.KycApplicationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the KycApplication
+   */
+  omit?: Prisma.KycApplicationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.KycApplicationInclude<ExtArgs> | null
+  where?: Prisma.KycApplicationWhereInput
 }
 
 /**

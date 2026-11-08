@@ -27,6 +27,26 @@ npm run db:seed                   # seed admin/demo users, products, offers, set
 | Admin | admin@cedix.gh   | Admin123! |
 | User  | demo@cedix.gh    | Demo123!  |
 
+### Admin access
+
+The admin dashboard is PIN-protected. Log in with an admin account, then open **`/admin/login`**
+and enter the 6-digit access PIN (default **863124**, or the `ADMIN_PIN` env var at seed time —
+change it in Admin → Settings & Audit). PIN attempts are rate-limited and audited; elevated
+sessions expire after 30 minutes.
+
+### Email verification (registration)
+
+Registration requires a 6-digit email code. Configure SMTP to send real emails:
+`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM` (optional `SMTP_SECURE=true`).
+Without SMTP the platform runs in sandbox mode and shows the code on-screen with a notice.
+
+### Identity verification (KYC)
+
+Users submit Ghana Card/passport details, front/back document photos and a live camera selfie at
+`/m/kyc` (or `/verify`). Documents are stored privately in `private-uploads/` (never publicly
+served; access restricted to the owner and elevated admins). Admins review applications in
+Admin → KYC. Withdrawals require an approved verification.
+
 ## Apps & URLs
 
 | Surface              | URL                  | Notes                                             |
@@ -78,6 +98,8 @@ npm run db:seed      # reseed demo data
 > app-locally into `node_modules/@embedded-postgres/windows-x64/native/bin/` — if you reinstall
 > node_modules on a machine without the VC++ redistributable, copy `vcruntime140.dll`,
 > `vcruntime140_1.dll` and `msvcp140.dll` there again (or install the VC++ redistributable).
+> Local database files live in `%USERPROFILE%\.cedix\` (outside the project so the dev watcher
+> is not triggered); override with `CEDIX_PGDIR`.
 
 ## Going to production
 

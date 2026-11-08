@@ -7,9 +7,9 @@ import { fmtGHS, fmtNum } from '@/lib/format';
 
 const ASSETS = ['USDT', 'BTC', 'ETH', 'SOL', 'BNB', 'GHS'];
 const METHODS = [
-  ['MOMO', '📱 MoMo'],
-  ['CARD', '💳 Card'],
-  ['BANK', '🏦 Bank'],
+  ['MOMO', 'Mobile Money', '/pay/mtn.svg'],
+  ['CARD', 'Card', '/pay/card.svg'],
+  ['BANK', 'Bank', '/pay/bank.svg'],
 ] as const;
 
 type Quote = { amountAsset: number; rateGHSUSD: number };
@@ -58,7 +58,7 @@ export default function MobileDeposit() {
 
   return (
     <div className="px-4 pt-4">
-      <h1 className="text-xl font-bold">💳 Deposit GH₵</h1>
+      <h1 className="text-xl font-bold">Deposit GH₵</h1>
       <p className="mt-1 text-xs text-muted">Pay with MoMo, card or bank via Payteller — receive crypto instantly.</p>
 
       <div className="-mx-1 mt-4 flex gap-1.5 overflow-x-auto px-1 [scrollbar-width:none]">
@@ -92,24 +92,35 @@ export default function MobileDeposit() {
       </div>
 
       <div className="mt-3 grid grid-cols-3 gap-2">
-        {METHODS.map(([id, label]) => (
+        {METHODS.map(([id, label, badge]) => (
           <button
             key={id}
             onClick={() => setMethod(id)}
-            className={`rounded-xl border py-3 text-xs font-bold ${method === id ? 'border-accent bg-panel2' : 'border-line bg-panel text-muted'}`}
+            className={`flex flex-col items-center gap-1.5 rounded-xl border py-3 text-xs font-bold ${method === id ? 'border-accent bg-panel2' : 'border-line bg-panel text-muted'}`}
           >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={badge} alt="" className="h-7 w-7 rounded-lg" />
             {label}
           </button>
         ))}
       </div>
 
       {method === 'MOMO' && (
-        <input
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          placeholder="MoMo number — 024 123 4567"
-          className="mt-3 w-full rounded-xl border border-line bg-panel px-4 py-3 text-sm outline-none focus:border-accent"
-        />
+        <>
+          <div className="mt-3 flex items-center gap-2 px-1">
+            <span className="text-[11px] font-medium text-muted">Supported networks:</span>
+            {['/pay/mtn.svg', '/pay/telecel.svg', '/pay/at.svg'].map((s) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img key={s} src={s} alt="" className="h-5 w-5 rounded" />
+            ))}
+          </div>
+          <input
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder="MoMo number — 024 123 4567"
+            className="mt-2 w-full rounded-xl border border-line bg-panel px-4 py-3 text-sm outline-none focus:border-accent"
+          />
+        </>
       )}
 
       {quote && amt >= 10 && (

@@ -3,6 +3,7 @@ import { useRef, useState } from 'react';
 import Link from 'next/link';
 import { post as apiPost, usePoll, useUser } from '@/lib/hooks';
 import { timeAgo } from '@/lib/format';
+import { IconImage, IconVideo, IconHeart, IconComment } from '@/components/icons';
 
 type Post = {
   id: string;
@@ -145,7 +146,7 @@ function Composer({ onPosted }: { onPosted: () => void }) {
       <div className="mt-3 flex items-center gap-3">
         <input ref={fileRef} type="file" accept="image/*,video/mp4,video/webm" multiple hidden onChange={(e) => upload(e.target.files)} />
         <button onClick={() => fileRef.current?.click()} disabled={uploading || media.length >= 4} className="rounded-lg border border-line px-3 py-1.5 text-xs text-muted hover:border-accent hover:text-white disabled:opacity-40">
-          {uploading ? 'Uploading…' : '📷 Photo / 🎬 Video'}
+          {uploading ? 'Uploading…' : (<span className="flex items-center gap-1.5"><IconImage size={15} /> Photo <IconVideo size={15} /> Video</span>)}
         </button>
         <span className="text-[11px] text-muted">AI moderation active — fraud is auto-removed</span>
         <button
@@ -210,10 +211,10 @@ function PostCard({ post, myId, isAdmin, onChange }: { post: Post; myId: string 
       )}
       <div className="mt-3 flex items-center gap-5 text-sm text-muted">
         <button onClick={toggleLike} className={`flex items-center gap-1.5 hover:text-white ${liked ? 'text-down' : ''}`}>
-          {liked ? '❤️' : '🤍'} {likeCount}
+          <IconHeart size={17} filled={liked} className={liked ? 'text-down' : ''} /> {likeCount}
         </button>
         <button onClick={() => setShowComments((v) => !v)} className="flex items-center gap-1.5 hover:text-white">
-          💬 {post.commentCount}
+          <IconComment size={17} /> {post.commentCount}
         </button>
       </div>
       {showComments && <Comments postId={post.id} canComment={!!myId} />}

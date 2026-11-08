@@ -74,11 +74,11 @@ export default function EarnSection() {
         </section>
       )}
       <section>
-        <h2 className="mb-3 text-lg font-bold">🔒 Staking</h2>
+        <h2 className="mb-3 text-lg font-bold">Staking</h2>
         <Grid items={staking} />
       </section>
       <section className="mt-8">
-        <h2 className="mb-3 text-lg font-bold">🏦 Savings</h2>
+        <h2 className="mb-3 text-lg font-bold">Savings</h2>
         <Grid items={savings} />
       </section>
       {subscribing && (
@@ -133,7 +133,7 @@ function PositionRow({ pos, onChange }: { pos: Position; onChange: () => void })
         className="ml-auto rounded-lg border border-line px-4 py-1.5 text-xs font-medium hover:border-accent disabled:opacity-40"
         title={locked ? 'Locked until term ends' : ''}
       >
-        {locked ? '🔒 Locked' : busy ? 'Redeeming…' : 'Redeem'}
+        {locked ? 'Locked' : busy ? 'Redeeming…' : 'Redeem'}
       </button>
     </div>
   );

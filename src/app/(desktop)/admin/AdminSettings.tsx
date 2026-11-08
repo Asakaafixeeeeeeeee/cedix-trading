@@ -16,6 +16,7 @@ type Log = {
   action: string;
   targetType: string | null;
   targetId: string | null;
+  ip: string | null;
   createdAt: string;
   admin: { username: string };
 };
@@ -23,10 +24,14 @@ type Log = {
 export default function AdminSettings() {
   const { data, refresh } = usePoll<{ settings: Settings }>('/api/admin/settings', 0);
   const { data: fx } = usePoll<{ rate: number; baseRate: number; source: string }>('/api/fx', 30000);
-  const { data: audit } = usePoll<{ logs: Log[] }>('/api/admin/audit', 30000);
+  const [logQ, setLogQ] = useState('');
+  const [logQuery, setLogQuery] = useState('');
+  const { data: audit } = usePoll<{ logs: Log[] }>(`/api/admin/audit?q=${encodeURIComponent(logQuery)}`, 30000);
   const [form, setForm] = useState({ fx_margin_pct: '', fx_override: '', trading_fee_pct: '', withdrawal_fee_pct: '' });
   const [msg, setMsg] = useState('');
   const [busy, setBusy] = useState(false);
+  const [newPin, setNewPin] = useState('');
+  const [pinMsg, setPinMsg] = useState('');
 
   useEffect(() => {
     const s = data?.settings;
@@ -63,12 +68,23 @@ export default function AdminSettings() {
     }
   }
 
+  async function changePin() {
+    setPinMsg('');
+    try {
+      await post('/api/admin/pin', { newPin }, 'PATCH');
+      setPinMsg('PIN changed ✓');
+      setNewPin('');
+    } catch (e) {
+      setPinMsg(e instanceof Error ? e.message : 'Failed');
+    }
+  }
+
   const input = 'num mt-1 w-full rounded-lg border border-line bg-bg px-3 py-2.5 text-sm outline-none focus:border-accent';
 
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
       <div className="rounded-xl border border-line bg-panel p-5">
-        <h3 className="font-semibold">💱 Exchange Rate & Fees</h3>
+        <h3 className="font-semibold">Exchange Rate & Fees</h3>
         <p className="mt-1 text-xs text-muted">
           Live rate: {fx ? `1 USD = ${fx.baseRate.toFixed(4)} GHS (${fx.source})` : '…'} · Effective:{' '}
           {fx ? fx.rate.toFixed(4) : '…'} GHS
@@ -96,7 +112,22 @@ export default function AdminSettings() {
         </button>
         {msg && <span className={`ml-3 text-sm ${msg.includes('✓') ? 'text-up' : 'text-down'}`}>{msg}</span>}
 
-        <h3 className="mt-8 font-semibold">💳 Payteller Gateway</h3>
+        <h3 className="mt-8 font-semibold">Admin Access PIN</h3>
+        <div className="mt-2 flex gap-2">
+          <input
+            value={newPin}
+            onChange={(e) => setNewPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
+            placeholder="New 6-digit PIN"
+            inputMode="numeric"
+            className="num w-44 rounded-lg border border-line bg-bg px-3 py-2.5 text-sm outline-none focus:border-accent"
+          />
+          <button onClick={changePin} disabled={newPin.length !== 6} className="rounded-lg bg-white px-5 text-sm font-semibold text-black disabled:opacity-40">
+            Change PIN
+          </button>
+          {pinMsg && <span className={`self-center text-sm ${pinMsg.includes('✓') ? 'text-up' : 'text-down'}`}>{pinMsg}</span>}
+        </div>
+
+        <h3 className="mt-8 font-semibold">Payteller Gateway</h3>
         <div className="mt-2 rounded-lg border border-line bg-bg p-4 text-sm">
           <div className="flex justify-between py-1">
             <span className="text-muted">Mode</span>
@@ -114,17 +145,30 @@ export default function AdminSettings() {
       </div>
 
       <div className="rounded-xl border border-line bg-panel p-5">
-        <h3 className="font-semibold">📜 Admin Audit Log</h3>
+        <h3 className="font-semibold">Admin Activity Logs</h3>
+        <form
+          onSubmit={(e) => { e.preventDefault(); setLogQuery(logQ); }}
+          className="mt-2 flex gap-2"
+        >
+          <input
+            value={logQ}
+            onChange={(e) => setLogQ(e.target.value)}
+            placeholder="Filter by action, admin, target…"
+            className="w-full rounded-lg border border-line bg-bg px-3 py-2 text-sm outline-none focus:border-accent"
+          />
+          <button className="rounded-lg bg-panel2 px-4 text-sm font-medium">Search</button>
+        </form>
         <div className="mt-3 max-h-[480px] space-y-2 overflow-y-auto">
           {(audit?.logs ?? []).map((l) => (
             <div key={l.id} className="rounded-lg border border-line/60 bg-bg px-3 py-2 text-xs">
               <span className="font-semibold text-gold">@{l.admin.username}</span>{' '}
               <span className="text-foreground">{l.action}</span>
               {l.targetType && <span className="text-muted"> · {l.targetType} {l.targetId?.slice(0, 10)}</span>}
+              {l.ip && <span className="num text-muted"> · {l.ip}</span>}
               <span className="float-right text-muted">{timeAgo(l.createdAt)}</span>
             </div>
           ))}
-          {(audit?.logs ?? []).length === 0 && <div className="py-8 text-center text-muted">No admin actions yet.</div>}
+          {(audit?.logs ?? []).length === 0 && <div className="py-8 text-center text-muted">No matching log entries.</div>}
         </div>
       </div>
     </div>
