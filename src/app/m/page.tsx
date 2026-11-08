@@ -9,6 +9,7 @@ import type { Portfolio } from '@/lib/wallet';
 import type { MarketRow } from '@/components/MarketTable';
 import CoinIcon from '@/components/CoinIcon';
 import HomeSections from '@/components/mobile/HomeSections';
+import GuestHero from '@/components/mobile/GuestHero';
 import {
   IconMenu, IconScan, IconSearch, IconEye, IconEyeOff, IconChevronRight, IconChevronDown,
   IconGear, IconClock, IconClose,
@@ -89,6 +90,14 @@ export default function MobileHome() {
         )}
       </div>
 
+      {/* Logged-out: OKX-style splash with live market preview */}
+      {!loading && !user ? (
+        <>
+          <GuestHero markets={markets?.markets ?? []} />
+          {menuOpen && <MenuSheet isAdmin={false} loggedIn={false} onClose={() => setMenuOpen(false)} />}
+        </>
+      ) : (
+        <>
       {/* Search */}
       <div className="mt-2 flex items-center gap-2">
         <div className="flex flex-1 items-center gap-2 rounded-full bg-panel px-4 py-2.5">
@@ -261,6 +270,8 @@ export default function MobileHome() {
 
       {menuOpen && <MenuSheet isAdmin={user?.role === 'ADMIN'} loggedIn={!!user} onClose={() => setMenuOpen(false)} />}
       {scanOpen && <ScanSheet onClose={() => setScanOpen(false)} />}
+        </>
+      )}
     </div>
   );
 }
