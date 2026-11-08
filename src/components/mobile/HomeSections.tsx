@@ -33,10 +33,20 @@ function SectionHeading({ title }: { title: string }) {
   );
 }
 
+/**
+ * Tickers whose generic logo CDN entry is stale (ticker reassigned to a new
+ * company). Maps to a verified correct logo URL.
+ */
+const LOGO_OVERRIDES: Record<string, string> = {
+  // FLY now belongs to Firefly Aerospace; Parqet/FMP still serve old Fly Leasing.
+  FLY: 'https://s3-symbol-logo.tradingview.com/firefly-aerospace--big.svg',
+};
+
 /** Real company logo by ticker (Parqet CDN), with a monogram fallback. */
 function CompanyLogo({ symbol, size = 20 }: { symbol: string; size?: number }) {
   const [failed, setFailed] = useState(false);
   const clean = symbol.split('.')[0].split('^')[0]; // PBR.A -> PBR
+  const override = LOGO_OVERRIDES[clean];
   if (failed) {
     return (
       <span
@@ -50,7 +60,7 @@ function CompanyLogo({ symbol, size = 20 }: { symbol: string; size?: number }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={`https://assets.parqet.com/logos/symbol/${encodeURIComponent(clean)}?format=png&size=64`}
+      src={override ?? `https://assets.parqet.com/logos/symbol/${encodeURIComponent(clean)}?format=png&size=64`}
       alt={symbol}
       width={size}
       height={size}

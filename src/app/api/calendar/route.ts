@@ -21,13 +21,15 @@ const HEADERS = {
 
 // Popular/trending tickers prioritized in the calendar (the names traders watch),
 // matching the selection style of major exchanges. Earnings dates remain 100% real.
-const WATCHLIST = new Set([
+// Order matters: earlier tickers rank higher when several report the same day.
+const WATCHLIST = [
   'RKLB','ASTS','CRWV','FLY','NBIS','CBRS','PLTR','COIN','HOOD','SOFI','MSTR','SMCI','ARM','IONQ','JOBY','ACHR',
   'OKLO','SMR','RBLX','U','PATH','UPST','AFRM','DKNG','ROKU','NET','DDOG','SNOW','SHOP','SPOT','UBER','ABNB',
   'AMD','NVDA','TSLA','AAPL','MSFT','AMZN','GOOGL','GOOG','META','NFLX','AVGO','INTC','MU','QCOM','ORCL','CRM',
   'DIS','BA','PYPL','XYZ','SQ','GME','AMC','RIVN','LCID','NIO','LI','XPEV','BABA','JD','PDD','SE','GRAB','CVNA',
   'CELH','ELF','DUOL','APP','TTD','ZS','CRWD','PANW','MDB','OSCR','RDDT','DJT','TEM','LUNR','RGTI','QBTS','BBAI',
-]);
+];
+const WATCH_RANK = new Map(WATCHLIST.map((t, i) => [t, i]));
 
 function fmtDate(d: Date) {
   return d.toISOString().slice(0, 10);
@@ -38,27 +40,30 @@ async function fetchEarnings(date: string) {
     headers: HEADERS,
     signal: AbortSignal.timeout(8000),
   });
-  if (!res.ok) return [];
+  if (!res.ok) return { items: [] as { symbol: string; name: string }[], hot: false };
   const json = await res.json();
   const rows = (json?.data?.rows ?? []) as { symbol: string; name: string; marketCap: string; noOfEsts?: string }[];
   const mapped = rows.map((r) => ({
     symbol: r.symbol,
     name: r.name,
     cap: Number(String(r.marketCap).replace(/[^0-9]/g, '')) || 0,
-    hot: WATCHLIST.has(r.symbol.split('.')[0]),
+    rank: WATCH_RANK.get(r.symbol.split('.')[0]) ?? Infinity,
   }));
-  // trending watchlist names first, then by size; dedupe share classes (PBR / PBR.A)
-  mapped.sort((a, b) => (Number(b.hot) - Number(a.hot)) || b.cap - a.cap);
+  // trending watchlist names first (by watchlist order), then by size;
+  // dedupe share classes (PBR / PBR.A)
+  mapped.sort((a, b) => a.rank - b.rank || b.cap - a.cap);
   const seen = new Set<string>();
   const out: { symbol: string; name: string }[] = [];
+  let hot = false;
   for (const r of mapped) {
     const root = r.symbol.split('.')[0];
     if (seen.has(root)) continue;
     seen.add(root);
     out.push({ symbol: r.symbol, name: r.name });
+    if (Number.isFinite(r.rank)) hot = true;
     if (out.length === 2) break;
   }
-  return out;
+  return { items: out, hot };
 }
 
 async function fetchEconHighlight(dates: string[]) {
@@ -117,9 +122,14 @@ export async function GET() {
         dates.push(fmtDate(d));
       }
 
-      const results = await Promise.all(dates.slice(0, 5).map(async (date) => ({ date, items: await fetchEarnings(date) })));
-      const days: Day[] = results
-        .filter((r) => r.items.length > 0)
+      const results = await Promise.all(
+        dates.slice(0, 5).map(async (date) => ({ date, ...(await fetchEarnings(date)) })),
+      );
+      // Prefer days featuring trending watchlist names; fall back to any
+      // earnings days during quiet weeks so the calendar never goes empty.
+      const withEarnings = results.filter((r) => r.items.length > 0);
+      const hotDays = withEarnings.filter((r) => r.hot);
+      const days: Day[] = (hotDays.length > 0 ? hotDays : withEarnings)
         .slice(0, 4)
         .map((r) => {
           const d = new Date(r.date + 'T00:00:00Z');
