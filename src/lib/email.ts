@@ -20,7 +20,7 @@ export async function sendEmail(opts: {
   subject: string;
   template: string;
   html: string;
-}): Promise<void> {
+}): Promise<'SENT' | 'QUEUED' | 'FAILED'> {
   const log = await prisma.emailLog.create({
     data: {
       userId: opts.userId ?? null,
@@ -32,7 +32,7 @@ export async function sendEmail(opts: {
     },
   });
 
-  if (!emailEnabled()) return; // stays QUEUED until Resend is connected
+  if (!emailEnabled()) return 'QUEUED'; // stays QUEUED until Resend is connected
 
   try {
     const res = await fetch('https://api.resend.com/emails', {
@@ -46,15 +46,17 @@ export async function sendEmail(opts: {
     });
     if (res.ok) {
       await prisma.emailLog.update({ where: { id: log.id }, data: { status: 'SENT', sentAt: new Date() } });
-    } else {
-      const err = await res.text().catch(() => `HTTP ${res.status}`);
-      await prisma.emailLog.update({ where: { id: log.id }, data: { status: 'FAILED', error: err.slice(0, 500) } });
+      return 'SENT';
     }
+    const err = await res.text().catch(() => `HTTP ${res.status}`);
+    await prisma.emailLog.update({ where: { id: log.id }, data: { status: 'FAILED', error: err.slice(0, 500) } });
+    return 'FAILED';
   } catch (e) {
     await prisma.emailLog.update({
       where: { id: log.id },
       data: { status: 'FAILED', error: e instanceof Error ? e.message.slice(0, 500) : 'send error' },
     });
+    return 'FAILED';
   }
 }
 

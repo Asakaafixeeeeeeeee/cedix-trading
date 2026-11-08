@@ -34,7 +34,7 @@ export async function POST(req: Request) {
     });
 
     if (emailEnabled()) {
-      await sendEmail({
+      const result = await sendEmail({
         to: addr,
         subject: 'Your CediX verification code',
         template: 'email_verification',
@@ -44,7 +44,8 @@ export async function POST(req: Request) {
           'It expires in 10 minutes. If you did not request this, you can ignore this email.',
         ]),
       });
-      return { sent: true };
+      if (result === 'SENT') return { sent: true };
+      // fall through to SMTP / sandbox so registration never breaks
     }
 
     const sent = await sendMail(
