@@ -40,9 +40,10 @@ export default function MessagesThread({ id }: { id: string }) {
     }
     load();
     const t = setInterval(load, 5000);
-    const u = setInterval(() => {
+    const loadUnread = () =>
       jfetch<{ unread: number }>('/api/messages/unread').then((d) => setOtherUnread(d.unread)).catch(() => {});
-    }, 8000);
+    loadUnread();
+    const u = setInterval(loadUnread, 8000);
     return () => {
       stop = true;
       clearInterval(t);
@@ -93,13 +94,16 @@ export default function MessagesThread({ id }: { id: string }) {
         <div className="relative flex flex-col items-center">
           <Link
             href="/messages"
-            className="absolute left-0 top-1 flex items-center gap-1.5 rounded-full bg-[#ffffff] py-1.5 pl-2.5 pr-3 shadow-[0_1px_4px_rgba(0,0,0,0.12)]"
+            aria-label="Back to messages"
+            className={`absolute left-0 top-1 flex items-center gap-2 rounded-full border border-[#ffffff]/70 bg-[#ffffff]/65 py-[7px] pl-3 shadow-[0_2px_12px_rgba(0,0,0,0.10)] backdrop-blur-xl ${otherUnread > 0 ? 'pr-[7px]' : 'pr-3'}`}
           >
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M15 5l-7 7 7 7" />
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 4.5L7.5 12l7.5 7.5" />
             </svg>
             {otherUnread > 0 && (
-              <span className="rounded-full bg-[#111] px-2 py-0.5 text-[12px] font-semibold text-[#fff]">{otherUnread}</span>
+              <span className="flex min-w-[36px] items-center justify-center rounded-full bg-[#0a0a0a] px-2.5 py-[3px] text-[13px] font-semibold leading-[18px] text-[#ffffff]">
+                {otherUnread}
+              </span>
             )}
           </Link>
           <ConversationAvatar sender={thread?.sender ?? null} size={62} />
