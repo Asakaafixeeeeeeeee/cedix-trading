@@ -59,7 +59,7 @@ export default function MobileTransfer() {
     <div className="px-4 pt-3">
       <div className="flex items-center gap-3 py-2">
         <Link href="/m/assets" className="text-xl text-muted">‹</Link>
-        <h1 className="text-lg font-bold">Transfer</h1>
+        <h1 className="text-[17px] font-bold">Transfer</h1>
       </div>
       <p className="mt-1 text-[13px] text-muted">
         Move value between your Funding (GH₵) and Trading (USDT) wallets at the live exchange rate. No fee.
@@ -75,14 +75,14 @@ export default function MobileTransfer() {
           </div>
           <div className="mt-2 flex items-center gap-2.5">
             <CoinIcon asset={from.asset} size={32} />
-            <span className="text-[15px] font-bold">{from.label}</span>
+            <span className="text-[14px] font-semibold">{from.label}</span>
           </div>
           <input
             type="number"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             placeholder="0.00"
-            className="num mt-3 w-full bg-transparent text-3xl font-bold outline-none placeholder:text-line"
+            className="num mt-3 w-full bg-transparent text-[26px] font-bold outline-none placeholder:text-line"
           />
         </div>
 
@@ -98,9 +98,9 @@ export default function MobileTransfer() {
           <div className="text-[12px] text-muted">To</div>
           <div className="mt-2 flex items-center gap-2.5">
             <CoinIcon asset={to.asset} size={32} />
-            <span className="text-[15px] font-bold">{to.label}</span>
+            <span className="text-[14px] font-semibold">{to.label}</span>
           </div>
-          <div className="num mt-3 text-3xl font-bold text-muted">
+          <div className="num mt-3 text-[26px] font-bold text-muted">
             {amt > 0 && rate ? fmtNum(received, 2) : '0.00'}
           </div>
         </div>
@@ -116,7 +116,7 @@ export default function MobileTransfer() {
       <button
         onClick={submit}
         disabled={busy || !(amt > 0) || amt > sourceBal + 1e-9}
-        className="mt-5 w-full rounded-full bg-white py-3.5 font-bold text-black transition active:scale-[0.98] disabled:opacity-40"
+        className="mt-5 w-full rounded-full bg-white py-3 text-[14px] font-bold text-black transition active:scale-[0.98] disabled:opacity-40"
       >
         {busy ? 'Transferring…' : 'Transfer'}
       </button>

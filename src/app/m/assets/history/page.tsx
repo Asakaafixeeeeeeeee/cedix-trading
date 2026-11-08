@@ -34,7 +34,7 @@ export default function MobileHistory() {
     <div className="px-4 pt-3">
       <div className="flex items-center gap-3 py-2">
         <Link href="/m/assets" className="text-xl text-muted">‹</Link>
-        <h1 className="text-lg font-bold">Transaction History</h1>
+        <h1 className="text-[17px] font-bold">Transaction History</h1>
       </div>
       <div className="mt-2">
         {(data?.transactions ?? []).length === 0 && (
@@ -47,7 +47,7 @@ export default function MobileHistory() {
               <div className="mt-0.5 truncate text-[12px] text-muted">{t.note ?? '—'}</div>
             </div>
             <div className="shrink-0 text-right">
-              <div className="num text-[14px] font-bold">{fmtNum(Number(t.amount))} {t.asset}</div>
+              <div className="num text-[13px] font-semibold">{fmtNum(Number(t.amount))} {t.asset}</div>
               <div className="num text-[11px] text-muted">
                 {timeAgo(t.createdAt)} · <span className={t.status === 'COMPLETED' ? 'text-up' : t.status === 'FAILED' ? 'text-down' : 'text-gold'}>{t.status}</span>
               </div>

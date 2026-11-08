@@ -117,6 +117,27 @@ async function main() {
     });
   }
 
+  const annCount = await prisma.announcement.count();
+  if (annCount === 0) {
+    await prisma.announcement.createMany({
+      data: [
+        {
+          title: 'CediX launches P2P trading with Ghanaian Cedis',
+          body: 'Buy and sell crypto directly with other users using MTN MoMo, Telecel Cash, AT Money and bank transfer. Every trade is protected by escrow.',
+          pinned: true,
+        },
+        {
+          title: 'Identity verification with Ghana Card now available',
+          body: 'Verify your identity with your Ghana Card or passport to unlock withdrawals and higher limits. Review usually completes within 24 hours.',
+        },
+        {
+          title: 'Earn products are live: staking and savings up to 14.5% APY',
+          body: 'Grow your assets with flexible and fixed-term staking and savings products, including Cedi Yield.',
+        },
+      ],
+    });
+  }
+
   const offerCount = await prisma.p2POffer.count();
   if (offerCount === 0) {
     await prisma.p2POffer.createMany({

@@ -34,7 +34,7 @@ export default function MobileMarkets() {
   return (
     <div className="px-4 pt-3">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold">Markets</h1>
+        <h1 className="text-[17px] font-bold">Markets</h1>
         <div className="flex gap-1 rounded-full bg-panel p-1">
           {(['spot', 'futures'] as const).map((m) => (
             <button
@@ -64,7 +64,7 @@ export default function MobileMarkets() {
           <button
             key={t.id}
             onClick={() => setTab(t.id)}
-            className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold ${
+            className={`shrink-0 rounded-full px-3.5 py-1.5 text-[13px] font-semibold ${
               tab === t.id && !search ? 'bg-panel text-foreground' : 'text-muted'
             }`}
           >
@@ -77,19 +77,19 @@ export default function MobileMarkets() {
         {rows.length === 0 && <div className="py-16 text-center text-sm text-muted">Nothing here yet.</div>}
         {rows.map((m) => (
           <Link key={m.symbol} href={`/m/trade/${m.symbol}`} className="flex items-center gap-3 py-[9px] active:opacity-70">
-            <CoinIcon asset={m.base} size={38} />
+            <CoinIcon asset={m.base} size={34} />
             <div className="min-w-0 flex-1">
-              <div className="text-[15px] font-bold">
+              <div className="text-[14px] font-semibold">
                 {m.base} <span className="text-[12px] font-medium text-muted">/ {m.quote}</span>
               </div>
-              <div className="num mt-0.5 text-[12px] text-muted">${fmtCompact(m.quoteVolume)}</div>
+              <div className="num mt-0.5 text-[11px] text-muted">${fmtCompact(m.quoteVolume)}</div>
             </div>
             <div className="mr-1 text-right">
-              <div className="num text-[15px] font-bold">{fmtPrice(m.price, m.precision)}</div>
-              <div className="num mt-0.5 text-[11px] text-muted">{m.name}</div>
+              <div className="num text-[14px] font-semibold">{fmtPrice(m.price, m.precision)}</div>
+              <div className="mt-0.5 truncate text-[10.5px] text-muted">{m.name}</div>
             </div>
             <span
-              className={`num w-[76px] shrink-0 rounded-lg py-2 text-center text-[13px] font-bold text-[#ffffff] ${
+              className={`num w-[64px] shrink-0 rounded-md py-1.5 text-center text-[12px] font-bold text-[#ffffff] ${
                 m.changePct >= 0 ? 'bg-up' : 'bg-down'
               }`}
             >

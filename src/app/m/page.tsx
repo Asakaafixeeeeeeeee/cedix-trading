@@ -8,6 +8,7 @@ import { fmtCompact, fmtPct, fmtPrice } from '@/lib/format';
 import type { Portfolio } from '@/lib/wallet';
 import type { MarketRow } from '@/components/MarketTable';
 import CoinIcon from '@/components/CoinIcon';
+import HomeSections from '@/components/mobile/HomeSections';
 import {
   IconMenu, IconScan, IconSearch, IconEye, IconEyeOff, IconChevronRight, IconChevronDown,
   IconGear, IconClock, IconClose,
@@ -67,8 +68,8 @@ export default function MobileHome() {
           <IconMenu size={20} />
         </button>
         <div className="flex items-center gap-1 rounded-full bg-panel p-1">
-          <span className="rounded-full bg-bg px-4 py-1.5 text-sm font-bold shadow-sm">Exchange</span>
-          <span className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-muted" title="Coming soon">
+          <span className="rounded-full bg-bg px-3.5 py-1 text-[13px] font-bold shadow-sm">Exchange</span>
+          <span className="flex items-center gap-1 px-2.5 py-1 text-[13px] font-medium text-muted" title="Coming soon">
             Web3
             <span className="rounded bg-panel2 px-1 py-0.5 text-[9px] font-bold uppercase">Soon</span>
           </span>
@@ -82,7 +83,7 @@ export default function MobileHome() {
             {(user.displayName || user.username).slice(0, 1).toUpperCase()}
           </Link>
         ) : (
-          <Link href="/m/login" className="rounded-full bg-white px-4 py-1.5 text-sm font-bold text-black">
+          <Link href="/m/login" className="rounded-full bg-white px-3.5 py-1 text-[13px] font-bold text-black">
             Log in
           </Link>
         )}
@@ -110,21 +111,21 @@ export default function MobileHome() {
       {/* Balance */}
       {user && (
         <div className="mt-4">
-          <div className="flex items-center gap-1.5 text-[13px] text-muted">
+          <div className="flex items-center gap-1.5 text-[12px] text-muted">
             Est total value
             <button onClick={() => setHidden((v) => !v)} className="p-0.5" aria-label="Toggle balance">
               {hidden ? <IconEyeOff size={15} /> : <IconEye size={15} />}
             </button>
           </div>
           <Link href="/m/assets" className="mt-0.5 flex items-end gap-1.5">
-            <span className="num text-[34px] font-bold leading-none tracking-tight">
+            <span className="num text-[27px] font-bold leading-none tracking-tight">
               {hidden ? '******' : displayValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
-            <span className="mb-0.5 flex items-center text-sm font-semibold">
+            <span className="mb-0.5 flex items-center text-[13px] font-semibold">
               {currency} <IconChevronDown size={12} className="text-muted" />
             </span>
           </Link>
-          <Link href="/m/assets/history" className="mt-1.5 flex items-center gap-1 text-[13px]">
+          <Link href="/m/assets/history" className="mt-1 flex items-center gap-1 text-[12px]">
             <span className="border-b border-dashed border-line text-muted">Today&apos;s PnL</span>
             <span className={`num font-semibold ${pnlUp ? 'text-up' : 'text-down'}`}>
               {hidden ? '****' : `${pnlUp ? '+' : '-'}${money(Math.abs(pnl))} (${pnlUp ? '+' : ''}${(portfolio?.pnl24hPct ?? 0).toFixed(2)}%)`}
@@ -135,7 +136,7 @@ export default function MobileHome() {
       )}
       {!loading && !user && (
         <div className="mt-4">
-          <h1 className="text-[26px] font-bold leading-tight">Trade Crypto with Confidence</h1>
+          <h1 className="text-[21px] font-bold leading-tight">Trade Crypto with Confidence</h1>
           <p className="mt-1 text-[13px] text-muted">
             Live markets, powerful tools and secure asset management in one platform.
           </p>
@@ -146,13 +147,13 @@ export default function MobileHome() {
       <div className="mt-4 grid grid-cols-2 gap-3">
         <Link
           href={user ? '/m/deposit' : '/m/login'}
-          className="rounded-full bg-[#0B4F3F] py-3 text-center text-[15px] font-bold text-[#ffffff] transition active:scale-[0.98] dark:bg-up"
+          className="rounded-full bg-[#0B4F3F] py-2.5 text-center text-[13.5px] font-bold text-[#ffffff] transition active:scale-[0.98] dark:bg-up"
         >
           Deposit crypto
         </Link>
         <Link
           href="/p2p"
-          className="rounded-full bg-[#0B4F3F] py-3 text-center text-[15px] font-bold text-[#ffffff] transition active:scale-[0.98] dark:bg-up"
+          className="rounded-full bg-[#0B4F3F] py-2.5 text-center text-[13.5px] font-bold text-[#ffffff] transition active:scale-[0.98] dark:bg-up"
         >
           P2P trading
         </Link>
@@ -165,10 +166,10 @@ export default function MobileHome() {
             i === bannerIdx ? (
               <Link key={b.id} href={b.link || '#'} className="flex items-center gap-3 rounded-2xl bg-panel p-4">
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-1 text-[15px] font-bold">
+                  <div className="flex items-center gap-1 text-[14px] font-semibold">
                     {b.title} <IconChevronRight size={14} className="text-muted" />
                   </div>
-                  <div className="mt-0.5 line-clamp-2 text-[13px] text-muted">{b.body}</div>
+                  <div className="mt-0.5 line-clamp-2 text-[12px] text-muted">{b.body}</div>
                 </div>
               </Link>
             ) : null,
@@ -194,7 +195,7 @@ export default function MobileHome() {
           <button
             key={t.id}
             onClick={() => { setTab(t.id); setSearch(''); }}
-            className={`shrink-0 rounded-full px-4 py-2 text-[14px] font-semibold ${
+            className={`shrink-0 rounded-full px-3.5 py-1.5 text-[13px] font-semibold ${
               tab === t.id && !search ? 'bg-panel text-foreground' : 'text-muted'
             }`}
           >
@@ -207,7 +208,7 @@ export default function MobileHome() {
           <button
             key={m}
             onClick={() => setMode(m)}
-            className={`rounded-full px-3.5 py-1.5 text-[12px] font-bold capitalize ${
+            className={`rounded-full px-3 py-1 text-[11.5px] font-bold capitalize ${
               mode === m ? 'bg-white text-black' : 'text-muted'
             }`}
           >
@@ -231,21 +232,21 @@ export default function MobileHome() {
         )}
         {rows.map((m) => (
           <Link key={m.symbol} href={`/m/trade/${m.symbol}`} className="flex items-center gap-3 py-[9px] active:opacity-70">
-            <CoinIcon asset={m.base} size={38} />
+            <CoinIcon asset={m.base} size={34} />
             <div className="min-w-0 flex-1">
-              <div className="text-[15px] font-bold">
+              <div className="text-[14px] font-semibold">
                 {m.base} <span className="text-[12px] font-medium text-muted">/ {m.quote}</span>
               </div>
-              <div className="num mt-0.5 text-[12px] text-muted">${fmtCompact(m.quoteVolume)}</div>
+              <div className="num mt-0.5 text-[10.5px] text-muted">${fmtCompact(m.quoteVolume)}</div>
             </div>
             <div className="mr-1 text-right">
-              <div className="num text-[15px] font-bold">{fmtPrice(m.price, m.precision)}</div>
-              <div className="num mt-0.5 text-[11px] text-muted">
+              <div className="num text-[14px] font-semibold">{fmtPrice(m.price, m.precision)}</div>
+              <div className="num mt-0.5 text-[10.5px] text-muted">
                 {currency === 'GHS' && rate ? `GH₵${fmtPrice(m.price * rate, 2)}` : `$${fmtPrice(m.price, m.precision)}`}
               </div>
             </div>
             <span
-              className={`num w-[76px] shrink-0 rounded-lg py-2 text-center text-[13px] font-bold text-[#ffffff] ${
+              className={`num w-[64px] shrink-0 rounded-md py-1.5 text-center text-[12px] font-bold text-[#ffffff] ${
                 m.changePct >= 0 ? 'bg-up' : 'bg-down'
               }`}
             >
@@ -254,6 +255,9 @@ export default function MobileHome() {
           </Link>
         ))}
       </div>
+
+      {/* Lower sections: calendar, market overview, announcements */}
+      <HomeSections />
 
       {menuOpen && <MenuSheet isAdmin={user?.role === 'ADMIN'} loggedIn={!!user} onClose={() => setMenuOpen(false)} />}
       {scanOpen && <ScanSheet onClose={() => setScanOpen(false)} />}

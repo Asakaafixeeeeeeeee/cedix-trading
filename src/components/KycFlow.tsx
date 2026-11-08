@@ -12,7 +12,7 @@ type KycInfo = {
 };
 
 const input =
-  'w-full rounded-xl border border-line bg-bg px-4 py-3.5 text-[15px] outline-none transition focus:border-accent';
+  'w-full rounded-xl border border-line bg-bg px-4 py-3 text-[14px] outline-none transition focus:border-accent';
 
 const COUNTRIES: [string, string][] = [
   ['GH', 'Ghana'], ['NG', 'Nigeria'], ['KE', 'Kenya'], ['ZA', 'South Africa'], ['US', 'United States'],
@@ -51,11 +51,11 @@ export default function KycFlow() {
     return (
       <div className="mx-auto max-w-md px-5 pt-16 text-center">
         <span className="inline-flex rounded-full bg-up/10 p-4 text-up"><IconCheckCircle size={36} /></span>
-        <h1 className="mt-4 text-xl font-bold">Verification submitted</h1>
+        <h1 className="mt-4 text-[18px] font-bold">Verification submitted</h1>
         <p className="mt-2 text-sm leading-relaxed text-muted">
           Your identity verification has been submitted successfully. We will notify you when the review is complete.
         </p>
-        <Link href="/m/assets" className="mt-6 inline-block w-full rounded-full bg-white py-3.5 font-bold text-black">
+        <Link href="/m/assets" className="mt-6 inline-block w-full rounded-full bg-white py-3 text-[14px] font-bold text-black">
           Done
         </Link>
       </div>
@@ -87,7 +87,7 @@ export default function KycFlow() {
     <div className="mx-auto max-w-md px-4 pb-16 pt-4">
       <div className="flex items-center gap-3">
         <Link href="/m/assets" className="text-xl text-muted">‹</Link>
-        <h1 className="text-lg font-bold">Identity Verification</h1>
+        <h1 className="text-[17px] font-bold">Identity Verification</h1>
       </div>
 
       {(status === 'REJECTED' || status === 'INFO_REQUIRED') && data?.kyc?.note && (
@@ -141,7 +141,7 @@ export default function KycFlow() {
               setError('');
               setStep(2);
             }}
-            className="w-full rounded-full bg-white py-3.5 font-bold text-black"
+            className="w-full rounded-full bg-white py-3 text-[14px] font-bold text-black"
           >
             Continue
           </button>
@@ -179,7 +179,7 @@ export default function KycFlow() {
               setError('');
               setStep(3);
             }}
-            className="w-full rounded-full bg-white py-3.5 font-bold text-black"
+            className="w-full rounded-full bg-white py-3 text-[14px] font-bold text-black"
           >
             Continue
           </button>
@@ -198,7 +198,7 @@ export default function KycFlow() {
           <button
             onClick={submit}
             disabled={busy || !selfie}
-            className="mt-4 w-full rounded-full bg-white py-3.5 font-bold text-black disabled:opacity-40"
+            className="mt-4 w-full rounded-full bg-white py-3 text-[14px] font-bold text-black disabled:opacity-40"
           >
             {busy ? 'Submitting…' : 'Submit for review'}
           </button>
@@ -346,14 +346,14 @@ function StatusView({ info }: { info: KycInfo }) {
   return (
     <div className="mx-auto max-w-md px-5 pt-16 text-center">
       <span className={`inline-flex rounded-full p-4 ${cfg.cls}`}>{cfg.icon}</span>
-      <h1 className="mt-4 text-xl font-bold">{cfg.title}</h1>
+      <h1 className="mt-4 text-[18px] font-bold">{cfg.title}</h1>
       <p className="mt-2 text-sm leading-relaxed text-muted">{cfg.body}</p>
       <div className="mt-5 rounded-2xl bg-panel p-4 text-left text-sm">
         <div className="flex justify-between py-1"><span className="text-muted">Name</span><span className="font-semibold">{info.kyc!.legalName}</span></div>
         <div className="flex justify-between py-1"><span className="text-muted">Document</span><span>{info.kyc!.idType.replace(/_/g, ' ')}</span></div>
         <div className="flex justify-between py-1"><span className="text-muted">Status</span><span className={s === 'APPROVED' ? 'font-bold text-up' : 'font-bold text-gold'}>{s.replace(/_/g, ' ')}</span></div>
       </div>
-      <Link href="/m/assets" className="mt-6 inline-block w-full rounded-full bg-white py-3.5 font-bold text-black">
+      <Link href="/m/assets" className="mt-6 inline-block w-full rounded-full bg-white py-3 text-[14px] font-bold text-black">
         Back to Assets
       </Link>
     </div>

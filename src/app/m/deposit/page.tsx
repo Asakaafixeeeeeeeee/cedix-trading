@@ -58,7 +58,7 @@ export default function MobileDeposit() {
 
   return (
     <div className="px-4 pt-4">
-      <h1 className="text-xl font-bold">Deposit GH₵</h1>
+      <h1 className="text-[17px] font-bold">Deposit GH₵</h1>
       <p className="mt-1 text-xs text-muted">Pay with MoMo, card or bank via Payteller — receive crypto instantly.</p>
 
       <div className="-mx-1 mt-4 flex gap-1.5 overflow-x-auto px-1 [scrollbar-width:none]">
@@ -66,7 +66,7 @@ export default function MobileDeposit() {
           <button
             key={a}
             onClick={() => setAsset(a)}
-            className={`shrink-0 rounded-full px-4 py-2 text-xs font-bold ${asset === a ? 'bg-white text-black' : 'bg-panel text-muted'}`}
+            className={`shrink-0 rounded-full px-3.5 py-1.5 text-[12px] font-bold ${asset === a ? 'bg-white text-black' : 'bg-panel text-muted'}`}
           >
             {a}
           </button>
@@ -80,7 +80,7 @@ export default function MobileDeposit() {
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           placeholder="0.00"
-          className="num mt-1 w-full bg-transparent text-3xl font-bold outline-none placeholder:text-line"
+          className="num mt-1 w-full bg-transparent text-[26px] font-bold outline-none placeholder:text-line"
         />
         <div className="mt-2 flex gap-2">
           {[50, 200, 1000].map((v) => (
@@ -140,7 +140,7 @@ export default function MobileDeposit() {
       <button
         onClick={pay}
         disabled={busy || !(amt >= 10) || (method === 'MOMO' && phone.replace(/\D/g, '').length < 9)}
-        className="mt-4 w-full rounded-xl bg-up py-3.5 font-bold text-white disabled:opacity-40"
+        className="mt-4 w-full rounded-full bg-up py-3 text-[14px] font-bold text-white disabled:opacity-40"
       >
         {busy ? 'Connecting…' : `Pay ${amt >= 10 ? fmtGHS(amt) : ''} with Payteller`}
       </button>

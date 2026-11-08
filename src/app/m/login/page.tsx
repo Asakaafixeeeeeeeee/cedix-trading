@@ -31,14 +31,14 @@ export default function MobileLogin() {
     <div className="px-6 pt-16">
       <div className="text-center">
         <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-2xl font-black text-black">C</span>
-        <h1 className="mt-4 text-2xl font-bold">Welcome back</h1>
+        <h1 className="mt-4 text-[20px] font-bold">Welcome back</h1>
         <p className="mt-1 text-sm text-muted">Log in to continue trading</p>
       </div>
       <form onSubmit={submit} className="mt-8 space-y-3">
         <input value={form.identifier} onChange={(e) => set('identifier', e.target.value)} placeholder="Email or username" className={input} />
         <input value={form.password} onChange={(e) => set('password', e.target.value)} type="password" placeholder="Password" className={input} />
         {error && <p className="text-sm text-down">{error}</p>}
-        <button disabled={busy} className="w-full rounded-full bg-white py-3.5 font-bold text-black disabled:opacity-50">
+        <button disabled={busy} className="w-full rounded-full bg-white py-3 text-[14px] font-bold text-black disabled:opacity-50">
           {busy ? 'Please wait…' : 'Log in'}
         </button>
       </form>

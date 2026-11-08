@@ -27,7 +27,7 @@ type Stats = {
   openDisputes: number;
 };
 
-const TABS = ['Overview', 'Users', 'KYC', 'Finance', 'P2P', 'Orbit & Moderation', 'Banners', 'Settings & Audit'] as const;
+const TABS = ['Overview', 'Users', 'KYC', 'Finance', 'P2P', 'Orbit & Moderation', 'Content', 'Settings & Audit'] as const;
 
 export default function AdminPage() {
   const { user, loading } = useUser();
@@ -77,7 +77,7 @@ export default function AdminPage() {
         {tab === 'Finance' && <AdminFinance />}
         {tab === 'P2P' && <AdminP2P />}
         {tab === 'Orbit & Moderation' && <AdminContent />}
-        {tab === 'Banners' && <AdminBanners />}
+        {tab === 'Content' && <AdminBanners />}
         {tab === 'Settings & Audit' && <AdminSettings />}
       </div>
     </div>

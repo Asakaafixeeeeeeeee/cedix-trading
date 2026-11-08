@@ -121,7 +121,7 @@ export default function MobileTradeView({ symbol }: { symbol: string }) {
           <button
             key={c.id}
             onClick={() => { if (!c.enabled) setNotice(`${c.label} trading is coming soon`); }}
-            className={`shrink-0 pb-1 text-[16px] ${
+            className={`shrink-0 pb-1 text-[14px] ${
               c.id === 'spot'
                 ? 'border-b-[3px] border-foreground font-bold text-foreground'
                 : 'font-medium text-muted'
@@ -135,7 +135,7 @@ export default function MobileTradeView({ symbol }: { symbol: string }) {
       {/* Pair selector row */}
       <div className="flex items-center justify-between px-4 py-1.5">
         <button onClick={() => setPairOpen(true)} className="flex items-center gap-2">
-          <span className="text-[20px] font-bold">
+          <span className="text-[17px] font-bold">
             {base}<span className="text-muted">/{quote}</span>
           </span>
           <IconChevronDown size={16} className="text-muted" />
@@ -161,7 +161,7 @@ export default function MobileTradeView({ symbol }: { symbol: string }) {
           <div className="flex rounded-full bg-panel p-0.5">
             <button
               onClick={() => setSide('BUY')}
-              className={`flex-1 rounded-full py-2 text-[15px] font-bold transition ${
+              className={`flex-1 rounded-full py-1.5 text-[13.5px] font-bold transition ${
                 side === 'BUY' ? 'bg-up text-[#ffffff]' : 'text-muted'
               }`}
             >
@@ -169,7 +169,7 @@ export default function MobileTradeView({ symbol }: { symbol: string }) {
             </button>
             <button
               onClick={() => setSide('SELL')}
-              className={`flex-1 rounded-full py-2 text-[15px] font-bold transition ${
+              className={`flex-1 rounded-full py-1.5 text-[13.5px] font-bold transition ${
                 side === 'SELL' ? 'bg-down text-[#ffffff]' : 'text-muted'
               }`}
             >
@@ -181,7 +181,7 @@ export default function MobileTradeView({ symbol }: { symbol: string }) {
           <div className="relative mt-2.5">
             <button
               onClick={() => setTypeOpen((v) => !v)}
-              className="flex w-full items-center justify-between rounded-xl bg-panel px-3.5 py-3 text-[14px] font-semibold"
+              className="flex w-full items-center justify-between rounded-xl bg-panel px-3 py-2.5 text-[13px] font-semibold"
             >
               <span className="flex items-center gap-1.5">
                 {type === 'MARKET' ? 'Market order' : 'Limit order'}
@@ -217,7 +217,7 @@ export default function MobileTradeView({ symbol }: { symbol: string }) {
 
           {/* Market price hint / Limit price input */}
           {type === 'MARKET' ? (
-            <div className="num mt-2 rounded-xl bg-panel px-3.5 py-3 text-[13px] text-muted">
+            <div className="num mt-2 rounded-xl bg-panel px-3 py-2.5 text-[12px] text-muted">
               Est. price <span className="float-right font-semibold text-foreground">{price ? fmtPrice(price, precision) : '—'}</span>
             </div>
           ) : (
@@ -227,7 +227,7 @@ export default function MobileTradeView({ symbol }: { symbol: string }) {
                 value={limitPrice}
                 onChange={(e) => setLimitPrice(e.target.value)}
                 placeholder={price ? fmtPrice(price, precision) : 'Price'}
-                className="num w-full bg-transparent py-3 text-[14px] font-semibold outline-none placeholder:text-muted"
+                className="num w-full bg-transparent py-2.5 text-[13px] font-semibold outline-none placeholder:text-muted"
               />
               <span className="text-[12px] font-semibold text-muted">{quote}</span>
             </div>
@@ -240,7 +240,7 @@ export default function MobileTradeView({ symbol }: { symbol: string }) {
               value={amount}
               onChange={(e) => { setAmount(e.target.value); setPct(0); }}
               placeholder="Amount"
-              className="num w-full bg-transparent py-3 text-[14px] font-semibold outline-none placeholder:text-muted"
+              className="num w-full bg-transparent py-2.5 text-[13px] font-semibold outline-none placeholder:text-muted"
             />
             <span className="text-[12px] font-semibold text-muted">{base}</span>
           </div>
@@ -291,14 +291,14 @@ export default function MobileTradeView({ symbol }: { symbol: string }) {
             <button
               onClick={() => setConfirmOpen(true)}
               disabled={!(amt > 0) || overMax || !price || (type === 'LIMIT' && !(parseFloat(limitPrice) > 0))}
-              className={`mt-3 w-full rounded-full py-3.5 text-[15px] font-bold text-[#ffffff] transition active:scale-[0.98] disabled:opacity-40 ${
+              className={`mt-3 w-full rounded-full py-3 text-[14px] font-bold text-[#ffffff] transition active:scale-[0.98] disabled:opacity-40 ${
                 side === 'BUY' ? 'bg-up' : 'bg-down'
               }`}
             >
               {side === 'BUY' ? `Buy ${base}` : `Sell ${base}`}
             </button>
           ) : (
-            <Link href="/m/login" className="mt-3 block w-full rounded-full bg-white py-3.5 text-center text-[15px] font-bold text-black">
+            <Link href="/m/login" className="mt-3 block w-full rounded-full bg-white py-3 text-center text-[14px] font-bold text-black">
               Log in to trade
             </Link>
           )}
@@ -421,7 +421,7 @@ function MobileOrderBook({ depth, price, precision, base, quote, changePct }: {
         {asks.map(([p, q], i) => <Row key={`a${i}`} p={p} q={q} kind="ask" />)}
       </div>
       <div className="py-1.5">
-        <div className={`num text-[19px] font-bold leading-none ${changePct >= 0 ? 'text-up' : 'text-down'}`}>
+        <div className={`num text-[17px] font-bold leading-none ${changePct >= 0 ? 'text-up' : 'text-down'}`}>
           {price ? fmtPrice(price, precision) : '—'}
         </div>
         <div className="num mt-0.5 text-[10px] text-muted">
@@ -510,7 +510,7 @@ function OrdersSection({ symbol, orders, loggedIn, portfolio, money, onChanged }
           <button
             key={id}
             onClick={() => setTab(id)}
-            className={`pb-1 text-[15px] ${tab === id ? 'font-bold text-foreground' : 'font-medium text-muted'}`}
+            className={`pb-1 text-[14px] ${tab === id ? 'font-bold text-foreground' : 'font-medium text-muted'}`}
           >
             {label}
           </button>
@@ -547,7 +547,7 @@ function OrdersSection({ symbol, orders, loggedIn, portfolio, money, onChanged }
             {shown.map((o) => (
               <div key={o.id} className="border-b border-line/60 py-3 last:border-0">
                 <div className="flex items-center gap-2">
-                  <span className="text-[14px] font-bold">{o.symbol.replace('USDT', '')}<span className="text-muted">/USDT</span></span>
+                  <span className="text-[13.5px] font-semibold">{o.symbol.replace('USDT', '')}<span className="text-muted">/USDT</span></span>
                   <span className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${o.side === 'BUY' ? 'bg-up/10 text-up' : 'bg-down/10 text-down'}`}>
                     {o.side}
                   </span>
@@ -617,7 +617,7 @@ function EmptyState({ text, sub, action }: { text: string; sub: string; action?:
         <rect x="17" y="36" width="8" height="3" rx="1" fill="currentColor" className="text-line" />
         <path d="M52 20l3-3M55 23l2-2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-line" />
       </svg>
-      <div className="mt-3 text-[15px] font-bold">{text}</div>
+      <div className="mt-3 text-[14px] font-semibold">{text}</div>
       <div className="mt-1 text-[12.5px] text-muted">{sub}</div>
       {action && (
         <Link href={action.href} className="mt-4 rounded-full bg-panel px-6 py-2.5 text-[13px] font-bold">
@@ -645,7 +645,7 @@ function PairSheet({ markets, current, onSelect, onClose }: {
       <div className="flex max-h-[80vh] w-full flex-col rounded-t-3xl bg-bg p-4 pb-8" onClick={(e) => e.stopPropagation()}>
         <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-line" />
         <div className="flex items-center justify-between px-1">
-          <h3 className="text-[16px] font-bold">Select pair</h3>
+          <h3 className="text-[15px] font-bold">Select pair</h3>
           <button onClick={onClose} className="rounded-full bg-panel p-2 text-muted"><IconClose size={14} /></button>
         </div>
         <div className="mt-3 flex items-center gap-2 rounded-full bg-panel px-4 py-2.5">
@@ -688,7 +688,7 @@ function OrderTypeInfo({ onClose }: { onClose: () => void }) {
     <div className="fixed inset-0 z-[70] flex items-end bg-black/60" onClick={onClose}>
       <div className="w-full rounded-t-3xl bg-bg p-5 pb-10" onClick={(e) => e.stopPropagation()}>
         <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-line" />
-        <h3 className="text-[16px] font-bold">Order types</h3>
+        <h3 className="text-[15px] font-bold">Order types</h3>
         <div className="mt-3 space-y-3 text-[13px] leading-relaxed">
           <div className="rounded-xl bg-panel p-3.5">
             <div className="font-bold">Market order</div>
@@ -735,7 +735,7 @@ function ConfirmSheet({ side, type, base, quote, amount, price, feePct, precisio
     <div className="fixed inset-0 z-[70] flex items-end bg-black/60" onClick={onCancel}>
       <div className="w-full rounded-t-3xl bg-bg p-5 pb-9" onClick={(e) => e.stopPropagation()}>
         <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-line" />
-        <h3 className="text-center text-[16px] font-bold">Confirm {side === 'BUY' ? 'buy' : 'sell'} order</h3>
+        <h3 className="text-center text-[15px] font-bold">Confirm {side === 'BUY' ? 'buy' : 'sell'} order</h3>
         <div className="num mt-4 space-y-2.5 rounded-2xl bg-panel p-4 text-[13.5px]">
           {rows.map(([k, v]) => (
             <div key={k} className="flex justify-between">

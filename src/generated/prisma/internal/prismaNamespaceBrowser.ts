@@ -71,6 +71,7 @@ export const ModelName = {
   AuditLog: 'AuditLog',
   KycApplication: 'KycApplication',
   Banner: 'Banner',
+  Announcement: 'Announcement',
   VerificationCode: 'VerificationCode'
 } as const
 
@@ -402,6 +403,20 @@ export const BannerScalarFieldEnum = {
 } as const
 
 export type BannerScalarFieldEnum = (typeof BannerScalarFieldEnum)[keyof typeof BannerScalarFieldEnum]
+
+
+export const AnnouncementScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  body: 'body',
+  published: 'published',
+  pinned: 'pinned',
+  publishAt: 'publishAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AnnouncementScalarFieldEnum = (typeof AnnouncementScalarFieldEnum)[keyof typeof AnnouncementScalarFieldEnum]
 
 
 export const VerificationCodeScalarFieldEnum = {

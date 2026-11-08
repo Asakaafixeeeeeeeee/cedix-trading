@@ -478,6 +478,21 @@ model Banner {
   updatedAt DateTime @updatedAt
 }
 
+// ─────────────────────────── Announcements ───────────────────────────
+
+model Announcement {
+  id        String   @id @default(cuid())
+  title     String
+  body      String?
+  published Boolean  @default(true)
+  pinned    Boolean  @default(false)
+  publishAt DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([published, publishAt])
+}
+
 // ─────────────────────────── Email Verification Codes ───────────────────────────
 
 model VerificationCode {

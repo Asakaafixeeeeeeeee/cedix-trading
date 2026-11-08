@@ -11,7 +11,7 @@ const COUNTRIES: [string, string][] = [
 ];
 
 const input =
-  'w-full rounded-xl border border-line bg-bg px-4 py-3.5 text-[15px] outline-none transition focus:border-accent';
+  'w-full rounded-xl border border-line bg-bg px-4 py-3 text-[14px] outline-none transition focus:border-accent';
 
 export default function RegisterWizard() {
   const [step, setStep] = useState(1);
@@ -77,7 +77,7 @@ export default function RegisterWizard() {
 
         {step === 1 && (
           <>
-            <h1 className="text-xl font-bold">Create your account</h1>
+            <h1 className="text-[17px] font-bold">Create your account</h1>
             <p className="mt-1 text-sm text-muted">Join CediX and start trading in minutes.</p>
             <div className="mt-5 space-y-3.5">
               <label className="block">
@@ -116,7 +116,7 @@ export default function RegisterWizard() {
             <button
               onClick={sendCode}
               disabled={busy || !form.email || !form.username || !form.password}
-              className="mt-5 w-full rounded-full bg-white py-3.5 font-bold text-black transition active:scale-[0.99] disabled:opacity-40"
+              className="mt-5 w-full rounded-full bg-white py-3 text-[14px] font-bold text-black transition active:scale-[0.99] disabled:opacity-40"
             >
               {busy ? 'Sending code…' : 'Continue'}
             </button>
@@ -130,7 +130,7 @@ export default function RegisterWizard() {
         {step === 2 && (
           <>
             <span className="inline-flex rounded-full bg-panel2 p-3 text-foreground"><IconMail size={22} /></span>
-            <h1 className="mt-3 text-xl font-bold">Verify your email</h1>
+            <h1 className="mt-3 text-[17px] font-bold">Verify your email</h1>
             <p className="mt-1 text-sm text-muted">
               Enter the 6-digit code sent to <span className="font-semibold text-foreground">{form.email}</span>.
             </p>
@@ -151,7 +151,7 @@ export default function RegisterWizard() {
             <button
               onClick={createAccount}
               disabled={busy || code.length !== 6}
-              className="mt-5 w-full rounded-full bg-white py-3.5 font-bold text-black disabled:opacity-40"
+              className="mt-5 w-full rounded-full bg-white py-3 text-[14px] font-bold text-black disabled:opacity-40"
             >
               {busy ? 'Creating account…' : 'Verify & create account'}
             </button>
@@ -164,7 +164,7 @@ export default function RegisterWizard() {
         {step === 3 && (
           <div className="py-8 text-center">
             <span className="inline-flex rounded-full bg-up/10 p-4 text-up"><IconCheckCircle size={36} /></span>
-            <h1 className="mt-4 text-xl font-bold">Account created</h1>
+            <h1 className="mt-4 text-[17px] font-bold">Account created</h1>
             <p className="mt-1 text-sm text-muted">Welcome to CediX — taking you to your dashboard…</p>
           </div>
         )}

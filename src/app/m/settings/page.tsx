@@ -12,21 +12,21 @@ export default function MobileSettings() {
     <div className="px-4 pt-3">
       <div className="flex items-center gap-3 py-2">
         <Link href="/m/assets" className="text-xl text-muted">‹</Link>
-        <h1 className="text-lg font-bold">Settings</h1>
+        <h1 className="text-[17px] font-bold">Settings</h1>
       </div>
 
       {user && (
         <div className="mt-3 rounded-2xl bg-panel p-4">
-          <div className="text-[15px] font-bold">{user.displayName || user.username}</div>
-          <div className="mt-0.5 text-[13px] text-muted">@{user.username} · {user.email}</div>
+          <div className="text-[14px] font-semibold">{user.displayName || user.username}</div>
+          <div className="mt-0.5 text-[12px] text-muted">@{user.username} · {user.email}</div>
         </div>
       )}
 
       {user && (
         <Link href="/m/kyc" className="mt-3 flex items-center justify-between rounded-2xl bg-panel p-4">
           <div>
-            <div className="text-[15px] font-bold">Identity verification</div>
-            <div className="mt-0.5 text-[13px] text-muted">
+            <div className="text-[14px] font-semibold">Identity verification</div>
+            <div className="mt-0.5 text-[12px] text-muted">
               {user.kycLevel >= 1 ? 'Verified — full access enabled' : 'Required for withdrawals'}
             </div>
           </div>
@@ -71,7 +71,7 @@ export default function MobileSettings() {
           >
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-panel2 text-sm font-bold">{sym}</span>
             <span className="flex-1 text-left">
-              <span className="block text-[15px] font-semibold">{code} — {name}</span>
+              <span className="block text-[14px] font-semibold">{code} — {name}</span>
               <span className="block text-[12px] text-muted">{sub}</span>
             </span>
             <span className={`flex h-5 w-5 items-center justify-center rounded-full border-2 ${currency === code ? 'border-accent' : 'border-line'}`}>

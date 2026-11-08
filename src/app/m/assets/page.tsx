@@ -91,10 +91,10 @@ export default function MobileAssets() {
       {/* Balance */}
       <div className="relative mt-0.5">
         <button onClick={() => setShowCurrency((v) => !v)} className="flex items-end gap-1.5">
-          <span className="num text-[40px] font-bold leading-none tracking-tight">
+          <span className="num text-[30px] font-bold leading-none tracking-tight">
             {hidden ? '******' : displayValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </span>
-          <span className="mb-1 flex items-center gap-0.5 text-base font-semibold text-foreground">
+          <span className="mb-0.5 flex items-center gap-0.5 text-[13px] font-semibold text-foreground">
             {currency}
             <IconChevronDown size={14} className="text-muted" />
           </span>
@@ -138,10 +138,10 @@ export default function MobileAssets() {
           { href: '/m/explore', label: 'Earn', icon: <IconEarn size={22} /> },
         ].map((b) => (
           <Link key={b.label} href={b.href} className="flex w-16 flex-col items-center gap-2">
-            <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-black shadow-sm transition active:scale-95">
+            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-black shadow-sm transition active:scale-95">
               {b.icon}
             </span>
-            <span className="text-[13px] font-medium">{b.label}</span>
+            <span className="text-[12px] font-medium">{b.label}</span>
           </Link>
         ))}
       </div>
@@ -149,15 +149,15 @@ export default function MobileAssets() {
       {/* P2P banner */}
       <Link href="/p2p" className="mt-6 flex items-center gap-4 rounded-2xl bg-panel p-4 active:opacity-80">
         <div className="min-w-0 flex-1">
-          <div className="text-[15px] font-bold">Trade P2P with GH₵</div>
-          <div className="mt-0.5 truncate text-[13px] text-muted">Buy & sell crypto with MoMo — escrow protected</div>
+          <div className="text-[14px] font-semibold">Trade P2P with GH₵</div>
+          <div className="mt-0.5 truncate text-[12px] text-muted">Buy & sell crypto with MoMo — escrow protected</div>
         </div>
         <span className="rounded-xl bg-panel2 p-3 text-foreground"><IconP2P size={26} /></span>
       </Link>
 
       {/* Portfolio */}
       <div className="mt-7 flex items-center justify-between">
-        <h2 className="text-[19px] font-bold">Portfolio</h2>
+        <h2 className="text-[16px] font-bold">Portfolio</h2>
       </div>
       <div className="no-scrollbar -mx-4 mt-3 flex gap-2.5 overflow-x-auto px-4">
         {[
@@ -168,20 +168,20 @@ export default function MobileAssets() {
           <button
             key={c.id}
             onClick={() => setBucket(c.id)}
-            className="min-w-[142px] shrink-0 rounded-2xl bg-panel p-4 text-left transition active:scale-[0.98]"
+            className="min-w-[124px] shrink-0 rounded-2xl bg-panel p-3.5 text-left transition active:scale-[0.98]"
           >
-            <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-bg text-foreground">
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-bg text-foreground">
               {c.icon}
             </span>
-            <div className="mt-2.5 text-[16px] font-semibold text-muted">{c.label}</div>
-            <div className="num mt-2 text-[17px] font-bold">{hidden ? '****' : money(c.value)}</div>
+            <div className="mt-2 text-[13px] font-medium text-muted">{c.label}</div>
+            <div className="num mt-1 text-[15px] font-bold">{hidden ? '****' : money(c.value)}</div>
           </button>
         ))}
       </div>
 
       {/* Crypto list */}
       <div className="mt-7">
-        <h2 className="text-[19px] font-bold">Crypto</h2>
+        <h2 className="text-[16px] font-bold">Crypto</h2>
         <div className="mt-2 flex items-center justify-between text-[12px] text-muted">
           <span>Name/Amount</span>
           <span className="border-b border-dashed border-line">Value/Spot PnL</span>
@@ -198,22 +198,22 @@ export default function MobileAssets() {
             const up = a.pnl24hUSD >= 0;
             return (
               <Link key={a.asset} href={a.asset === 'USDT' || a.asset === 'USDC' ? '/m/deposit' : `/m/trade/${a.asset}USDT`} className="flex items-center gap-3 py-3 active:opacity-70">
-                <CoinIcon asset={a.asset} size={40} />
+                <CoinIcon asset={a.asset} size={34} />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-[16px] font-bold">{a.asset}</span>
+                    <span className="text-[14px] font-semibold">{a.asset}</span>
                     {apr !== undefined && (
-                      <span className="rounded-md bg-up/10 px-1.5 py-0.5 text-[10px] font-semibold text-up">
+                      <span className="rounded bg-up/10 px-1 py-0.5 text-[9.5px] font-semibold text-up">
                         Up to {apr.toFixed(0)}% APR
                       </span>
                     )}
                   </div>
-                  <div className="num mt-0.5 text-[13px] text-muted">
+                  <div className="num mt-0.5 text-[12px] text-muted">
                     {hidden ? '****' : fmtNum(a.total)}
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="num text-[16px] font-bold">{hidden ? '****' : money(a.valueUSD)}</div>
+                  <div className="num text-[14px] font-semibold">{hidden ? '****' : money(a.valueUSD)}</div>
                   <div className={`num mt-0.5 text-[12px] font-medium ${a.pnl24hUSD === 0 ? 'text-muted' : up ? 'text-up' : 'text-down'}`}>
                     {hidden ? '' : a.pnl24hUSD === 0 ? '—' : `${up ? '+' : '-'}${money(Math.abs(a.pnl24hUSD))}`}
                   </div>
@@ -227,14 +227,14 @@ export default function MobileAssets() {
       {/* GHS funding balance row */}
       {(data?.assets ?? []).filter((a) => a.asset === 'GHS').map((a) => (
         <div key="ghs" className="mt-2">
-          <h2 className="text-[19px] font-bold">Fiat</h2>
+          <h2 className="text-[16px] font-bold">Fiat</h2>
           <Link href="/m/transfer" className="mt-1 flex items-center gap-3 py-3 active:opacity-70">
-            <CoinIcon asset="GHS" size={40} />
+            <CoinIcon asset="GHS" size={34} />
             <div className="min-w-0 flex-1">
-              <div className="text-[16px] font-bold">GHS</div>
-              <div className="num mt-0.5 text-[13px] text-muted">{hidden ? '****' : fmtNum(a.total, 2)}</div>
+              <div className="text-[14px] font-semibold">GHS</div>
+              <div className="num mt-0.5 text-[12px] text-muted">{hidden ? '****' : fmtNum(a.total, 2)}</div>
             </div>
-            <div className="num text-[16px] font-bold">{hidden ? '****' : money(a.valueUSD)}</div>
+            <div className="num text-[14px] font-semibold">{hidden ? '****' : money(a.valueUSD)}</div>
           </Link>
         </div>
       ))}

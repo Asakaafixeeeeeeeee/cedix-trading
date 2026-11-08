@@ -57,7 +57,7 @@ export default function MobileWithdraw() {
 
   return (
     <div className="px-4 pt-4">
-      <h1 className="text-xl font-bold">Withdraw to GH₵</h1>
+      <h1 className="text-[17px] font-bold">Withdraw to GH₵</h1>
       <p className="mt-1 text-xs text-muted">Cash out any crypto straight to MoMo or bank — no selling step.</p>
 
       <div className="-mx-1 mt-4 flex gap-1.5 overflow-x-auto px-1 [scrollbar-width:none]">
@@ -65,7 +65,7 @@ export default function MobileWithdraw() {
           <button
             key={a}
             onClick={() => setAsset(a)}
-            className={`shrink-0 rounded-full px-4 py-2 text-xs font-bold ${asset === a ? 'bg-white text-black' : 'bg-panel text-muted'}`}
+            className={`shrink-0 rounded-full px-3.5 py-1.5 text-[12px] font-bold ${asset === a ? 'bg-white text-black' : 'bg-panel text-muted'}`}
           >
             {a}
           </button>
@@ -86,7 +86,7 @@ export default function MobileWithdraw() {
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           placeholder="0.00"
-          className="num mt-1 w-full bg-transparent text-3xl font-bold outline-none placeholder:text-line"
+          className="num mt-1 w-full bg-transparent text-[26px] font-bold outline-none placeholder:text-line"
         />
       </div>
 
@@ -127,7 +127,7 @@ export default function MobileWithdraw() {
       <button
         onClick={submit}
         disabled={busy || !(amt > 0) || destination.replace(/\D/g, '').length < 8}
-        className="mt-4 w-full rounded-xl bg-white py-3.5 font-bold text-black disabled:opacity-40"
+        className="mt-4 w-full rounded-full bg-white py-3 text-[14px] font-bold text-black disabled:opacity-40"
       >
         {busy ? 'Processing…' : 'Withdraw via Payteller'}
       </button>

@@ -142,6 +142,11 @@ export type KycApplication = Prisma.KycApplicationModel
  */
 export type Banner = Prisma.BannerModel
 /**
+ * Model Announcement
+ * 
+ */
+export type Announcement = Prisma.AnnouncementModel
+/**
  * Model VerificationCode
  * 
  */
