@@ -13,6 +13,7 @@ import AdminBanners from './AdminBanners';
 import AdminPayteller from './AdminPayteller';
 import AdminMessages from './AdminMessages';
 import AdminWithdrawals from './AdminWithdrawals';
+import AdminEmail from './AdminEmail';
 import Link from 'next/link';
 
 type Activity = { type: string; user: string; detail: string; status: string; at: string; section: string };
@@ -44,7 +45,7 @@ type Stats = {
 
 type SectionId =
   | 'overview' | 'users' | 'kyc' | 'finance' | 'deposits' | 'withdrawals' | 'payteller' | 'p2p'
-  | 'msg-dashboard' | 'msg-access' | 'msg-senders' | 'msg-templates' | 'msg-delivery' | 'msg-announce'
+  | 'msg-dashboard' | 'msg-access' | 'msg-senders' | 'msg-templates' | 'msg-delivery' | 'msg-announce' | 'email'
   | 'orbit' | 'moderation' | 'content'
   | 'settings' | 'security' | 'logs' | 'audit';
 
@@ -71,6 +72,7 @@ const NAV: { group: string; items: { id: SectionId; label: string; icon: string 
       { id: 'msg-templates', label: 'Notification Templates', icon: 'M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm0 0v6h6M8 13h8M8 17h5' },
       { id: 'msg-delivery', label: 'Delivery Status', icon: 'M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z' },
       { id: 'msg-announce', label: 'Send Announcements', icon: 'M3 11l18-7-7 18-2.5-7.5L3 11z' },
+      { id: 'email', label: 'Email Broadcast', icon: 'M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm0 2l8 6 8-6' },
     ],
   },
   {
@@ -230,6 +232,7 @@ export default function AdminPage() {
         {(section === 'msg-senders' || section === 'msg-announce') && <AdminMessages initialSub="senders" />}
         {section === 'msg-templates' && <AdminMessages initialSub="templates" />}
         {section === 'msg-delivery' && <AdminMessages initialSub="delivery" />}
+        {section === 'email' && <AdminEmail />}
         {(section === 'orbit' || section === 'moderation') && <AdminContent />}
         {section === 'content' && <AdminBanners />}
         {(section === 'settings' || section === 'security' || section === 'logs' || section === 'audit') && <AdminSettings />}
