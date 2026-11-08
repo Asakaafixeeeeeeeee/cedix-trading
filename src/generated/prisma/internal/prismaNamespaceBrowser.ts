@@ -71,6 +71,7 @@ export const ModelName = {
   WebhookEvent: 'WebhookEvent',
   MessagesAccount: 'MessagesAccount',
   MessagesInvite: 'MessagesInvite',
+  MessageSender: 'MessageSender',
   Conversation: 'Conversation',
   Message: 'Message',
   PushSubscription: 'PushSubscription',
@@ -406,11 +407,28 @@ export const MessagesInviteScalarFieldEnum = {
 export type MessagesInviteScalarFieldEnum = (typeof MessagesInviteScalarFieldEnum)[keyof typeof MessagesInviteScalarFieldEnum]
 
 
+export const MessageSenderScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  phone: 'phone',
+  avatarType: 'avatarType',
+  letter: 'letter',
+  allowReplies: 'allowReplies',
+  disabled: 'disabled',
+  system: 'system',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MessageSenderScalarFieldEnum = (typeof MessageSenderScalarFieldEnum)[keyof typeof MessageSenderScalarFieldEnum]
+
+
 export const ConversationScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   name: 'name',
   system: 'system',
+  senderId: 'senderId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

@@ -48,6 +48,55 @@ export function SystemAvatar({ size = 44 }: { size?: number }) {
   );
 }
 
+/**
+ * iOS contact avatar: blue-to-purple gradient circle with either the default
+ * white human silhouette or a white initial letter — exactly like Apple
+ * Messages. Admin controls which type each sender uses.
+ */
+export function IosAvatar({ letter, size = 45 }: { letter?: string | null; size?: number }) {
+  const id = `iosav-${size}-${letter ? 'l' : 'h'}`;
+  return (
+    <svg width={size} height={size} viewBox="0 0 100 100" className="shrink-0" aria-hidden>
+      <defs>
+        <linearGradient id={id} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#b7c2da" />
+          <stop offset="1" stopColor="#8e96c9" />
+        </linearGradient>
+      </defs>
+      <circle cx="50" cy="50" r="50" fill={`url(#${id})`} />
+      {letter ? (
+        <text
+          x="50"
+          y="51"
+          textAnchor="middle"
+          dominantBaseline="central"
+          fill="#ffffff"
+          fontSize="44"
+          fontWeight="600"
+          fontFamily="-apple-system, 'SF Pro Rounded', 'Segoe UI', system-ui, sans-serif"
+        >
+          {letter.slice(0, 1).toUpperCase()}
+        </text>
+      ) : (
+        <g fill="#ffffff">
+          <circle cx="50" cy="38" r="16.5" />
+          <path d="M50 58c-16.8 0-28.5 9.6-31.5 22.6A49.8 49.8 0 0 0 50 100a49.8 49.8 0 0 0 31.5-19.4C78.5 67.6 66.8 58 50 58z" />
+        </g>
+      )}
+    </svg>
+  );
+}
+
+export type SenderInfo = { name: string; avatarType: string; letter: string | null; allowReplies?: boolean } | null;
+
+/** Avatar for a conversation based on its admin-configured sender. */
+export function ConversationAvatar({ sender, size = 45 }: { sender: SenderInfo; size?: number }) {
+  if (sender?.avatarType === 'LETTER') {
+    return <IosAvatar letter={sender.letter || sender.name} size={size} />;
+  }
+  return <IosAvatar size={size} />;
+}
+
 /** Returns true when running as an installed (standalone) PWA. */
 export function useStandalone() {
   const [standalone, setStandalone] = useState(true); // assume true during SSR to avoid banner flash

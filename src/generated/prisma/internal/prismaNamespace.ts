@@ -417,6 +417,7 @@ export const ModelName = {
   WebhookEvent: 'WebhookEvent',
   MessagesAccount: 'MessagesAccount',
   MessagesInvite: 'MessagesInvite',
+  MessageSender: 'MessageSender',
   Conversation: 'Conversation',
   Message: 'Message',
   PushSubscription: 'PushSubscription',
@@ -441,7 +442,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "wallet" | "transaction" | "order" | "trade" | "depositIntent" | "withdrawal" | "p2POffer" | "p2POrder" | "orbitPost" | "orbitComment" | "orbitLike" | "moderationEvent" | "product" | "position" | "favorite" | "setting" | "webhookEvent" | "messagesAccount" | "messagesInvite" | "conversation" | "message" | "pushSubscription" | "emailLog" | "auditLog" | "kycApplication" | "banner" | "announcement" | "verificationCode"
+    modelProps: "user" | "wallet" | "transaction" | "order" | "trade" | "depositIntent" | "withdrawal" | "p2POffer" | "p2POrder" | "orbitPost" | "orbitComment" | "orbitLike" | "moderationEvent" | "product" | "position" | "favorite" | "setting" | "webhookEvent" | "messagesAccount" | "messagesInvite" | "messageSender" | "conversation" | "message" | "pushSubscription" | "emailLog" | "auditLog" | "kycApplication" | "banner" | "announcement" | "verificationCode"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1925,6 +1926,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    MessageSender: {
+      payload: Prisma.$MessageSenderPayload<ExtArgs>
+      fields: Prisma.MessageSenderFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MessageSenderFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageSenderPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MessageSenderFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageSenderPayload>
+        }
+        findFirst: {
+          args: Prisma.MessageSenderFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageSenderPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MessageSenderFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageSenderPayload>
+        }
+        findMany: {
+          args: Prisma.MessageSenderFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageSenderPayload>[]
+        }
+        create: {
+          args: Prisma.MessageSenderCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageSenderPayload>
+        }
+        createMany: {
+          args: Prisma.MessageSenderCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MessageSenderCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageSenderPayload>[]
+        }
+        delete: {
+          args: Prisma.MessageSenderDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageSenderPayload>
+        }
+        update: {
+          args: Prisma.MessageSenderUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageSenderPayload>
+        }
+        deleteMany: {
+          args: Prisma.MessageSenderDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MessageSenderUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MessageSenderUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageSenderPayload>[]
+        }
+        upsert: {
+          args: Prisma.MessageSenderUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageSenderPayload>
+        }
+        aggregate: {
+          args: Prisma.MessageSenderAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMessageSender>
+        }
+        groupBy: {
+          args: Prisma.MessageSenderGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MessageSenderGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MessageSenderCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MessageSenderCountAggregateOutputType> | number
+        }
+      }
+    }
     Conversation: {
       payload: Prisma.$ConversationPayload<ExtArgs>
       fields: Prisma.ConversationFieldRefs
@@ -2938,11 +3013,28 @@ export const MessagesInviteScalarFieldEnum = {
 export type MessagesInviteScalarFieldEnum = (typeof MessagesInviteScalarFieldEnum)[keyof typeof MessagesInviteScalarFieldEnum]
 
 
+export const MessageSenderScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  phone: 'phone',
+  avatarType: 'avatarType',
+  letter: 'letter',
+  allowReplies: 'allowReplies',
+  disabled: 'disabled',
+  system: 'system',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MessageSenderScalarFieldEnum = (typeof MessageSenderScalarFieldEnum)[keyof typeof MessageSenderScalarFieldEnum]
+
+
 export const ConversationScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   name: 'name',
   system: 'system',
+  senderId: 'senderId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -3596,6 +3688,7 @@ export type GlobalOmitConfig = {
   webhookEvent?: Prisma.WebhookEventOmit
   messagesAccount?: Prisma.MessagesAccountOmit
   messagesInvite?: Prisma.MessagesInviteOmit
+  messageSender?: Prisma.MessageSenderOmit
   conversation?: Prisma.ConversationOmit
   message?: Prisma.MessageOmit
   pushSubscription?: Prisma.PushSubscriptionOmit

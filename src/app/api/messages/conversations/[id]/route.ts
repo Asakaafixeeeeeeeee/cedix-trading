@@ -9,14 +9,25 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> 
     const { id } = await ctx.params;
     const conversation = await prisma.conversation.findUnique({
       where: { id },
-      include: { messages: { orderBy: { createdAt: 'asc' }, take: 300 } },
+      include: {
+        sender: { select: { name: true, avatarType: true, letter: true, allowReplies: true, disabled: true } },
+        messages: { orderBy: { createdAt: 'asc' }, take: 300 },
+      },
     });
     if (!conversation || conversation.userId !== user.id) throw new Error('Conversation not found');
     return {
       conversation: {
         id: conversation.id,
-        name: conversation.name,
+        name: conversation.sender?.name ?? conversation.name,
         system: conversation.system,
+        sender: conversation.sender
+          ? {
+              name: conversation.sender.name,
+              avatarType: conversation.sender.avatarType,
+              letter: conversation.sender.letter,
+              allowReplies: conversation.sender.allowReplies && !conversation.sender.disabled,
+            }
+          : null,
         messages: conversation.messages.map((m) => ({
           id: m.id,
           sender: m.sender,
@@ -43,5 +54,28 @@ export async function POST(_req: Request, ctx: { params: Promise<{ id: string }>
       data: { readAt: new Date() },
     });
     return { ok: true };
+  });
+}
+
+/** Send a reply — only when the admin enabled replies for this sender. */
+export async function PUT(req: Request, ctx: { params: Promise<{ id: string }> }) {
+  return api(async () => {
+    const { user } = await requireMessagesUser();
+    const { id } = await ctx.params;
+    const { body } = await req.json();
+    const text = String(body ?? '').trim();
+    if (!text || text.length > 2000) throw new Error('Message must be 1-2000 characters');
+
+    const conversation = await prisma.conversation.findUnique({ where: { id }, include: { sender: true } });
+    if (!conversation || conversation.userId !== user.id) throw new Error('Conversation not found');
+    if (!conversation.sender?.allowReplies || conversation.sender.disabled) {
+      throw new Error('This conversation is read-only');
+    }
+
+    const message = await prisma.message.create({
+      data: { conversationId: id, sender: 'USER', body: text, readAt: new Date() },
+    });
+    await prisma.conversation.update({ where: { id }, data: { updatedAt: new Date() } });
+    return { message };
   });
 }

@@ -118,6 +118,11 @@ export type MessagesAccount = Prisma.MessagesAccountModel
  */
 export type MessagesInvite = Prisma.MessagesInviteModel
 /**
+ * Model MessageSender
+ * 
+ */
+export type MessageSender = Prisma.MessageSenderModel
+/**
  * Model Conversation
  * 
  */

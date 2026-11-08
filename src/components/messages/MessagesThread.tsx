@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
-import { iosFullTime, jfetch, SystemAvatar, useMessagesUser } from './shared';
+import { iosFullTime, jfetch, ConversationAvatar, useMessagesUser, type SenderInfo } from './shared';
 
 type Msg = {
   id: string;
@@ -12,13 +12,15 @@ type Msg = {
   createdAt: string;
 };
 
-type Thread = { id: string; name: string; system: boolean; messages: Msg[] };
+type Thread = { id: string; name: string; system: boolean; sender: SenderInfo; messages: Msg[] };
 
 export default function MessagesThread({ id }: { id: string }) {
   const { user, loading } = useMessagesUser();
   const [thread, setThread] = useState<Thread | null>(null);
   const [otherUnread, setOtherUnread] = useState(0);
   const [error, setError] = useState('');
+  const [draft, setDraft] = useState('');
+  const [sending, setSending] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const lastCount = useRef(0);
 
@@ -31,7 +33,6 @@ export default function MessagesThread({ id }: { id: string }) {
         if (stop) return;
         setThread(d.conversation);
         setError('');
-        // Mark read (fire and forget)
         jfetch(`/api/messages/conversations/${id}`, { method: 'POST' }).catch(() => {});
       } catch (e) {
         if (!stop) setError(e instanceof Error ? e.message : 'Failed to load');
@@ -39,7 +40,6 @@ export default function MessagesThread({ id }: { id: string }) {
     }
     load();
     const t = setInterval(load, 5000);
-    // Unread count from other conversations (shown next to Back, Apple-style)
     const u = setInterval(() => {
       jfetch<{ unread: number }>('/api/messages/unread').then((d) => setOtherUnread(d.unread)).catch(() => {});
     }, 8000);
@@ -50,14 +50,30 @@ export default function MessagesThread({ id }: { id: string }) {
     };
   }, [user, id]);
 
-  // Auto-scroll to the newest message when new ones arrive
   useEffect(() => {
     const count = thread?.messages.length ?? 0;
     if (count !== lastCount.current) {
       lastCount.current = count;
-      bottomRef.current?.scrollIntoView({ behavior: count > 0 ? 'auto' : 'smooth' });
+      bottomRef.current?.scrollIntoView({ behavior: 'auto' });
     }
   }, [thread?.messages.length]);
+
+  async function sendReply(e: React.FormEvent) {
+    e.preventDefault();
+    const text = draft.trim();
+    if (!text || sending) return;
+    setSending(true);
+    try {
+      await jfetch(`/api/messages/conversations/${id}`, { method: 'PUT', body: JSON.stringify({ body: text }) });
+      setDraft('');
+      const d = await jfetch<{ conversation: Thread }>(`/api/messages/conversations/${id}`);
+      setThread(d.conversation);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to send');
+    } finally {
+      setSending(false);
+    }
+  }
 
   if (loading || !user) {
     return (
@@ -67,26 +83,31 @@ export default function MessagesThread({ id }: { id: string }) {
     );
   }
 
+  const canReply = Boolean(thread?.sender?.allowReplies);
+
   return (
     <div className="flex min-h-dvh flex-col">
-      {/* Header */}
-      <header className="sticky top-0 z-10 border-b border-[#e5e5ea] bg-[#f9f9f9]/95 px-2 pb-2 pt-[calc(8px+env(safe-area-inset-top))] backdrop-blur">
-        <div className="grid grid-cols-[64px_1fr_64px] items-center">
-          <Link href="/messages" className="flex items-center gap-0.5 text-[#007aff]">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-              <path d="M15 6l-6 6 6 6" />
+      {/* Header — blurred, rounded back pill + large avatar + name pill (screenshots 2-3) */}
+      <header className="sticky top-0 z-10 bg-[#fbfbfd]/85 px-3 pb-1.5 pt-[calc(8px+env(safe-area-inset-top))] backdrop-blur-xl">
+        <div className="relative flex flex-col items-center">
+          <Link
+            href="/messages"
+            className="absolute left-0 top-1 flex items-center gap-1.5 rounded-full bg-[#ffffff] py-1.5 pl-2.5 pr-3 shadow-[0_1px_4px_rgba(0,0,0,0.12)]"
+          >
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 5l-7 7 7 7" />
             </svg>
-            {otherUnread > 0 ? (
-              <span className="rounded-full bg-[#007aff] px-2 py-0.5 text-[12px] font-semibold text-[#fff]">{otherUnread}</span>
-            ) : (
-              <span className="text-[15px]">Back</span>
+            {otherUnread > 0 && (
+              <span className="rounded-full bg-[#111] px-2 py-0.5 text-[12px] font-semibold text-[#fff]">{otherUnread}</span>
             )}
           </Link>
-          <div className="flex flex-col items-center">
-            <SystemAvatar size={40} />
-            <span className="mt-0.5 text-[11px] text-[#111]">{thread?.name ?? ''}</span>
-          </div>
-          <span />
+          <ConversationAvatar sender={thread?.sender ?? null} size={62} />
+          <span className="-mt-2 flex items-center gap-0.5 rounded-full bg-[#ffffff]/90 px-3 py-1 shadow-[0_1px_4px_rgba(0,0,0,0.1)]">
+            <span className="max-w-[180px] truncate text-[13px] font-semibold text-[#111]">{thread?.name ?? ''}</span>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" strokeWidth="3" strokeLinecap="round">
+              <path d="M9 6l6 6-6 6" />
+            </svg>
+          </span>
         </div>
       </header>
 
@@ -99,15 +120,14 @@ export default function MessagesThread({ id }: { id: string }) {
         {thread?.messages.map((m, i) => {
           const prev = thread.messages[i - 1];
           const gap = !prev || new Date(m.createdAt).getTime() - new Date(prev.createdAt).getTime() > 30 * 60 * 1000;
+          const mine = m.sender === 'USER';
           return (
             <div key={m.id}>
-              {gap && (
-                <p className="py-2 text-center text-[11px] text-[#8e8e93]">{iosFullTime(m.createdAt)}</p>
-              )}
-              <div className="flex justify-start">
-                <div className="relative max-w-[82%] rounded-2xl bg-[#e9e9eb] px-3.5 py-2">
-                  {m.title && <p className="text-[14px] font-semibold text-[#111]">{m.title}</p>}
-                  <p className="whitespace-pre-line text-[14px] leading-snug text-[#111]">{m.body}</p>
+              {gap && <p className="py-2 text-center text-[11px] text-[#8e8e93]">{iosFullTime(m.createdAt)}</p>}
+              <div className={`flex ${mine ? 'justify-end' : 'justify-start'}`}>
+                <div className={`relative max-w-[82%] rounded-2xl px-3.5 py-2 ${mine ? 'bg-[#007aff]' : 'bg-[#e9e9eb]'}`}>
+                  {m.title && !mine && <p className="text-[14px] font-semibold text-[#111]">{m.title}</p>}
+                  <p className={`whitespace-pre-line text-[14px] leading-snug ${mine ? 'text-[#fff]' : 'text-[#111]'}`}>{m.body}</p>
                 </div>
               </div>
             </div>
@@ -116,11 +136,39 @@ export default function MessagesThread({ id }: { id: string }) {
         <div ref={bottomRef} />
       </main>
 
-      {/* Read-only footer for system conversations */}
-      <footer className="sticky bottom-0 border-t border-[#e5e5ea] bg-[#f9f9f9]/95 px-4 pb-[calc(12px+env(safe-area-inset-bottom))] pt-2.5 text-center backdrop-blur">
-        <p className="text-[12px] text-[#8e8e93]">
-          {thread?.system ? 'CediX Trading notifications are read-only.' : ''}
-        </p>
+      {/* Composer (admin-enabled senders) or read-only note */}
+      <footer className="sticky bottom-0 bg-[#fbfbfd]/85 px-3 pb-[calc(10px+env(safe-area-inset-bottom))] pt-2 backdrop-blur-xl">
+        {canReply ? (
+          <form onSubmit={sendReply} className="flex items-center gap-2">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#e9e9eb]">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5b5b60" strokeWidth="2.5" strokeLinecap="round">
+                <path d="M12 5v14M5 12h14" />
+              </svg>
+            </span>
+            <div className="flex flex-1 items-center rounded-full border border-[#d9d9de] bg-[#ffffff] py-1.5 pl-4 pr-1.5">
+              <input
+                value={draft}
+                onChange={(e) => setDraft(e.target.value)}
+                placeholder="Text Message"
+                className="w-full bg-transparent text-[14px] text-[#111] outline-none placeholder:text-[#b8b8bd]"
+              />
+              <button
+                type="submit"
+                disabled={!draft.trim() || sending}
+                aria-label="Send"
+                className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#007aff] disabled:opacity-0"
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 19V5M5 12l7-7 7 7" />
+                </svg>
+              </button>
+            </div>
+          </form>
+        ) : (
+          <p className="py-1 text-center text-[12px] text-[#8e8e93]">
+            {thread ? `${thread.name} notifications are read-only.` : ''}
+          </p>
+        )}
       </footer>
     </div>
   );

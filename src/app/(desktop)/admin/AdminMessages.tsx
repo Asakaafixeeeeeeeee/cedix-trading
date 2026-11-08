@@ -22,13 +22,24 @@ type Invite = {
   createdAt: string;
 };
 type Template = { title: string; body: string };
+type Sender = {
+  id: string;
+  name: string;
+  phone: string | null;
+  avatarType: string;
+  letter: string | null;
+  allowReplies: boolean;
+  disabled: boolean;
+  system: boolean;
+};
 type Data = {
   accounts: Account[];
   invites: Invite[];
   templates: Record<string, Template>;
   defaultTemplates: Record<string, Template>;
-  recentMessages: { id: string; email: string; title: string | null; pushStatus: string | null; readAt: string | null; createdAt: string }[];
+  recentMessages: { id: string; email: string; conversation: string; direction: string; title: string | null; preview: string; pushStatus: string | null; readAt: string | null; createdAt: string }[];
   emailLogs: { id: string; to: string; subject: string; status: string; error: string | null; createdAt: string }[];
+  senders: Sender[];
 };
 
 const dt = (s: string) => new Date(s).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
@@ -43,7 +54,10 @@ export default function AdminMessages() {
   const [annBody, setAnnBody] = useState('');
   const [annEmailToo, setAnnEmailToo] = useState(false);
   const [templates, setTemplates] = useState<Record<string, Template> | null>(null);
-  const [sub, setSub] = useState<'users' | 'templates' | 'delivery'>('users');
+  const [sub, setSub] = useState<'users' | 'senders' | 'templates' | 'delivery'>('users');
+  const emptySender = { id: '', name: '', phone: '', avatarType: 'HUMAN', letter: '', allowReplies: false };
+  const [senderForm, setSenderForm] = useState(emptySender);
+  const [compose, setCompose] = useState({ senderId: '', email: '', title: '', body: '', sendEmail: false, toAll: false });
 
   async function act(body: Record<string, unknown>, done?: (r: unknown) => void) {
     setBusy(true);
@@ -65,13 +79,13 @@ export default function AdminMessages() {
   return (
     <div>
       <div className="mb-4 flex items-center gap-2">
-        {(['users', 'templates', 'delivery'] as const).map((s) => (
+        {(['users', 'senders', 'templates', 'delivery'] as const).map((s) => (
           <button
             key={s}
             onClick={() => setSub(s)}
             className={`rounded-lg px-4 py-2 text-sm font-medium capitalize ${sub === s ? 'bg-panel2 text-white' : 'text-muted hover:text-white'}`}
           >
-            {s === 'users' ? 'Access & invites' : s === 'templates' ? 'Notification templates' : 'Delivery status'}
+            {s === 'users' ? 'Access & invites' : s === 'senders' ? 'Sender management' : s === 'templates' ? 'Notification templates' : 'Delivery status'}
           </button>
         ))}
         <span className="ml-auto text-xs text-muted">
@@ -267,6 +281,202 @@ export default function AdminMessages() {
         </>
       )}
 
+      {sub === 'senders' && (
+        <>
+          {/* Create / edit sender */}
+          <div className="mb-4 rounded-xl border border-line bg-panel p-4">
+            <h3 className="text-sm font-semibold">{senderForm.id ? `Edit sender: ${senderForm.name}` : 'Create sender'}</h3>
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <input
+                value={senderForm.name}
+                onChange={(e) => setSenderForm((f) => ({ ...f, name: e.target.value }))}
+                placeholder="Display name or phone (e.g. +233 20 766 1175)"
+                className="w-72 rounded-lg border border-line bg-panel2 px-3 py-2 text-xs outline-none"
+              />
+              <input
+                value={senderForm.phone}
+                onChange={(e) => setSenderForm((f) => ({ ...f, phone: e.target.value }))}
+                placeholder="Phone (optional)"
+                className="w-44 rounded-lg border border-line bg-panel2 px-3 py-2 text-xs outline-none"
+              />
+              <select
+                value={senderForm.avatarType}
+                onChange={(e) => setSenderForm((f) => ({ ...f, avatarType: e.target.value }))}
+                className="rounded-lg border border-line bg-panel2 px-3 py-2 text-xs outline-none"
+              >
+                <option value="HUMAN">Default human profile</option>
+                <option value="LETTER">Letter profile</option>
+              </select>
+              {senderForm.avatarType === 'LETTER' && (
+                <input
+                  value={senderForm.letter}
+                  onChange={(e) => setSenderForm((f) => ({ ...f, letter: e.target.value.slice(0, 1).toUpperCase() }))}
+                  placeholder="Letter"
+                  maxLength={1}
+                  className="w-16 rounded-lg border border-line bg-panel2 px-3 py-2 text-center text-xs outline-none"
+                />
+              )}
+              <label className="flex items-center gap-1.5 text-xs text-muted">
+                <input
+                  type="checkbox"
+                  checked={senderForm.allowReplies}
+                  onChange={(e) => setSenderForm((f) => ({ ...f, allowReplies: e.target.checked }))}
+                />
+                Allow user replies
+              </label>
+              <button
+                disabled={busy || !senderForm.name.trim()}
+                onClick={() =>
+                  act(
+                    {
+                      action: senderForm.id ? 'sender-update' : 'sender-create',
+                      id: senderForm.id || undefined,
+                      name: senderForm.name,
+                      phone: senderForm.phone,
+                      avatarType: senderForm.avatarType,
+                      letter: senderForm.letter,
+                      allowReplies: senderForm.allowReplies,
+                    },
+                    () => setSenderForm(emptySender),
+                  )
+                }
+                className="rounded-lg bg-white px-4 py-2 text-xs font-semibold text-black disabled:opacity-50"
+              >
+                {senderForm.id ? 'Save changes' : 'Create sender'}
+              </button>
+              {senderForm.id && (
+                <button onClick={() => setSenderForm(emptySender)} className="rounded-lg bg-panel2 px-3 py-2 text-xs text-white">
+                  Cancel
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Senders list */}
+          <div className="overflow-x-auto rounded-xl border border-line bg-panel">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-left text-xs text-muted">
+                  <th className="py-2.5 pl-4 font-medium">Profile</th>
+                  <th className="font-medium">Sender</th>
+                  <th className="font-medium">Replies</th>
+                  <th className="font-medium">Status</th>
+                  <th className="pr-4 text-right font-medium">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.senders.map((s) => (
+                  <tr key={s.id} className="border-t border-line text-xs">
+                    <td className="py-2 pl-4">
+                      <span
+                        className="flex h-9 w-9 items-center justify-center rounded-full text-[15px] font-semibold text-white"
+                        style={{ background: 'linear-gradient(180deg,#b7c2da,#8e96c9)' }}
+                      >
+                        {s.avatarType === 'LETTER' ? (s.letter || s.name[0]).toUpperCase() : (
+                          <svg width="18" height="18" viewBox="0 0 100 100" fill="#fff"><circle cx="50" cy="38" r="17" /><path d="M50 58c-17 0-29 10-32 23a50 50 0 0064 0c-3-13-15-23-32-23z" /></svg>
+                        )}
+                      </span>
+                    </td>
+                    <td>
+                      <p className="font-medium">{s.name} {s.system && <span className="ml-1 rounded bg-panel2 px-1.5 py-0.5 text-[10px] text-muted">SYSTEM</span>}</p>
+                      {s.phone && <p className="text-muted">{s.phone}</p>}
+                    </td>
+                    <td className={s.allowReplies ? 'text-up' : 'text-muted'}>{s.allowReplies ? 'Enabled' : 'Read-only'}</td>
+                    <td className={s.disabled ? 'text-down' : 'text-up'}>{s.disabled ? 'Disabled' : 'Active'}</td>
+                    <td className="pr-4 text-right">
+                      <div className="flex justify-end gap-1.5">
+                        <button
+                          onClick={() => setSenderForm({ id: s.id, name: s.name, phone: s.phone ?? '', avatarType: s.avatarType, letter: s.letter ?? '', allowReplies: s.allowReplies })}
+                          className="rounded-lg bg-panel2 px-2.5 py-1 font-medium text-white"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          disabled={busy}
+                          onClick={() => act({ action: 'sender-update', id: s.id, name: s.name, phone: s.phone, avatarType: s.avatarType, letter: s.letter, allowReplies: s.allowReplies, disabled: !s.disabled })}
+                          className="rounded-lg bg-panel2 px-2.5 py-1 font-medium text-white"
+                        >
+                          {s.disabled ? 'Enable' : 'Disable'}
+                        </button>
+                        {!s.system && (
+                          <button
+                            disabled={busy}
+                            onClick={() => { if (confirm(`Delete sender "${s.name}"? Conversation history is preserved.`)) act({ action: 'sender-delete', id: s.id }); }}
+                            className="rounded-lg bg-down/15 px-2.5 py-1 font-medium text-down"
+                          >
+                            Delete
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Compose */}
+          <h3 className="mt-6 text-sm font-semibold">Send message</h3>
+          <div className="mt-2 space-y-2 rounded-xl border border-line bg-panel p-4">
+            <div className="flex flex-wrap items-center gap-2">
+              <select
+                value={compose.senderId}
+                onChange={(e) => setCompose((c) => ({ ...c, senderId: e.target.value }))}
+                className="rounded-lg border border-line bg-panel2 px-3 py-2 text-xs outline-none"
+              >
+                <option value="">Choose sender…</option>
+                {data.senders.filter((s) => !s.disabled).map((s) => (
+                  <option key={s.id} value={s.id}>{s.name}</option>
+                ))}
+              </select>
+              <label className="flex items-center gap-1.5 text-xs text-muted">
+                <input type="checkbox" checked={compose.toAll} onChange={(e) => setCompose((c) => ({ ...c, toAll: e.target.checked }))} />
+                Send to ALL authorized users
+              </label>
+              {!compose.toAll && (
+                <input
+                  value={compose.email}
+                  onChange={(e) => setCompose((c) => ({ ...c, email: e.target.value }))}
+                  placeholder="Recipient CediX email"
+                  className="w-64 rounded-lg border border-line bg-panel2 px-3 py-2 text-xs outline-none"
+                />
+              )}
+              <label className="flex items-center gap-1.5 text-xs text-muted">
+                <input type="checkbox" checked={compose.sendEmail} onChange={(e) => setCompose((c) => ({ ...c, sendEmail: e.target.checked }))} />
+                Also email
+              </label>
+            </div>
+            <input
+              value={compose.title}
+              onChange={(e) => setCompose((c) => ({ ...c, title: e.target.value }))}
+              placeholder="Title (optional)"
+              className="w-full rounded-lg border border-line bg-panel2 px-3 py-2 text-xs outline-none"
+            />
+            <textarea
+              value={compose.body}
+              onChange={(e) => setCompose((c) => ({ ...c, body: e.target.value }))}
+              placeholder="Message body"
+              rows={3}
+              className="w-full rounded-lg border border-line bg-panel2 px-3 py-2 text-xs outline-none"
+            />
+            <div className="flex justify-end">
+              <button
+                disabled={busy || !compose.senderId || !compose.body.trim() || (!compose.toAll && !compose.email)}
+                onClick={() =>
+                  act(
+                    { action: 'send', senderId: compose.senderId, email: compose.toAll ? undefined : compose.email, title: compose.title, body: compose.body, sendEmail: compose.sendEmail },
+                    () => setCompose((c) => ({ ...c, title: '', body: '' })),
+                  )
+                }
+                className="rounded-lg bg-white px-4 py-2 text-xs font-semibold text-black disabled:opacity-50"
+              >
+                Send message
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+
       {sub === 'templates' && (
         <div className="space-y-3">
           <p className="text-xs text-muted">
@@ -309,14 +519,15 @@ export default function AdminMessages() {
 
       {sub === 'delivery' && (
         <>
-          <h3 className="text-sm font-semibold">Recent in-app notifications</h3>
+          <h3 className="text-sm font-semibold">Recent in-app messages</h3>
           <div className="mt-2 overflow-x-auto rounded-xl border border-line bg-panel">
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left text-xs text-muted">
                   <th className="py-2.5 pl-4 font-medium">Time</th>
                   <th className="font-medium">User</th>
-                  <th className="font-medium">Title</th>
+                  <th className="font-medium">Sender</th>
+                  <th className="font-medium">Message</th>
                   <th className="font-medium">Push</th>
                   <th className="pr-4 font-medium">Read</th>
                 </tr>
@@ -326,15 +537,16 @@ export default function AdminMessages() {
                   <tr key={m.id} className="border-t border-line text-xs">
                     <td className="py-2 pl-4 text-muted">{dt(m.createdAt)}</td>
                     <td>{m.email}</td>
-                    <td className="max-w-[220px] truncate">{m.title ?? '—'}</td>
+                    <td className="text-muted">{m.direction === 'USER' ? `Reply → ${m.conversation}` : m.conversation}</td>
+                    <td className="max-w-[220px] truncate">{m.title ?? m.preview}</td>
                     <td className={m.pushStatus === 'sent' ? 'text-up' : m.pushStatus === 'failed' ? 'text-down' : 'text-muted'}>
-                      {m.pushStatus ?? '—'}
+                      {m.direction === 'USER' ? '—' : m.pushStatus ?? '—'}
                     </td>
                     <td className={`pr-4 ${m.readAt ? 'text-up' : 'text-gold'}`}>{m.readAt ? 'Read' : 'Unread'}</td>
                   </tr>
                 ))}
                 {data.recentMessages.length === 0 && (
-                  <tr><td colSpan={5} className="py-6 text-center text-xs text-muted">No notifications sent yet.</td></tr>
+                  <tr><td colSpan={6} className="py-6 text-center text-xs text-muted">No notifications sent yet.</td></tr>
                 )}
               </tbody>
             </table>

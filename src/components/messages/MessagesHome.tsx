@@ -1,12 +1,13 @@
 'use client';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { iosTime, jfetch, SystemAvatar, usePush, useStandalone, useMessagesUser } from './shared';
+import { iosTime, jfetch, ConversationAvatar, IosAvatar, usePush, useStandalone, useMessagesUser, type SenderInfo } from './shared';
 
 type Conversation = {
   id: string;
   name: string;
   system: boolean;
+  sender: SenderInfo;
   last: { title: string | null; body: string; createdAt: string } | null;
   unread: number;
 };
@@ -98,7 +99,7 @@ export default function MessagesHome() {
       {/* Enable notifications banner */}
       {pushState === 'prompt' || pushState === 'granted' ? (
         <div className="mx-4 mb-2 flex items-center gap-3 rounded-xl bg-[#f2f2f7] px-4 py-3">
-          <SystemAvatar size={34} />
+          <IosAvatar size={34} />
           <div className="min-w-0 flex-1">
             <p className="text-[13px] font-medium">Get notified instantly</p>
             <p className="text-[11px] leading-snug text-[#8e8e93]">Allow notifications to receive transaction alerts on this device.</p>
@@ -159,7 +160,7 @@ export default function MessagesHome() {
                   <span className="flex w-2.5 shrink-0 items-center justify-center">
                     {c.unread > 0 && <span className="h-2.5 w-2.5 rounded-full bg-[#007aff]" />}
                   </span>
-                  <SystemAvatar />
+                  <ConversationAvatar sender={c.sender} />
                   <span className="flex min-w-0 flex-1 flex-col border-b border-[#e5e5ea] py-1.5">
                     <span className="flex items-baseline justify-between gap-2">
                       <span className="truncate text-[15px] font-semibold">{c.name}</span>

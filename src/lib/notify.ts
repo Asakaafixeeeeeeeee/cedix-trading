@@ -58,6 +58,15 @@ export const DEFAULT_TEMPLATES: Record<TemplateKind, Template> = {
 
 const SYSTEM_CONVERSATION = 'CediX Trading';
 
+/** Built-in transaction sender (admin can restyle it in Sender Management). */
+export async function getSystemSender() {
+  const existing = await prisma.messageSender.findFirst({ where: { system: true } });
+  if (existing) return existing;
+  return prisma.messageSender.create({
+    data: { name: SYSTEM_CONVERSATION, system: true, avatarType: 'HUMAN', allowReplies: false },
+  });
+}
+
 export async function getTemplates(): Promise<Record<TemplateKind, Template>> {
   const row = await prisma.setting.findUnique({ where: { key: 'messages_templates' } });
   const overrides = (row?.value ?? {}) as Partial<Record<TemplateKind, Template>>;
@@ -120,6 +129,56 @@ async function pushToUser(userId: string, payload: { title: string; body: string
   return { sent, failed, none: false };
 }
 
+// ───────── Admin sender-based messaging (Sender Management) ─────────
+
+/** Deliver a message to one user from a specific admin-configured sender. */
+export async function sendFromSender(
+  userId: string,
+  senderId: string,
+  opts: { title?: string; body: string; email?: boolean },
+) {
+  const sender = await prisma.messageSender.findUnique({ where: { id: senderId } });
+  if (!sender || sender.disabled) throw new Error('Sender not found or disabled');
+  const account = await prisma.messagesAccount.findUnique({ where: { userId } });
+  if (!account || account.suspended || !account.registeredAt) return { delivered: false };
+
+  const conversation = await prisma.conversation.upsert({
+    where: { userId_name: { userId, name: sender.name } },
+    update: { updatedAt: new Date(), senderId: sender.id },
+    create: { userId, name: sender.name, system: !sender.allowReplies, senderId: sender.id },
+  });
+
+  const push = await pushToUser(userId, {
+    title: sender.name,
+    body: `${opts.title ? opts.title + ' — ' : ''}${opts.body.split('\n')[0]}`,
+    url: '/messages',
+  });
+
+  await prisma.message.create({
+    data: {
+      conversationId: conversation.id,
+      sender: 'SYSTEM',
+      title: opts.title ?? null,
+      body: opts.body,
+      pushStatus: push.none ? 'no-subscription' : push.sent > 0 ? 'sent' : 'failed',
+    },
+  });
+
+  if (opts.email) {
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (user) {
+      await sendEmail({
+        userId,
+        to: user.email,
+        subject: `${sender.name} — ${opts.title ?? 'New message'}`,
+        template: 'sender_message',
+        html: emailHtml(opts.title ?? sender.name, opts.body.split('\n').filter(Boolean)),
+      }).catch(() => {});
+    }
+  }
+  return { delivered: true };
+}
+
 // ───────── Main dispatch ─────────
 
 export type NotifyOptions = {
@@ -158,10 +217,11 @@ export async function notifyUser(userId: string, opts: NotifyOptions) {
   // 1-3. In-app message + push — only for users with active Messages access.
   const account = await prisma.messagesAccount.findUnique({ where: { userId } });
   if (account && !account.suspended) {
+    const sysSender = await getSystemSender();
     const conversation = await prisma.conversation.upsert({
-      where: { userId_name: { userId, name: SYSTEM_CONVERSATION } },
-      update: { updatedAt: new Date() },
-      create: { userId, name: SYSTEM_CONVERSATION, system: true },
+      where: { userId_name: { userId, name: sysSender.name } },
+      update: { updatedAt: new Date(), senderId: sysSender.id },
+      create: { userId, name: sysSender.name, system: true, senderId: sysSender.id },
     });
 
     const push = await pushToUser(userId, {
