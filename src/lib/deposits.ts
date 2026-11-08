@@ -5,6 +5,7 @@
 
 import { prisma } from './db';
 import { credit } from './wallet';
+import { notifyUser } from './notify';
 
 export type SettleOutcome = 'successful' | 'failed';
 
@@ -47,5 +48,19 @@ export async function settleDeposit(intentId: string, outcome: SettleOutcome): P
       },
     });
     return 'credited';
+  }).then((result) => {
+    if (result === 'credited') {
+      // Fire-and-forget Messages/email notification; never blocks settlement.
+      notifyUser(intent.userId, {
+        kind: 'deposit_completed',
+        vars: {
+          amountGHS: `GH₵${Number(intent.amountGHS).toFixed(2)}`,
+          amountAsset: `${Number(intent.amountAsset)} ${intent.asset}`,
+          reference: `CEDIX-${intent.id.slice(-8).toUpperCase()}`,
+        },
+        meta: { depositId: intent.id },
+      }).catch(() => {});
+    }
+    return result;
   });
 }

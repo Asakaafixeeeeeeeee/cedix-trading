@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { post, usePoll, useUser } from '@/lib/hooks';
 import { fmtGHS, fmtNum } from '@/lib/format';
+import { IconCheckCircle } from '@/components/icons';
 import type { Portfolio } from '@/lib/wallet';
 
 type Quote = { netGHS: number; feeGHS: number; feePct: number; rateGHSUSD: number };
@@ -14,13 +15,16 @@ export default function MobileWithdraw() {
   const [amount, setAmount] = useState('');
   const [method, setMethod] = useState<'MOMO' | 'BANK'>('MOMO');
   const [destination, setDestination] = useState('');
+  const [destName, setDestName] = useState('');
   const [quote, setQuote] = useState<Quote | null>(null);
-  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
-  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  const [phase, setPhase] = useState<'form' | 'processing' | 'submitted'>('form');
+  const [submittedGHS, setSubmittedGHS] = useState(0);
 
   const amt = parseFloat(amount) || 0;
   const assets = portfolio?.assets ?? [];
   const selected = assets.find((a) => a.asset === asset);
+  const amountUSD = selected ? amt * selected.priceUSD : 0;
 
   useEffect(() => {
     if (!(amt > 0)) return setQuote(null);
@@ -32,17 +36,22 @@ export default function MobileWithdraw() {
   }, [asset, amt]);
 
   async function submit() {
-    setBusy(true);
-    setMsg(null);
+    setPhase('processing');
+    setError('');
+    const started = Date.now();
     try {
-      const res = await post<{ netGHS: number }>('/api/withdraw', { asset, amountAsset: amt, method, destination });
-      setMsg({ ok: true, text: `${fmtGHS(res.netGHS)} sent to your ${method === 'MOMO' ? 'MoMo' : 'bank'}` });
-      setAmount('');
-      refresh();
+      const res = await post<{ netGHS: number }>('/api/withdraw', { asset, amountAsset: amt, method, destination, destName });
+      // Keep the processing screen visible briefly so it never just flashes
+      const wait = Math.max(0, 1600 - (Date.now() - started));
+      setTimeout(() => {
+        setSubmittedGHS(res.netGHS);
+        setPhase('submitted');
+        setAmount('');
+        refresh();
+      }, wait);
     } catch (e) {
-      setMsg({ ok: false, text: e instanceof Error ? e.message : 'Failed' });
-    } finally {
-      setBusy(false);
+      setError(e instanceof Error ? e.message : 'Failed to submit withdrawal');
+      setPhase('form');
     }
   }
 
@@ -55,10 +64,48 @@ export default function MobileWithdraw() {
     );
   }
 
+  // ── Processing screen ──
+  if (phase === 'processing') {
+    return (
+      <div className="flex min-h-[80vh] flex-col items-center justify-center px-6 text-center">
+        <div className="h-12 w-12 animate-spin rounded-full border-[3px] border-gray-200 border-t-transparent" />
+        <h2 className="mt-6 text-[15px] font-semibold">Processing Your Withdrawal Request</h2>
+        <p className="mt-1 text-xs text-muted">Please wait…</p>
+      </div>
+    );
+  }
+
+  // ── Submitted screen ──
+  if (phase === 'submitted') {
+    return (
+      <div className="flex min-h-[80vh] flex-col items-center justify-center px-6 pb-20 text-center">
+        <IconCheckCircle size={56} className="text-emerald-500" />
+        <h2 className="mt-4 text-[17px] font-bold">Withdrawal Request Submitted</h2>
+        <p className="mt-2 max-w-xs text-xs leading-relaxed text-muted">
+          Your withdrawal request for {fmtGHS(submittedGHS)} has been received. Our team will review your account and
+          notify you when a decision has been made.
+        </p>
+        <p className="mt-3 rounded-full bg-panel px-4 py-1.5 text-xs font-medium text-gold">Status: Pending Review</p>
+        <div className="mt-6 w-full max-w-xs space-y-2">
+          <Link href="/m/withdrawals" className="block rounded-xl bg-white py-3 text-[13px] font-semibold text-black">
+            View Withdrawal Status
+          </Link>
+          <button onClick={() => setPhase('form')} className="block w-full rounded-xl bg-panel py-3 text-[13px] font-semibold">
+            New withdrawal
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Form ──
   return (
     <div className="px-4 pt-4">
-      <h1 className="text-[17px] font-bold">Withdraw to GH₵</h1>
-      <p className="mt-1 text-xs text-muted">Cash out any crypto straight to MoMo or bank — no selling step.</p>
+      <div className="flex items-baseline justify-between">
+        <h1 className="text-[17px] font-bold">Withdraw to GH₵</h1>
+        <Link href="/m/withdrawals" className="text-xs text-accent">History</Link>
+      </div>
+      <p className="mt-1 text-xs text-muted">Cash out any crypto straight to MoMo or bank — requests are reviewed before payment.</p>
 
       <div className="-mx-1 mt-4 flex gap-1.5 overflow-x-auto px-1 [scrollbar-width:none]">
         {(assets.length ? assets.map((a) => a.asset) : ['USDT']).map((a) => (
@@ -74,10 +121,10 @@ export default function MobileWithdraw() {
 
       <div className="mt-4 rounded-2xl bg-panel p-4">
         <div className="flex justify-between text-xs text-muted">
-          <span>Amount ({asset})</span>
+          <span>Available balance</span>
           {selected && (
             <button onClick={() => setAmount(String(selected.available))} className="text-accent">
-              Max {fmtNum(selected.available)}
+              Max {fmtNum(selected.available)} {asset}
             </button>
           )}
         </div>
@@ -86,8 +133,9 @@ export default function MobileWithdraw() {
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           placeholder="0.00"
-          className="num mt-1 w-full bg-transparent text-[26px] font-bold outline-none placeholder:text-line"
+          className="num mt-1 w-full bg-transparent text-[24px] font-bold outline-none placeholder:text-line"
         />
+        {amountUSD > 0 && <p className="text-xs text-muted">≈ ${amountUSD.toFixed(2)}</p>}
       </div>
 
       <div className="mt-3 grid grid-cols-2 gap-2">
@@ -109,28 +157,45 @@ export default function MobileWithdraw() {
         placeholder={method === 'MOMO' ? 'MoMo number' : 'Bank account number'}
         className="mt-3 w-full rounded-xl border border-line bg-panel px-4 py-3 text-sm outline-none focus:border-accent"
       />
+      <input
+        value={destName}
+        onChange={(e) => setDestName(e.target.value)}
+        placeholder="Recipient name (as registered)"
+        className="mt-2 w-full rounded-xl border border-line bg-panel px-4 py-3 text-sm outline-none focus:border-accent"
+      />
 
       {quote && amt > 0 && (
-        <div className="num mt-4 rounded-xl border border-line bg-panel p-4 text-sm">
+        <div className="num mt-4 space-y-1 rounded-xl border border-line bg-panel p-4 text-[13px]">
+          <div className="flex justify-between text-muted">
+            <span>Estimated GHS amount</span>
+            <span>{fmtGHS(quote.netGHS + quote.feeGHS)}</span>
+          </div>
+          <div className="flex justify-between text-muted">
+            <span>Exchange rate</span>
+            <span>1 USD = {quote.rateGHSUSD.toFixed(4)} GHS</span>
+          </div>
           <div className="flex justify-between text-muted">
             <span>Fee ({quote.feePct}%)</span>
             <span>-{fmtGHS(quote.feeGHS)}</span>
           </div>
-          <div className="mt-1 flex justify-between font-bold">
-            <span>You receive</span>
+          <div className="flex justify-between border-t border-line pt-1.5 font-bold">
+            <span>Final amount to receive</span>
             <span className="text-up">{fmtGHS(quote.netGHS)}</span>
           </div>
         </div>
       )}
 
-      {msg && <p className={`mt-3 text-sm ${msg.ok ? 'text-up' : 'text-down'}`}>{msg.text}</p>}
+      {error && <p className="mt-3 text-sm text-down">{error}</p>}
       <button
         onClick={submit}
-        disabled={busy || !(amt > 0) || destination.replace(/\D/g, '').length < 8}
+        disabled={!(amt > 0) || destination.replace(/\D/g, '').length < 8}
         className="mt-4 w-full rounded-full bg-white py-3 text-[14px] font-bold text-black disabled:opacity-40"
       >
-        {busy ? 'Processing…' : 'Withdraw via Payteller'}
+        Confirm withdrawal request
       </button>
+      <p className="mb-4 mt-2 text-center text-[11px] text-muted">
+        Requests are reviewed by our team. You will be notified when a decision is made.
+      </p>
     </div>
   );
 }

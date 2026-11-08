@@ -317,6 +317,10 @@ export type UserWhereInput = {
   moderationEvents?: Prisma.ModerationEventListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
   kyc?: Prisma.XOR<Prisma.KycApplicationNullableScalarRelationFilter, Prisma.KycApplicationWhereInput> | null
+  messagesAccount?: Prisma.XOR<Prisma.MessagesAccountNullableScalarRelationFilter, Prisma.MessagesAccountWhereInput> | null
+  messagesInvites?: Prisma.MessagesInviteListRelationFilter
+  conversations?: Prisma.ConversationListRelationFilter
+  pushSubscriptions?: Prisma.PushSubscriptionListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -352,6 +356,10 @@ export type UserOrderByWithRelationInput = {
   moderationEvents?: Prisma.ModerationEventOrderByRelationAggregateInput
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
   kyc?: Prisma.KycApplicationOrderByWithRelationInput
+  messagesAccount?: Prisma.MessagesAccountOrderByWithRelationInput
+  messagesInvites?: Prisma.MessagesInviteOrderByRelationAggregateInput
+  conversations?: Prisma.ConversationOrderByRelationAggregateInput
+  pushSubscriptions?: Prisma.PushSubscriptionOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -390,6 +398,10 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   moderationEvents?: Prisma.ModerationEventListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
   kyc?: Prisma.XOR<Prisma.KycApplicationNullableScalarRelationFilter, Prisma.KycApplicationWhereInput> | null
+  messagesAccount?: Prisma.XOR<Prisma.MessagesAccountNullableScalarRelationFilter, Prisma.MessagesAccountWhereInput> | null
+  messagesInvites?: Prisma.MessagesInviteListRelationFilter
+  conversations?: Prisma.ConversationListRelationFilter
+  pushSubscriptions?: Prisma.PushSubscriptionListRelationFilter
 }, "id" | "email" | "username">
 
 export type UserOrderByWithAggregationInput = {
@@ -469,6 +481,10 @@ export type UserCreateInput = {
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -504,6 +520,10 @@ export type UserUncheckedCreateInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -539,6 +559,10 @@ export type UserUpdateInput = {
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -574,6 +598,10 @@ export type UserUncheckedUpdateInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -953,6 +981,62 @@ export type UserUpdateOneRequiredWithoutFavoritesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFavoritesInput, Prisma.UserUpdateWithoutFavoritesInput>, Prisma.UserUncheckedUpdateWithoutFavoritesInput>
 }
 
+export type UserCreateNestedOneWithoutMessagesAccountInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMessagesAccountInput, Prisma.UserUncheckedCreateWithoutMessagesAccountInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMessagesAccountInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutMessagesAccountNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMessagesAccountInput, Prisma.UserUncheckedCreateWithoutMessagesAccountInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMessagesAccountInput
+  upsert?: Prisma.UserUpsertWithoutMessagesAccountInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutMessagesAccountInput, Prisma.UserUpdateWithoutMessagesAccountInput>, Prisma.UserUncheckedUpdateWithoutMessagesAccountInput>
+}
+
+export type UserCreateNestedOneWithoutMessagesInvitesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMessagesInvitesInput, Prisma.UserUncheckedCreateWithoutMessagesInvitesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMessagesInvitesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutMessagesInvitesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMessagesInvitesInput, Prisma.UserUncheckedCreateWithoutMessagesInvitesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMessagesInvitesInput
+  upsert?: Prisma.UserUpsertWithoutMessagesInvitesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutMessagesInvitesInput, Prisma.UserUpdateWithoutMessagesInvitesInput>, Prisma.UserUncheckedUpdateWithoutMessagesInvitesInput>
+}
+
+export type UserCreateNestedOneWithoutConversationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutConversationsInput, Prisma.UserUncheckedCreateWithoutConversationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutConversationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutConversationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutConversationsInput, Prisma.UserUncheckedCreateWithoutConversationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutConversationsInput
+  upsert?: Prisma.UserUpsertWithoutConversationsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutConversationsInput, Prisma.UserUpdateWithoutConversationsInput>, Prisma.UserUncheckedUpdateWithoutConversationsInput>
+}
+
+export type UserCreateNestedOneWithoutPushSubscriptionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPushSubscriptionsInput, Prisma.UserUncheckedCreateWithoutPushSubscriptionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPushSubscriptionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPushSubscriptionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPushSubscriptionsInput, Prisma.UserUncheckedCreateWithoutPushSubscriptionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPushSubscriptionsInput
+  upsert?: Prisma.UserUpsertWithoutPushSubscriptionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPushSubscriptionsInput, Prisma.UserUpdateWithoutPushSubscriptionsInput>, Prisma.UserUncheckedUpdateWithoutPushSubscriptionsInput>
+}
+
 export type UserCreateNestedOneWithoutAuditLogsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuditLogsInput
@@ -1013,6 +1097,10 @@ export type UserCreateWithoutWalletsInput = {
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutWalletsInput = {
@@ -1047,6 +1135,10 @@ export type UserUncheckedCreateWithoutWalletsInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutWalletsInput = {
@@ -1097,6 +1189,10 @@ export type UserUpdateWithoutWalletsInput = {
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutWalletsInput = {
@@ -1131,6 +1227,10 @@ export type UserUncheckedUpdateWithoutWalletsInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTransactionsInput = {
@@ -1165,6 +1265,10 @@ export type UserCreateWithoutTransactionsInput = {
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTransactionsInput = {
@@ -1199,6 +1303,10 @@ export type UserUncheckedCreateWithoutTransactionsInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTransactionsInput = {
@@ -1249,6 +1357,10 @@ export type UserUpdateWithoutTransactionsInput = {
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTransactionsInput = {
@@ -1283,6 +1395,10 @@ export type UserUncheckedUpdateWithoutTransactionsInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutOrdersInput = {
@@ -1317,6 +1433,10 @@ export type UserCreateWithoutOrdersInput = {
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutOrdersInput = {
@@ -1351,6 +1471,10 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutOrdersInput = {
@@ -1401,6 +1525,10 @@ export type UserUpdateWithoutOrdersInput = {
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -1435,6 +1563,10 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTradesInput = {
@@ -1469,6 +1601,10 @@ export type UserCreateWithoutTradesInput = {
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTradesInput = {
@@ -1503,6 +1639,10 @@ export type UserUncheckedCreateWithoutTradesInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTradesInput = {
@@ -1553,6 +1693,10 @@ export type UserUpdateWithoutTradesInput = {
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTradesInput = {
@@ -1587,6 +1731,10 @@ export type UserUncheckedUpdateWithoutTradesInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutDepositIntentsInput = {
@@ -1621,6 +1769,10 @@ export type UserCreateWithoutDepositIntentsInput = {
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutDepositIntentsInput = {
@@ -1655,6 +1807,10 @@ export type UserUncheckedCreateWithoutDepositIntentsInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutDepositIntentsInput = {
@@ -1705,6 +1861,10 @@ export type UserUpdateWithoutDepositIntentsInput = {
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDepositIntentsInput = {
@@ -1739,6 +1899,10 @@ export type UserUncheckedUpdateWithoutDepositIntentsInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutWithdrawalsInput = {
@@ -1773,6 +1937,10 @@ export type UserCreateWithoutWithdrawalsInput = {
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutWithdrawalsInput = {
@@ -1807,6 +1975,10 @@ export type UserUncheckedCreateWithoutWithdrawalsInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutWithdrawalsInput = {
@@ -1857,6 +2029,10 @@ export type UserUpdateWithoutWithdrawalsInput = {
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutWithdrawalsInput = {
@@ -1891,6 +2067,10 @@ export type UserUncheckedUpdateWithoutWithdrawalsInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutP2pOffersInput = {
@@ -1925,6 +2105,10 @@ export type UserCreateWithoutP2pOffersInput = {
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutP2pOffersInput = {
@@ -1959,6 +2143,10 @@ export type UserUncheckedCreateWithoutP2pOffersInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutP2pOffersInput = {
@@ -2009,6 +2197,10 @@ export type UserUpdateWithoutP2pOffersInput = {
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutP2pOffersInput = {
@@ -2043,6 +2235,10 @@ export type UserUncheckedUpdateWithoutP2pOffersInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutP2pOrdersAsBuyerInput = {
@@ -2077,6 +2273,10 @@ export type UserCreateWithoutP2pOrdersAsBuyerInput = {
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutP2pOrdersAsBuyerInput = {
@@ -2111,6 +2311,10 @@ export type UserUncheckedCreateWithoutP2pOrdersAsBuyerInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutP2pOrdersAsBuyerInput = {
@@ -2150,6 +2354,10 @@ export type UserCreateWithoutP2pOrdersAsSellerInput = {
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutP2pOrdersAsSellerInput = {
@@ -2184,6 +2392,10 @@ export type UserUncheckedCreateWithoutP2pOrdersAsSellerInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutP2pOrdersAsSellerInput = {
@@ -2234,6 +2446,10 @@ export type UserUpdateWithoutP2pOrdersAsBuyerInput = {
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutP2pOrdersAsBuyerInput = {
@@ -2268,6 +2484,10 @@ export type UserUncheckedUpdateWithoutP2pOrdersAsBuyerInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutP2pOrdersAsSellerInput = {
@@ -2313,6 +2533,10 @@ export type UserUpdateWithoutP2pOrdersAsSellerInput = {
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutP2pOrdersAsSellerInput = {
@@ -2347,6 +2571,10 @@ export type UserUncheckedUpdateWithoutP2pOrdersAsSellerInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutOrbitPostsInput = {
@@ -2381,6 +2609,10 @@ export type UserCreateWithoutOrbitPostsInput = {
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutOrbitPostsInput = {
@@ -2415,6 +2647,10 @@ export type UserUncheckedCreateWithoutOrbitPostsInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutOrbitPostsInput = {
@@ -2465,6 +2701,10 @@ export type UserUpdateWithoutOrbitPostsInput = {
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOrbitPostsInput = {
@@ -2499,6 +2739,10 @@ export type UserUncheckedUpdateWithoutOrbitPostsInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutOrbitCommentsInput = {
@@ -2533,6 +2777,10 @@ export type UserCreateWithoutOrbitCommentsInput = {
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutOrbitCommentsInput = {
@@ -2567,6 +2815,10 @@ export type UserUncheckedCreateWithoutOrbitCommentsInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutOrbitCommentsInput = {
@@ -2617,6 +2869,10 @@ export type UserUpdateWithoutOrbitCommentsInput = {
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOrbitCommentsInput = {
@@ -2651,6 +2907,10 @@ export type UserUncheckedUpdateWithoutOrbitCommentsInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutOrbitLikesInput = {
@@ -2685,6 +2945,10 @@ export type UserCreateWithoutOrbitLikesInput = {
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutOrbitLikesInput = {
@@ -2719,6 +2983,10 @@ export type UserUncheckedCreateWithoutOrbitLikesInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutOrbitLikesInput = {
@@ -2769,6 +3037,10 @@ export type UserUpdateWithoutOrbitLikesInput = {
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOrbitLikesInput = {
@@ -2803,6 +3075,10 @@ export type UserUncheckedUpdateWithoutOrbitLikesInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutModerationEventsInput = {
@@ -2837,6 +3113,10 @@ export type UserCreateWithoutModerationEventsInput = {
   favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutModerationEventsInput = {
@@ -2871,6 +3151,10 @@ export type UserUncheckedCreateWithoutModerationEventsInput = {
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutModerationEventsInput = {
@@ -2921,6 +3205,10 @@ export type UserUpdateWithoutModerationEventsInput = {
   favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutModerationEventsInput = {
@@ -2955,6 +3243,10 @@ export type UserUncheckedUpdateWithoutModerationEventsInput = {
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPositionsInput = {
@@ -2989,6 +3281,10 @@ export type UserCreateWithoutPositionsInput = {
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPositionsInput = {
@@ -3023,6 +3319,10 @@ export type UserUncheckedCreateWithoutPositionsInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPositionsInput = {
@@ -3073,6 +3373,10 @@ export type UserUpdateWithoutPositionsInput = {
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPositionsInput = {
@@ -3107,6 +3411,10 @@ export type UserUncheckedUpdateWithoutPositionsInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutFavoritesInput = {
@@ -3141,6 +3449,10 @@ export type UserCreateWithoutFavoritesInput = {
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutFavoritesInput = {
@@ -3175,6 +3487,10 @@ export type UserUncheckedCreateWithoutFavoritesInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
   kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutFavoritesInput = {
@@ -3225,6 +3541,10 @@ export type UserUpdateWithoutFavoritesInput = {
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFavoritesInput = {
@@ -3259,6 +3579,682 @@ export type UserUncheckedUpdateWithoutFavoritesInput = {
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
   kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutMessagesAccountInput = {
+  id?: string
+  email: string
+  username: string
+  passwordHash: string
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  country?: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  kycLevel?: number
+  orbitBanned?: boolean
+  riskScore?: number
+  createdAt?: Date | string
+  lastLoginAt?: Date | string | null
+  wallets?: Prisma.WalletCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  trades?: Prisma.TradeCreateNestedManyWithoutUserInput
+  depositIntents?: Prisma.DepositIntentCreateNestedManyWithoutUserInput
+  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutUserInput
+  p2pOffers?: Prisma.P2POfferCreateNestedManyWithoutUserInput
+  p2pOrdersAsBuyer?: Prisma.P2POrderCreateNestedManyWithoutBuyerInput
+  p2pOrdersAsSeller?: Prisma.P2POrderCreateNestedManyWithoutSellerInput
+  orbitPosts?: Prisma.OrbitPostCreateNestedManyWithoutAuthorInput
+  orbitComments?: Prisma.OrbitCommentCreateNestedManyWithoutAuthorInput
+  orbitLikes?: Prisma.OrbitLikeCreateNestedManyWithoutUserInput
+  positions?: Prisma.PositionCreateNestedManyWithoutUserInput
+  favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
+  moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutMessagesAccountInput = {
+  id?: string
+  email: string
+  username: string
+  passwordHash: string
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  country?: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  kycLevel?: number
+  orbitBanned?: boolean
+  riskScore?: number
+  createdAt?: Date | string
+  lastLoginAt?: Date | string | null
+  wallets?: Prisma.WalletUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  trades?: Prisma.TradeUncheckedCreateNestedManyWithoutUserInput
+  depositIntents?: Prisma.DepositIntentUncheckedCreateNestedManyWithoutUserInput
+  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutUserInput
+  p2pOffers?: Prisma.P2POfferUncheckedCreateNestedManyWithoutUserInput
+  p2pOrdersAsBuyer?: Prisma.P2POrderUncheckedCreateNestedManyWithoutBuyerInput
+  p2pOrdersAsSeller?: Prisma.P2POrderUncheckedCreateNestedManyWithoutSellerInput
+  orbitPosts?: Prisma.OrbitPostUncheckedCreateNestedManyWithoutAuthorInput
+  orbitComments?: Prisma.OrbitCommentUncheckedCreateNestedManyWithoutAuthorInput
+  orbitLikes?: Prisma.OrbitLikeUncheckedCreateNestedManyWithoutUserInput
+  positions?: Prisma.PositionUncheckedCreateNestedManyWithoutUserInput
+  favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
+  moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutMessagesAccountInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutMessagesAccountInput, Prisma.UserUncheckedCreateWithoutMessagesAccountInput>
+}
+
+export type UserUpsertWithoutMessagesAccountInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutMessagesAccountInput, Prisma.UserUncheckedUpdateWithoutMessagesAccountInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutMessagesAccountInput, Prisma.UserUncheckedCreateWithoutMessagesAccountInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutMessagesAccountInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutMessagesAccountInput, Prisma.UserUncheckedUpdateWithoutMessagesAccountInput>
+}
+
+export type UserUpdateWithoutMessagesAccountInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  wallets?: Prisma.WalletUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  trades?: Prisma.TradeUpdateManyWithoutUserNestedInput
+  depositIntents?: Prisma.DepositIntentUpdateManyWithoutUserNestedInput
+  withdrawals?: Prisma.WithdrawalUpdateManyWithoutUserNestedInput
+  p2pOffers?: Prisma.P2POfferUpdateManyWithoutUserNestedInput
+  p2pOrdersAsBuyer?: Prisma.P2POrderUpdateManyWithoutBuyerNestedInput
+  p2pOrdersAsSeller?: Prisma.P2POrderUpdateManyWithoutSellerNestedInput
+  orbitPosts?: Prisma.OrbitPostUpdateManyWithoutAuthorNestedInput
+  orbitComments?: Prisma.OrbitCommentUpdateManyWithoutAuthorNestedInput
+  orbitLikes?: Prisma.OrbitLikeUpdateManyWithoutUserNestedInput
+  positions?: Prisma.PositionUpdateManyWithoutUserNestedInput
+  favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
+  moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutMessagesAccountInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  wallets?: Prisma.WalletUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  trades?: Prisma.TradeUncheckedUpdateManyWithoutUserNestedInput
+  depositIntents?: Prisma.DepositIntentUncheckedUpdateManyWithoutUserNestedInput
+  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+  p2pOffers?: Prisma.P2POfferUncheckedUpdateManyWithoutUserNestedInput
+  p2pOrdersAsBuyer?: Prisma.P2POrderUncheckedUpdateManyWithoutBuyerNestedInput
+  p2pOrdersAsSeller?: Prisma.P2POrderUncheckedUpdateManyWithoutSellerNestedInput
+  orbitPosts?: Prisma.OrbitPostUncheckedUpdateManyWithoutAuthorNestedInput
+  orbitComments?: Prisma.OrbitCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  orbitLikes?: Prisma.OrbitLikeUncheckedUpdateManyWithoutUserNestedInput
+  positions?: Prisma.PositionUncheckedUpdateManyWithoutUserNestedInput
+  favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
+  moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutMessagesInvitesInput = {
+  id?: string
+  email: string
+  username: string
+  passwordHash: string
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  country?: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  kycLevel?: number
+  orbitBanned?: boolean
+  riskScore?: number
+  createdAt?: Date | string
+  lastLoginAt?: Date | string | null
+  wallets?: Prisma.WalletCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  trades?: Prisma.TradeCreateNestedManyWithoutUserInput
+  depositIntents?: Prisma.DepositIntentCreateNestedManyWithoutUserInput
+  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutUserInput
+  p2pOffers?: Prisma.P2POfferCreateNestedManyWithoutUserInput
+  p2pOrdersAsBuyer?: Prisma.P2POrderCreateNestedManyWithoutBuyerInput
+  p2pOrdersAsSeller?: Prisma.P2POrderCreateNestedManyWithoutSellerInput
+  orbitPosts?: Prisma.OrbitPostCreateNestedManyWithoutAuthorInput
+  orbitComments?: Prisma.OrbitCommentCreateNestedManyWithoutAuthorInput
+  orbitLikes?: Prisma.OrbitLikeCreateNestedManyWithoutUserInput
+  positions?: Prisma.PositionCreateNestedManyWithoutUserInput
+  favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
+  moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountCreateNestedOneWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutMessagesInvitesInput = {
+  id?: string
+  email: string
+  username: string
+  passwordHash: string
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  country?: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  kycLevel?: number
+  orbitBanned?: boolean
+  riskScore?: number
+  createdAt?: Date | string
+  lastLoginAt?: Date | string | null
+  wallets?: Prisma.WalletUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  trades?: Prisma.TradeUncheckedCreateNestedManyWithoutUserInput
+  depositIntents?: Prisma.DepositIntentUncheckedCreateNestedManyWithoutUserInput
+  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutUserInput
+  p2pOffers?: Prisma.P2POfferUncheckedCreateNestedManyWithoutUserInput
+  p2pOrdersAsBuyer?: Prisma.P2POrderUncheckedCreateNestedManyWithoutBuyerInput
+  p2pOrdersAsSeller?: Prisma.P2POrderUncheckedCreateNestedManyWithoutSellerInput
+  orbitPosts?: Prisma.OrbitPostUncheckedCreateNestedManyWithoutAuthorInput
+  orbitComments?: Prisma.OrbitCommentUncheckedCreateNestedManyWithoutAuthorInput
+  orbitLikes?: Prisma.OrbitLikeUncheckedCreateNestedManyWithoutUserInput
+  positions?: Prisma.PositionUncheckedCreateNestedManyWithoutUserInput
+  favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
+  moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedCreateNestedOneWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutMessagesInvitesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutMessagesInvitesInput, Prisma.UserUncheckedCreateWithoutMessagesInvitesInput>
+}
+
+export type UserUpsertWithoutMessagesInvitesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutMessagesInvitesInput, Prisma.UserUncheckedUpdateWithoutMessagesInvitesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutMessagesInvitesInput, Prisma.UserUncheckedCreateWithoutMessagesInvitesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutMessagesInvitesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutMessagesInvitesInput, Prisma.UserUncheckedUpdateWithoutMessagesInvitesInput>
+}
+
+export type UserUpdateWithoutMessagesInvitesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  wallets?: Prisma.WalletUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  trades?: Prisma.TradeUpdateManyWithoutUserNestedInput
+  depositIntents?: Prisma.DepositIntentUpdateManyWithoutUserNestedInput
+  withdrawals?: Prisma.WithdrawalUpdateManyWithoutUserNestedInput
+  p2pOffers?: Prisma.P2POfferUpdateManyWithoutUserNestedInput
+  p2pOrdersAsBuyer?: Prisma.P2POrderUpdateManyWithoutBuyerNestedInput
+  p2pOrdersAsSeller?: Prisma.P2POrderUpdateManyWithoutSellerNestedInput
+  orbitPosts?: Prisma.OrbitPostUpdateManyWithoutAuthorNestedInput
+  orbitComments?: Prisma.OrbitCommentUpdateManyWithoutAuthorNestedInput
+  orbitLikes?: Prisma.OrbitLikeUpdateManyWithoutUserNestedInput
+  positions?: Prisma.PositionUpdateManyWithoutUserNestedInput
+  favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
+  moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUpdateOneWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutMessagesInvitesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  wallets?: Prisma.WalletUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  trades?: Prisma.TradeUncheckedUpdateManyWithoutUserNestedInput
+  depositIntents?: Prisma.DepositIntentUncheckedUpdateManyWithoutUserNestedInput
+  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+  p2pOffers?: Prisma.P2POfferUncheckedUpdateManyWithoutUserNestedInput
+  p2pOrdersAsBuyer?: Prisma.P2POrderUncheckedUpdateManyWithoutBuyerNestedInput
+  p2pOrdersAsSeller?: Prisma.P2POrderUncheckedUpdateManyWithoutSellerNestedInput
+  orbitPosts?: Prisma.OrbitPostUncheckedUpdateManyWithoutAuthorNestedInput
+  orbitComments?: Prisma.OrbitCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  orbitLikes?: Prisma.OrbitLikeUncheckedUpdateManyWithoutUserNestedInput
+  positions?: Prisma.PositionUncheckedUpdateManyWithoutUserNestedInput
+  favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
+  moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedUpdateOneWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutConversationsInput = {
+  id?: string
+  email: string
+  username: string
+  passwordHash: string
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  country?: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  kycLevel?: number
+  orbitBanned?: boolean
+  riskScore?: number
+  createdAt?: Date | string
+  lastLoginAt?: Date | string | null
+  wallets?: Prisma.WalletCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  trades?: Prisma.TradeCreateNestedManyWithoutUserInput
+  depositIntents?: Prisma.DepositIntentCreateNestedManyWithoutUserInput
+  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutUserInput
+  p2pOffers?: Prisma.P2POfferCreateNestedManyWithoutUserInput
+  p2pOrdersAsBuyer?: Prisma.P2POrderCreateNestedManyWithoutBuyerInput
+  p2pOrdersAsSeller?: Prisma.P2POrderCreateNestedManyWithoutSellerInput
+  orbitPosts?: Prisma.OrbitPostCreateNestedManyWithoutAuthorInput
+  orbitComments?: Prisma.OrbitCommentCreateNestedManyWithoutAuthorInput
+  orbitLikes?: Prisma.OrbitLikeCreateNestedManyWithoutUserInput
+  positions?: Prisma.PositionCreateNestedManyWithoutUserInput
+  favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
+  moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutConversationsInput = {
+  id?: string
+  email: string
+  username: string
+  passwordHash: string
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  country?: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  kycLevel?: number
+  orbitBanned?: boolean
+  riskScore?: number
+  createdAt?: Date | string
+  lastLoginAt?: Date | string | null
+  wallets?: Prisma.WalletUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  trades?: Prisma.TradeUncheckedCreateNestedManyWithoutUserInput
+  depositIntents?: Prisma.DepositIntentUncheckedCreateNestedManyWithoutUserInput
+  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutUserInput
+  p2pOffers?: Prisma.P2POfferUncheckedCreateNestedManyWithoutUserInput
+  p2pOrdersAsBuyer?: Prisma.P2POrderUncheckedCreateNestedManyWithoutBuyerInput
+  p2pOrdersAsSeller?: Prisma.P2POrderUncheckedCreateNestedManyWithoutSellerInput
+  orbitPosts?: Prisma.OrbitPostUncheckedCreateNestedManyWithoutAuthorInput
+  orbitComments?: Prisma.OrbitCommentUncheckedCreateNestedManyWithoutAuthorInput
+  orbitLikes?: Prisma.OrbitLikeUncheckedCreateNestedManyWithoutUserInput
+  positions?: Prisma.PositionUncheckedCreateNestedManyWithoutUserInput
+  favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
+  moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutConversationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutConversationsInput, Prisma.UserUncheckedCreateWithoutConversationsInput>
+}
+
+export type UserUpsertWithoutConversationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutConversationsInput, Prisma.UserUncheckedUpdateWithoutConversationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutConversationsInput, Prisma.UserUncheckedCreateWithoutConversationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutConversationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutConversationsInput, Prisma.UserUncheckedUpdateWithoutConversationsInput>
+}
+
+export type UserUpdateWithoutConversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  wallets?: Prisma.WalletUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  trades?: Prisma.TradeUpdateManyWithoutUserNestedInput
+  depositIntents?: Prisma.DepositIntentUpdateManyWithoutUserNestedInput
+  withdrawals?: Prisma.WithdrawalUpdateManyWithoutUserNestedInput
+  p2pOffers?: Prisma.P2POfferUpdateManyWithoutUserNestedInput
+  p2pOrdersAsBuyer?: Prisma.P2POrderUpdateManyWithoutBuyerNestedInput
+  p2pOrdersAsSeller?: Prisma.P2POrderUpdateManyWithoutSellerNestedInput
+  orbitPosts?: Prisma.OrbitPostUpdateManyWithoutAuthorNestedInput
+  orbitComments?: Prisma.OrbitCommentUpdateManyWithoutAuthorNestedInput
+  orbitLikes?: Prisma.OrbitLikeUpdateManyWithoutUserNestedInput
+  positions?: Prisma.PositionUpdateManyWithoutUserNestedInput
+  favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
+  moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutConversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  wallets?: Prisma.WalletUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  trades?: Prisma.TradeUncheckedUpdateManyWithoutUserNestedInput
+  depositIntents?: Prisma.DepositIntentUncheckedUpdateManyWithoutUserNestedInput
+  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+  p2pOffers?: Prisma.P2POfferUncheckedUpdateManyWithoutUserNestedInput
+  p2pOrdersAsBuyer?: Prisma.P2POrderUncheckedUpdateManyWithoutBuyerNestedInput
+  p2pOrdersAsSeller?: Prisma.P2POrderUncheckedUpdateManyWithoutSellerNestedInput
+  orbitPosts?: Prisma.OrbitPostUncheckedUpdateManyWithoutAuthorNestedInput
+  orbitComments?: Prisma.OrbitCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  orbitLikes?: Prisma.OrbitLikeUncheckedUpdateManyWithoutUserNestedInput
+  positions?: Prisma.PositionUncheckedUpdateManyWithoutUserNestedInput
+  favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
+  moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutPushSubscriptionsInput = {
+  id?: string
+  email: string
+  username: string
+  passwordHash: string
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  country?: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  kycLevel?: number
+  orbitBanned?: boolean
+  riskScore?: number
+  createdAt?: Date | string
+  lastLoginAt?: Date | string | null
+  wallets?: Prisma.WalletCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  trades?: Prisma.TradeCreateNestedManyWithoutUserInput
+  depositIntents?: Prisma.DepositIntentCreateNestedManyWithoutUserInput
+  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutUserInput
+  p2pOffers?: Prisma.P2POfferCreateNestedManyWithoutUserInput
+  p2pOrdersAsBuyer?: Prisma.P2POrderCreateNestedManyWithoutBuyerInput
+  p2pOrdersAsSeller?: Prisma.P2POrderCreateNestedManyWithoutSellerInput
+  orbitPosts?: Prisma.OrbitPostCreateNestedManyWithoutAuthorInput
+  orbitComments?: Prisma.OrbitCommentCreateNestedManyWithoutAuthorInput
+  orbitLikes?: Prisma.OrbitLikeCreateNestedManyWithoutUserInput
+  positions?: Prisma.PositionCreateNestedManyWithoutUserInput
+  favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
+  moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutPushSubscriptionsInput = {
+  id?: string
+  email: string
+  username: string
+  passwordHash: string
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  country?: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  kycLevel?: number
+  orbitBanned?: boolean
+  riskScore?: number
+  createdAt?: Date | string
+  lastLoginAt?: Date | string | null
+  wallets?: Prisma.WalletUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  trades?: Prisma.TradeUncheckedCreateNestedManyWithoutUserInput
+  depositIntents?: Prisma.DepositIntentUncheckedCreateNestedManyWithoutUserInput
+  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutUserInput
+  p2pOffers?: Prisma.P2POfferUncheckedCreateNestedManyWithoutUserInput
+  p2pOrdersAsBuyer?: Prisma.P2POrderUncheckedCreateNestedManyWithoutBuyerInput
+  p2pOrdersAsSeller?: Prisma.P2POrderUncheckedCreateNestedManyWithoutSellerInput
+  orbitPosts?: Prisma.OrbitPostUncheckedCreateNestedManyWithoutAuthorInput
+  orbitComments?: Prisma.OrbitCommentUncheckedCreateNestedManyWithoutAuthorInput
+  orbitLikes?: Prisma.OrbitLikeUncheckedCreateNestedManyWithoutUserInput
+  positions?: Prisma.PositionUncheckedCreateNestedManyWithoutUserInput
+  favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
+  moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutPushSubscriptionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPushSubscriptionsInput, Prisma.UserUncheckedCreateWithoutPushSubscriptionsInput>
+}
+
+export type UserUpsertWithoutPushSubscriptionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPushSubscriptionsInput, Prisma.UserUncheckedUpdateWithoutPushSubscriptionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPushSubscriptionsInput, Prisma.UserUncheckedCreateWithoutPushSubscriptionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPushSubscriptionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPushSubscriptionsInput, Prisma.UserUncheckedUpdateWithoutPushSubscriptionsInput>
+}
+
+export type UserUpdateWithoutPushSubscriptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  wallets?: Prisma.WalletUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  trades?: Prisma.TradeUpdateManyWithoutUserNestedInput
+  depositIntents?: Prisma.DepositIntentUpdateManyWithoutUserNestedInput
+  withdrawals?: Prisma.WithdrawalUpdateManyWithoutUserNestedInput
+  p2pOffers?: Prisma.P2POfferUpdateManyWithoutUserNestedInput
+  p2pOrdersAsBuyer?: Prisma.P2POrderUpdateManyWithoutBuyerNestedInput
+  p2pOrdersAsSeller?: Prisma.P2POrderUpdateManyWithoutSellerNestedInput
+  orbitPosts?: Prisma.OrbitPostUpdateManyWithoutAuthorNestedInput
+  orbitComments?: Prisma.OrbitCommentUpdateManyWithoutAuthorNestedInput
+  orbitLikes?: Prisma.OrbitLikeUpdateManyWithoutUserNestedInput
+  positions?: Prisma.PositionUpdateManyWithoutUserNestedInput
+  favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
+  moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPushSubscriptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  wallets?: Prisma.WalletUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  trades?: Prisma.TradeUncheckedUpdateManyWithoutUserNestedInput
+  depositIntents?: Prisma.DepositIntentUncheckedUpdateManyWithoutUserNestedInput
+  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+  p2pOffers?: Prisma.P2POfferUncheckedUpdateManyWithoutUserNestedInput
+  p2pOrdersAsBuyer?: Prisma.P2POrderUncheckedUpdateManyWithoutBuyerNestedInput
+  p2pOrdersAsSeller?: Prisma.P2POrderUncheckedUpdateManyWithoutSellerNestedInput
+  orbitPosts?: Prisma.OrbitPostUncheckedUpdateManyWithoutAuthorNestedInput
+  orbitComments?: Prisma.OrbitCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  orbitLikes?: Prisma.OrbitLikeUncheckedUpdateManyWithoutUserNestedInput
+  positions?: Prisma.PositionUncheckedUpdateManyWithoutUserNestedInput
+  favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
+  moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAuditLogsInput = {
@@ -3293,6 +4289,10 @@ export type UserCreateWithoutAuditLogsInput = {
   favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   kyc?: Prisma.KycApplicationCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -3327,6 +4327,10 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   kyc?: Prisma.KycApplicationUncheckedCreateNestedOneWithoutUserInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -3377,6 +4381,10 @@ export type UserUpdateWithoutAuditLogsInput = {
   favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   kyc?: Prisma.KycApplicationUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -3411,6 +4419,10 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   kyc?: Prisma.KycApplicationUncheckedUpdateOneWithoutUserNestedInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutKycInput = {
@@ -3445,6 +4457,10 @@ export type UserCreateWithoutKycInput = {
   favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  messagesAccount?: Prisma.MessagesAccountCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutKycInput = {
@@ -3479,6 +4495,10 @@ export type UserUncheckedCreateWithoutKycInput = {
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
   moderationEvents?: Prisma.ModerationEventUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedCreateNestedOneWithoutUserInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutKycInput = {
@@ -3529,6 +4549,10 @@ export type UserUpdateWithoutKycInput = {
   favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  messagesAccount?: Prisma.MessagesAccountUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutKycInput = {
@@ -3563,6 +4587,10 @@ export type UserUncheckedUpdateWithoutKycInput = {
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
   moderationEvents?: Prisma.ModerationEventUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  messagesAccount?: Prisma.MessagesAccountUncheckedUpdateOneWithoutUserNestedInput
+  messagesInvites?: Prisma.MessagesInviteUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -3587,6 +4615,9 @@ export type UserCountOutputType = {
   favorites: number
   moderationEvents: number
   auditLogs: number
+  messagesInvites: number
+  conversations: number
+  pushSubscriptions: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3606,6 +4637,9 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   favorites?: boolean | UserCountOutputTypeCountFavoritesArgs
   moderationEvents?: boolean | UserCountOutputTypeCountModerationEventsArgs
   auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
+  messagesInvites?: boolean | UserCountOutputTypeCountMessagesInvitesArgs
+  conversations?: boolean | UserCountOutputTypeCountConversationsArgs
+  pushSubscriptions?: boolean | UserCountOutputTypeCountPushSubscriptionsArgs
 }
 
 /**
@@ -3730,6 +4764,27 @@ export type UserCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Types.
   where?: Prisma.AuditLogWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountMessagesInvitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MessagesInviteWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountConversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ConversationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPushSubscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PushSubscriptionWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -3764,6 +4819,10 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   moderationEvents?: boolean | Prisma.User$moderationEventsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   kyc?: boolean | Prisma.User$kycArgs<ExtArgs>
+  messagesAccount?: boolean | Prisma.User$messagesAccountArgs<ExtArgs>
+  messagesInvites?: boolean | Prisma.User$messagesInvitesArgs<ExtArgs>
+  conversations?: boolean | Prisma.User$conversationsArgs<ExtArgs>
+  pushSubscriptions?: boolean | Prisma.User$pushSubscriptionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -3840,6 +4899,10 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   moderationEvents?: boolean | Prisma.User$moderationEventsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   kyc?: boolean | Prisma.User$kycArgs<ExtArgs>
+  messagesAccount?: boolean | Prisma.User$messagesAccountArgs<ExtArgs>
+  messagesInvites?: boolean | Prisma.User$messagesInvitesArgs<ExtArgs>
+  conversations?: boolean | Prisma.User$conversationsArgs<ExtArgs>
+  pushSubscriptions?: boolean | Prisma.User$pushSubscriptionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -3865,6 +4928,10 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     moderationEvents: Prisma.$ModerationEventPayload<ExtArgs>[]
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
     kyc: Prisma.$KycApplicationPayload<ExtArgs> | null
+    messagesAccount: Prisma.$MessagesAccountPayload<ExtArgs> | null
+    messagesInvites: Prisma.$MessagesInvitePayload<ExtArgs>[]
+    conversations: Prisma.$ConversationPayload<ExtArgs>[]
+    pushSubscriptions: Prisma.$PushSubscriptionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -4293,6 +5360,10 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   moderationEvents<T extends Prisma.User$moderationEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$moderationEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ModerationEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   auditLogs<T extends Prisma.User$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   kyc<T extends Prisma.User$kycArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$kycArgs<ExtArgs>>): Prisma.Prisma__KycApplicationClient<runtime.Types.Result.GetResult<Prisma.$KycApplicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  messagesAccount<T extends Prisma.User$messagesAccountArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$messagesAccountArgs<ExtArgs>>): Prisma.Prisma__MessagesAccountClient<runtime.Types.Result.GetResult<Prisma.$MessagesAccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  messagesInvites<T extends Prisma.User$messagesInvitesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$messagesInvitesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessagesInvitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  conversations<T extends Prisma.User$conversationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$conversationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  pushSubscriptions<T extends Prisma.User$pushSubscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$pushSubscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5130,6 +6201,97 @@ export type User$kycArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs =
    */
   include?: Prisma.KycApplicationInclude<ExtArgs> | null
   where?: Prisma.KycApplicationWhereInput
+}
+
+/**
+ * User.messagesAccount
+ */
+export type User$messagesAccountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MessagesAccount
+   */
+  select?: Prisma.MessagesAccountSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MessagesAccount
+   */
+  omit?: Prisma.MessagesAccountOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessagesAccountInclude<ExtArgs> | null
+  where?: Prisma.MessagesAccountWhereInput
+}
+
+/**
+ * User.messagesInvites
+ */
+export type User$messagesInvitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MessagesInvite
+   */
+  select?: Prisma.MessagesInviteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MessagesInvite
+   */
+  omit?: Prisma.MessagesInviteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessagesInviteInclude<ExtArgs> | null
+  where?: Prisma.MessagesInviteWhereInput
+  orderBy?: Prisma.MessagesInviteOrderByWithRelationInput | Prisma.MessagesInviteOrderByWithRelationInput[]
+  cursor?: Prisma.MessagesInviteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MessagesInviteScalarFieldEnum | Prisma.MessagesInviteScalarFieldEnum[]
+}
+
+/**
+ * User.conversations
+ */
+export type User$conversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Conversation
+   */
+  select?: Prisma.ConversationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Conversation
+   */
+  omit?: Prisma.ConversationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ConversationInclude<ExtArgs> | null
+  where?: Prisma.ConversationWhereInput
+  orderBy?: Prisma.ConversationOrderByWithRelationInput | Prisma.ConversationOrderByWithRelationInput[]
+  cursor?: Prisma.ConversationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ConversationScalarFieldEnum | Prisma.ConversationScalarFieldEnum[]
+}
+
+/**
+ * User.pushSubscriptions
+ */
+export type User$pushSubscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PushSubscription
+   */
+  select?: Prisma.PushSubscriptionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PushSubscription
+   */
+  omit?: Prisma.PushSubscriptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PushSubscriptionInclude<ExtArgs> | null
+  where?: Prisma.PushSubscriptionWhereInput
+  orderBy?: Prisma.PushSubscriptionOrderByWithRelationInput | Prisma.PushSubscriptionOrderByWithRelationInput[]
+  cursor?: Prisma.PushSubscriptionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PushSubscriptionScalarFieldEnum | Prisma.PushSubscriptionScalarFieldEnum[]
 }
 
 /**

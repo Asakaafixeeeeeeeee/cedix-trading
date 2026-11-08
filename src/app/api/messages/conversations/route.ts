@@ -1,0 +1,27 @@
+import { api } from '@/lib/api';
+import { prisma } from '@/lib/db';
+import { requireMessagesUser } from '@/lib/messagesAuth';
+
+/** Conversation list with preview + unread counts (own conversations only). */
+export async function GET() {
+  return api(async () => {
+    const { user } = await requireMessagesUser();
+    const conversations = await prisma.conversation.findMany({
+      where: { userId: user.id },
+      orderBy: { updatedAt: 'desc' },
+      include: {
+        messages: { orderBy: { createdAt: 'desc' }, take: 1, select: { title: true, body: true, createdAt: true } },
+        _count: { select: { messages: { where: { readAt: null, sender: 'SYSTEM' } } } },
+      },
+    });
+    return {
+      conversations: conversations.map((c) => ({
+        id: c.id,
+        name: c.name,
+        system: c.system,
+        last: c.messages[0] ?? null,
+        unread: c._count.messages,
+      })),
+    };
+  });
+}

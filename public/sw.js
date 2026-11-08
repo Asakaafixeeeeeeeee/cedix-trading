@@ -1,5 +1,5 @@
 // CediX mobile PWA service worker — network-first with offline fallback cache.
-const CACHE = 'cedix-v2';
+const CACHE = 'cedix-v3';
 const PRECACHE = ['/m', '/manifest.webmanifest', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', (event) => {
@@ -16,8 +16,8 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET') return;
   const url = new URL(request.url);
-  // Never cache API or external calls
-  if (url.origin !== location.origin || url.pathname.startsWith('/api/')) return;
+  // Never cache API or external calls; leave the Messages app to its own SW
+  if (url.origin !== location.origin || url.pathname.startsWith('/api/') || url.pathname.startsWith('/messages')) return;
 
   event.respondWith(
     fetch(request)

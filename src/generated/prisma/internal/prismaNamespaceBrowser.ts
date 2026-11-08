@@ -69,6 +69,12 @@ export const ModelName = {
   Favorite: 'Favorite',
   Setting: 'Setting',
   WebhookEvent: 'WebhookEvent',
+  MessagesAccount: 'MessagesAccount',
+  MessagesInvite: 'MessagesInvite',
+  Conversation: 'Conversation',
+  Message: 'Message',
+  PushSubscription: 'PushSubscription',
+  EmailLog: 'EmailLog',
   AuditLog: 'AuditLog',
   KycApplication: 'KycApplication',
   Banner: 'Banner',
@@ -211,6 +217,10 @@ export const WithdrawalScalarFieldEnum = {
   status: 'status',
   gateway: 'gateway',
   gatewayRef: 'gatewayRef',
+  reviewNote: 'reviewNote',
+  providerRef: 'providerRef',
+  reviewedAt: 'reviewedAt',
+  paidAt: 'paidAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -366,6 +376,90 @@ export const WebhookEventScalarFieldEnum = {
 } as const
 
 export type WebhookEventScalarFieldEnum = (typeof WebhookEventScalarFieldEnum)[keyof typeof WebhookEventScalarFieldEnum]
+
+
+export const MessagesAccountScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  passwordHash: 'passwordHash',
+  displayName: 'displayName',
+  suspended: 'suspended',
+  registeredAt: 'registeredAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MessagesAccountScalarFieldEnum = (typeof MessagesAccountScalarFieldEnum)[keyof typeof MessagesAccountScalarFieldEnum]
+
+
+export const MessagesInviteScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  userId: 'userId',
+  createdBy: 'createdBy',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  revokedAt: 'revokedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type MessagesInviteScalarFieldEnum = (typeof MessagesInviteScalarFieldEnum)[keyof typeof MessagesInviteScalarFieldEnum]
+
+
+export const ConversationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
+  system: 'system',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ConversationScalarFieldEnum = (typeof ConversationScalarFieldEnum)[keyof typeof ConversationScalarFieldEnum]
+
+
+export const MessageScalarFieldEnum = {
+  id: 'id',
+  conversationId: 'conversationId',
+  sender: 'sender',
+  title: 'title',
+  body: 'body',
+  meta: 'meta',
+  readAt: 'readAt',
+  pushStatus: 'pushStatus',
+  createdAt: 'createdAt'
+} as const
+
+export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
+
+
+export const PushSubscriptionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  endpoint: 'endpoint',
+  p256dh: 'p256dh',
+  auth: 'auth',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt'
+} as const
+
+export type PushSubscriptionScalarFieldEnum = (typeof PushSubscriptionScalarFieldEnum)[keyof typeof PushSubscriptionScalarFieldEnum]
+
+
+export const EmailLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  to: 'to',
+  subject: 'subject',
+  template: 'template',
+  body: 'body',
+  status: 'status',
+  error: 'error',
+  createdAt: 'createdAt',
+  sentAt: 'sentAt'
+} as const
+
+export type EmailLogScalarFieldEnum = (typeof EmailLogScalarFieldEnum)[keyof typeof EmailLogScalarFieldEnum]
 
 
 export const AuditLogScalarFieldEnum = {

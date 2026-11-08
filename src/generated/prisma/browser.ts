@@ -108,6 +108,36 @@ export type Setting = Prisma.SettingModel
  */
 export type WebhookEvent = Prisma.WebhookEventModel
 /**
+ * Model MessagesAccount
+ * 
+ */
+export type MessagesAccount = Prisma.MessagesAccountModel
+/**
+ * Model MessagesInvite
+ * 
+ */
+export type MessagesInvite = Prisma.MessagesInviteModel
+/**
+ * Model Conversation
+ * 
+ */
+export type Conversation = Prisma.ConversationModel
+/**
+ * Model Message
+ * 
+ */
+export type Message = Prisma.MessageModel
+/**
+ * Model PushSubscription
+ * 
+ */
+export type PushSubscription = Prisma.PushSubscriptionModel
+/**
+ * Model EmailLog
+ * 
+ */
+export type EmailLog = Prisma.EmailLogModel
+/**
  * Model AuditLog
  * 
  */

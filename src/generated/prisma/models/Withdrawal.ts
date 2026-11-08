@@ -57,6 +57,10 @@ export type WithdrawalMinAggregateOutputType = {
   status: $Enums.GatewayStatus | null
   gateway: string | null
   gatewayRef: string | null
+  reviewNote: string | null
+  providerRef: string | null
+  reviewedAt: Date | null
+  paidAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -76,6 +80,10 @@ export type WithdrawalMaxAggregateOutputType = {
   status: $Enums.GatewayStatus | null
   gateway: string | null
   gatewayRef: string | null
+  reviewNote: string | null
+  providerRef: string | null
+  reviewedAt: Date | null
+  paidAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -95,6 +103,10 @@ export type WithdrawalCountAggregateOutputType = {
   status: number
   gateway: number
   gatewayRef: number
+  reviewNote: number
+  providerRef: number
+  reviewedAt: number
+  paidAt: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -132,6 +144,10 @@ export type WithdrawalMinAggregateInputType = {
   status?: true
   gateway?: true
   gatewayRef?: true
+  reviewNote?: true
+  providerRef?: true
+  reviewedAt?: true
+  paidAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -151,6 +167,10 @@ export type WithdrawalMaxAggregateInputType = {
   status?: true
   gateway?: true
   gatewayRef?: true
+  reviewNote?: true
+  providerRef?: true
+  reviewedAt?: true
+  paidAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -170,6 +190,10 @@ export type WithdrawalCountAggregateInputType = {
   status?: true
   gateway?: true
   gatewayRef?: true
+  reviewNote?: true
+  providerRef?: true
+  reviewedAt?: true
+  paidAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -276,6 +300,10 @@ export type WithdrawalGroupByOutputType = {
   status: $Enums.GatewayStatus
   gateway: string
   gatewayRef: string | null
+  reviewNote: string | null
+  providerRef: string | null
+  reviewedAt: Date | null
+  paidAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: WithdrawalCountAggregateOutputType | null
@@ -318,6 +346,10 @@ export type WithdrawalWhereInput = {
   status?: Prisma.EnumGatewayStatusFilter<"Withdrawal"> | $Enums.GatewayStatus
   gateway?: Prisma.StringFilter<"Withdrawal"> | string
   gatewayRef?: Prisma.StringNullableFilter<"Withdrawal"> | string | null
+  reviewNote?: Prisma.StringNullableFilter<"Withdrawal"> | string | null
+  providerRef?: Prisma.StringNullableFilter<"Withdrawal"> | string | null
+  reviewedAt?: Prisma.DateTimeNullableFilter<"Withdrawal"> | Date | string | null
+  paidAt?: Prisma.DateTimeNullableFilter<"Withdrawal"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Withdrawal"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Withdrawal"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -338,6 +370,10 @@ export type WithdrawalOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   gateway?: Prisma.SortOrder
   gatewayRef?: Prisma.SortOrderInput | Prisma.SortOrder
+  reviewNote?: Prisma.SortOrderInput | Prisma.SortOrder
+  providerRef?: Prisma.SortOrderInput | Prisma.SortOrder
+  reviewedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  paidAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -361,6 +397,10 @@ export type WithdrawalWhereUniqueInput = Prisma.AtLeast<{
   destName?: Prisma.StringNullableFilter<"Withdrawal"> | string | null
   status?: Prisma.EnumGatewayStatusFilter<"Withdrawal"> | $Enums.GatewayStatus
   gateway?: Prisma.StringFilter<"Withdrawal"> | string
+  reviewNote?: Prisma.StringNullableFilter<"Withdrawal"> | string | null
+  providerRef?: Prisma.StringNullableFilter<"Withdrawal"> | string | null
+  reviewedAt?: Prisma.DateTimeNullableFilter<"Withdrawal"> | Date | string | null
+  paidAt?: Prisma.DateTimeNullableFilter<"Withdrawal"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Withdrawal"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Withdrawal"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -381,6 +421,10 @@ export type WithdrawalOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   gateway?: Prisma.SortOrder
   gatewayRef?: Prisma.SortOrderInput | Prisma.SortOrder
+  reviewNote?: Prisma.SortOrderInput | Prisma.SortOrder
+  providerRef?: Prisma.SortOrderInput | Prisma.SortOrder
+  reviewedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  paidAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.WithdrawalCountOrderByAggregateInput
@@ -408,6 +452,10 @@ export type WithdrawalScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumGatewayStatusWithAggregatesFilter<"Withdrawal"> | $Enums.GatewayStatus
   gateway?: Prisma.StringWithAggregatesFilter<"Withdrawal"> | string
   gatewayRef?: Prisma.StringNullableWithAggregatesFilter<"Withdrawal"> | string | null
+  reviewNote?: Prisma.StringNullableWithAggregatesFilter<"Withdrawal"> | string | null
+  providerRef?: Prisma.StringNullableWithAggregatesFilter<"Withdrawal"> | string | null
+  reviewedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Withdrawal"> | Date | string | null
+  paidAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Withdrawal"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Withdrawal"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Withdrawal"> | Date | string
 }
@@ -426,6 +474,10 @@ export type WithdrawalCreateInput = {
   status?: $Enums.GatewayStatus
   gateway?: string
   gatewayRef?: string | null
+  reviewNote?: string | null
+  providerRef?: string | null
+  reviewedAt?: Date | string | null
+  paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutWithdrawalsInput
@@ -446,6 +498,10 @@ export type WithdrawalUncheckedCreateInput = {
   status?: $Enums.GatewayStatus
   gateway?: string
   gatewayRef?: string | null
+  reviewNote?: string | null
+  providerRef?: string | null
+  reviewedAt?: Date | string | null
+  paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -464,6 +520,10 @@ export type WithdrawalUpdateInput = {
   status?: Prisma.EnumGatewayStatusFieldUpdateOperationsInput | $Enums.GatewayStatus
   gateway?: Prisma.StringFieldUpdateOperationsInput | string
   gatewayRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutWithdrawalsNestedInput
@@ -484,6 +544,10 @@ export type WithdrawalUncheckedUpdateInput = {
   status?: Prisma.EnumGatewayStatusFieldUpdateOperationsInput | $Enums.GatewayStatus
   gateway?: Prisma.StringFieldUpdateOperationsInput | string
   gatewayRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -503,6 +567,10 @@ export type WithdrawalCreateManyInput = {
   status?: $Enums.GatewayStatus
   gateway?: string
   gatewayRef?: string | null
+  reviewNote?: string | null
+  providerRef?: string | null
+  reviewedAt?: Date | string | null
+  paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -521,6 +589,10 @@ export type WithdrawalUpdateManyMutationInput = {
   status?: Prisma.EnumGatewayStatusFieldUpdateOperationsInput | $Enums.GatewayStatus
   gateway?: Prisma.StringFieldUpdateOperationsInput | string
   gatewayRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -540,6 +612,10 @@ export type WithdrawalUncheckedUpdateManyInput = {
   status?: Prisma.EnumGatewayStatusFieldUpdateOperationsInput | $Enums.GatewayStatus
   gateway?: Prisma.StringFieldUpdateOperationsInput | string
   gatewayRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -569,6 +645,10 @@ export type WithdrawalCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   gateway?: Prisma.SortOrder
   gatewayRef?: Prisma.SortOrder
+  reviewNote?: Prisma.SortOrder
+  providerRef?: Prisma.SortOrder
+  reviewedAt?: Prisma.SortOrder
+  paidAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -596,6 +676,10 @@ export type WithdrawalMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   gateway?: Prisma.SortOrder
   gatewayRef?: Prisma.SortOrder
+  reviewNote?: Prisma.SortOrder
+  providerRef?: Prisma.SortOrder
+  reviewedAt?: Prisma.SortOrder
+  paidAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -615,6 +699,10 @@ export type WithdrawalMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   gateway?: Prisma.SortOrder
   gatewayRef?: Prisma.SortOrder
+  reviewNote?: Prisma.SortOrder
+  providerRef?: Prisma.SortOrder
+  reviewedAt?: Prisma.SortOrder
+  paidAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -683,6 +771,10 @@ export type WithdrawalCreateWithoutUserInput = {
   status?: $Enums.GatewayStatus
   gateway?: string
   gatewayRef?: string | null
+  reviewNote?: string | null
+  providerRef?: string | null
+  reviewedAt?: Date | string | null
+  paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -701,6 +793,10 @@ export type WithdrawalUncheckedCreateWithoutUserInput = {
   status?: $Enums.GatewayStatus
   gateway?: string
   gatewayRef?: string | null
+  reviewNote?: string | null
+  providerRef?: string | null
+  reviewedAt?: Date | string | null
+  paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -749,6 +845,10 @@ export type WithdrawalScalarWhereInput = {
   status?: Prisma.EnumGatewayStatusFilter<"Withdrawal"> | $Enums.GatewayStatus
   gateway?: Prisma.StringFilter<"Withdrawal"> | string
   gatewayRef?: Prisma.StringNullableFilter<"Withdrawal"> | string | null
+  reviewNote?: Prisma.StringNullableFilter<"Withdrawal"> | string | null
+  providerRef?: Prisma.StringNullableFilter<"Withdrawal"> | string | null
+  reviewedAt?: Prisma.DateTimeNullableFilter<"Withdrawal"> | Date | string | null
+  paidAt?: Prisma.DateTimeNullableFilter<"Withdrawal"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Withdrawal"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Withdrawal"> | Date | string
 }
@@ -767,6 +867,10 @@ export type WithdrawalCreateManyUserInput = {
   status?: $Enums.GatewayStatus
   gateway?: string
   gatewayRef?: string | null
+  reviewNote?: string | null
+  providerRef?: string | null
+  reviewedAt?: Date | string | null
+  paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -785,6 +889,10 @@ export type WithdrawalUpdateWithoutUserInput = {
   status?: Prisma.EnumGatewayStatusFieldUpdateOperationsInput | $Enums.GatewayStatus
   gateway?: Prisma.StringFieldUpdateOperationsInput | string
   gatewayRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -803,6 +911,10 @@ export type WithdrawalUncheckedUpdateWithoutUserInput = {
   status?: Prisma.EnumGatewayStatusFieldUpdateOperationsInput | $Enums.GatewayStatus
   gateway?: Prisma.StringFieldUpdateOperationsInput | string
   gatewayRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -821,6 +933,10 @@ export type WithdrawalUncheckedUpdateManyWithoutUserInput = {
   status?: Prisma.EnumGatewayStatusFieldUpdateOperationsInput | $Enums.GatewayStatus
   gateway?: Prisma.StringFieldUpdateOperationsInput | string
   gatewayRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -842,6 +958,10 @@ export type WithdrawalSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   status?: boolean
   gateway?: boolean
   gatewayRef?: boolean
+  reviewNote?: boolean
+  providerRef?: boolean
+  reviewedAt?: boolean
+  paidAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -862,6 +982,10 @@ export type WithdrawalSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   status?: boolean
   gateway?: boolean
   gatewayRef?: boolean
+  reviewNote?: boolean
+  providerRef?: boolean
+  reviewedAt?: boolean
+  paidAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -882,6 +1006,10 @@ export type WithdrawalSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   status?: boolean
   gateway?: boolean
   gatewayRef?: boolean
+  reviewNote?: boolean
+  providerRef?: boolean
+  reviewedAt?: boolean
+  paidAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -902,11 +1030,15 @@ export type WithdrawalSelectScalar = {
   status?: boolean
   gateway?: boolean
   gatewayRef?: boolean
+  reviewNote?: boolean
+  providerRef?: boolean
+  reviewedAt?: boolean
+  paidAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type WithdrawalOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "asset" | "amountAsset" | "amountUSD" | "amountGHS" | "rateGHSUSD" | "assetPrice" | "method" | "destination" | "destName" | "status" | "gateway" | "gatewayRef" | "createdAt" | "updatedAt", ExtArgs["result"]["withdrawal"]>
+export type WithdrawalOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "asset" | "amountAsset" | "amountUSD" | "amountGHS" | "rateGHSUSD" | "assetPrice" | "method" | "destination" | "destName" | "status" | "gateway" | "gatewayRef" | "reviewNote" | "providerRef" | "reviewedAt" | "paidAt" | "createdAt" | "updatedAt", ExtArgs["result"]["withdrawal"]>
 export type WithdrawalInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -937,6 +1069,10 @@ export type $WithdrawalPayload<ExtArgs extends runtime.Types.Extensions.Internal
     status: $Enums.GatewayStatus
     gateway: string
     gatewayRef: string | null
+    reviewNote: string | null
+    providerRef: string | null
+    reviewedAt: Date | null
+    paidAt: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["withdrawal"]>
@@ -1377,6 +1513,10 @@ export interface WithdrawalFieldRefs {
   readonly status: Prisma.FieldRef<"Withdrawal", 'GatewayStatus'>
   readonly gateway: Prisma.FieldRef<"Withdrawal", 'String'>
   readonly gatewayRef: Prisma.FieldRef<"Withdrawal", 'String'>
+  readonly reviewNote: Prisma.FieldRef<"Withdrawal", 'String'>
+  readonly providerRef: Prisma.FieldRef<"Withdrawal", 'String'>
+  readonly reviewedAt: Prisma.FieldRef<"Withdrawal", 'DateTime'>
+  readonly paidAt: Prisma.FieldRef<"Withdrawal", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Withdrawal", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Withdrawal", 'DateTime'>
 }

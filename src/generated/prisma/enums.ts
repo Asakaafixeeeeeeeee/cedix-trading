@@ -94,7 +94,11 @@ export const GatewayStatus = {
   PROCESSING: 'PROCESSING',
   COMPLETED: 'COMPLETED',
   FAILED: 'FAILED',
-  CANCELLED: 'CANCELLED'
+  CANCELLED: 'CANCELLED',
+  PENDING_REVIEW: 'PENDING_REVIEW',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  PAYMENT_SENT: 'PAYMENT_SENT'
 } as const
 
 export type GatewayStatus = (typeof GatewayStatus)[keyof typeof GatewayStatus]

@@ -2,9 +2,9 @@ import { requireUser } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { getFx } from '@/lib/fx';
 import { getBaseAssetPrice } from '@/lib/markets';
-import { createPayout } from '@/lib/payteller';
 import { debit } from '@/lib/wallet';
 import { api } from '@/lib/api';
+import { notifyUser } from '@/lib/notify';
 
 export async function GET() {
   return api(async () => {
@@ -19,8 +19,13 @@ export async function GET() {
 }
 
 /**
- * Direct fiat withdrawal: user withdraws any crypto straight to GHS
- * (MoMo/bank) via Payteller — no manual sell step required.
+ * Direct fiat withdrawal: user withdraws any crypto straight to GHS (MoMo/bank)
+ * — no manual sell step required.
+ *
+ * Review pipeline: the request is recorded as PENDING_REVIEW with funds
+ * debited and held. An admin reviews it (approve/reject), records the actual
+ * provider payout, and confirms completion. Each stage notifies the user
+ * through the Messages app (if enabled) and the email outbox.
  */
 export async function POST(req: Request) {
   return api(async () => {
@@ -45,10 +50,10 @@ export async function POST(req: Request) {
     const netGHS = grossGHS * (1 - feePct / 100);
     if (netGHS < 10) throw new Error('Minimum withdrawal is GHS 10 (net)');
 
-    // Debit the crypto immediately (conversion handled by the platform)
+    // Debit and hold the funds; they are refunded if the request is rejected.
     const withdrawal = await prisma.$transaction(async (db) => {
       await debit(db, user.id, asset, qty);
-      return db.withdrawal.create({
+      const wd = await db.withdrawal.create({
         data: {
           userId: user.id,
           asset,
@@ -60,51 +65,35 @@ export async function POST(req: Request) {
           method: fiatMethod,
           destination,
           destName: destName || null,
-          status: 'PROCESSING',
+          status: 'PENDING_REVIEW',
         },
       });
+      await db.transaction.create({
+        data: {
+          userId: user.id,
+          type: 'WITHDRAWAL',
+          asset,
+          amount: qty,
+          fee: grossGHS - netGHS,
+          status: 'PENDING',
+          note: `Withdrawal request: ${qty} ${asset} → GHS ${netGHS.toFixed(2)} (${fiatMethod}) to ${destination}`,
+          meta: { withdrawalId: wd.id, netGHS, feePct },
+        },
+      });
+      return wd;
     });
 
-    try {
-      const payout = await createPayout({
-        reference: withdrawal.id,
-        amountGHS: netGHS,
-        method: fiatMethod,
-        destination,
-        destName,
-        description: `CediX withdrawal: ${qty} ${asset} → GHS ${netGHS.toFixed(2)}`,
-      });
+    // Notify (Messages + email outbox) — never blocks the withdrawal itself.
+    notifyUser(user.id, {
+      kind: 'withdrawal_requested',
+      vars: {
+        amountUSD: `$${amountUSD.toFixed(2)}`,
+        amountGHS: `GH₵${netGHS.toFixed(2)}`,
+        reference: `CEDIX-${withdrawal.id.slice(-8).toUpperCase()}`,
+      },
+      meta: { withdrawalId: withdrawal.id },
+    }).catch(() => {});
 
-      const finalStatus = payout.status === 'COMPLETED' ? 'COMPLETED' : 'PROCESSING';
-      await prisma.$transaction(async (db) => {
-        await db.withdrawal.update({
-          where: { id: withdrawal.id },
-          data: { status: finalStatus, gatewayRef: payout.gatewayRef },
-        });
-        await db.transaction.create({
-          data: {
-            userId: user.id,
-            type: 'WITHDRAWAL',
-            asset,
-            amount: qty,
-            fee: grossGHS - netGHS,
-            status: finalStatus === 'COMPLETED' ? 'COMPLETED' : 'PROCESSING',
-            note: `Withdrew ${qty} ${asset} → GHS ${netGHS.toFixed(2)} (${fiatMethod}) to ${destination}`,
-            meta: { withdrawalId: withdrawal.id, netGHS, feePct },
-          },
-        });
-      });
-      return { withdrawal: { ...withdrawal, status: finalStatus }, netGHS };
-    } catch (e) {
-      // Refund on gateway failure
-      await prisma.$transaction(async (db) => {
-        await db.wallet.update({
-          where: { userId_asset: { userId: user.id, asset } },
-          data: { available: { increment: qty } },
-        });
-        await db.withdrawal.update({ where: { id: withdrawal.id }, data: { status: 'FAILED' } });
-      });
-      throw e;
-    }
+    return { withdrawal, netGHS };
   });
 }
