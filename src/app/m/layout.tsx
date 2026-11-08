@@ -18,7 +18,7 @@ export const viewport: Viewport = {
 
 export default function MobileLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mx-auto min-h-screen w-full max-w-lg pb-20">
+    <div className="mx-auto min-h-screen w-full max-w-lg pb-32">
       <SwRegister />
       {children}
       <MobileNav />

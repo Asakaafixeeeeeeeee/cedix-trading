@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { usePoll, post, useUser } from '@/lib/hooks';
 import { fmtCompact, fmtPct, fmtPrice } from '@/lib/format';
+import CoinIcon from '@/components/CoinIcon';
 
 export type MarketRow = {
   symbol: string;
@@ -130,12 +131,7 @@ export default function MarketTable({ compact = false }: { compact?: boolean }) 
                   >
                     ★
                   </button>
-                  <span
-                    className="flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-bold text-white"
-                    style={{ backgroundColor: m.color }}
-                  >
-                    {m.base.slice(0, 3)}
-                  </span>
+                  <CoinIcon asset={m.base} size={28} />
                   <span>
                     <span className="font-semibold">{m.base}</span>
                     <span className="text-muted">/{m.quote}</span>

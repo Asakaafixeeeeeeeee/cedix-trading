@@ -7,6 +7,7 @@ import OrderBook from '@/components/OrderBook';
 import { usePoll } from '@/lib/hooks';
 import { fmtGHS, fmtPct, fmtPrice } from '@/lib/format';
 import type { MarketRow } from '@/components/MarketTable';
+import CoinIcon from '@/components/CoinIcon';
 
 export default function MobileTradeView({ symbol }: { symbol: string }) {
   const { data } = usePoll<{ markets: MarketRow[] }>('/api/markets?type=spot', 5000);
@@ -25,12 +26,7 @@ export default function MobileTradeView({ symbol }: { symbol: string }) {
       <div className="flex items-center justify-between px-4">
         <Link href="/m/markets" className="flex items-center gap-2">
           <span className="text-muted">‹</span>
-          <span
-            className="flex h-7 w-7 items-center justify-center rounded-full text-[9px] font-bold text-white"
-            style={{ backgroundColor: market?.color ?? '#333' }}
-          >
-            {market?.base?.slice(0, 3)}
-          </span>
+          <CoinIcon asset={market?.base ?? ''} size={28} />
           <span className="font-bold">
             {market?.base}
             <span className="text-muted">/{market?.quote}</span>

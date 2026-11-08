@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { post, useUser } from '@/lib/hooks';
 import { fmtGHS, fmtNum } from '@/lib/format';
+import CoinIcon from '@/components/CoinIcon';
 
 const ASSETS = [
   { id: 'USDT', name: 'Tether', color: '#26A17B' },
@@ -123,9 +124,7 @@ export default function DepositPage() {
                 asset === a.id ? 'border-accent bg-panel2' : 'border-line bg-panel'
               }`}
             >
-              <span className="flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold text-white" style={{ backgroundColor: a.color }}>
-                {a.id.slice(0, 3)}
-              </span>
+              <CoinIcon asset={a.id} size={36} />
               <span>
                 <div className="font-semibold">{a.id}</div>
                 <div className="text-xs text-muted">{a.name}</div>

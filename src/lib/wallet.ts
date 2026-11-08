@@ -1,5 +1,5 @@
 import { prisma } from './db';
-import { getBaseAssetPrice } from './markets';
+import { getBaseAssetPrice, getSpotTickers, metaForBase } from './markets';
 import { getFx } from './fx';
 import type { Prisma } from '@/generated/prisma/client';
 
@@ -66,6 +66,10 @@ export type PortfolioAsset = {
   priceUSD: number;
   valueUSD: number;
   valueGHS: number;
+  /** 24h market change of this asset (%) */
+  changePct: number;
+  /** 24h value change of the holding (USD), derived from live market data */
+  pnl24hUSD: number;
 };
 
 export type Portfolio = {
@@ -73,15 +77,29 @@ export type Portfolio = {
   totalUSD: number;
   totalGHS: number;
   ghsPerUsd: number;
+  /** Buckets (USD): fiat funding wallet, spot trading wallet, earn positions */
+  fundingUSD: number;
+  tradingUSD: number;
+  earnUSD: number;
+  /** Today's PnL across holdings (USD + %) based on live 24h market moves */
+  pnl24hUSD: number;
+  pnl24hPct: number;
 };
 
 export async function getPortfolio(userId: string): Promise<Portfolio> {
-  const [wallets, fx] = await Promise.all([
+  const [wallets, fx, tickers, positions] = await Promise.all([
     prisma.wallet.findMany({ where: { userId } }),
     getFx(),
+    getSpotTickers().catch(() => []),
+    prisma.position.findMany({ where: { userId, status: 'ACTIVE' }, include: { product: true } }),
   ]);
 
+  const changeBySymbol = new Map(tickers.map((t) => [t.symbol, t.changePct]));
+
   const assets: PortfolioAsset[] = [];
+  let fundingUSD = 0;
+  let tradingUSD = 0;
+
   for (const w of wallets) {
     const available = Number(w.available);
     const locked = Number(w.locked);
@@ -94,6 +112,12 @@ export async function getPortfolio(userId: string): Promise<Portfolio> {
       priceUSD = (await getBaseAssetPrice(w.asset)) ?? 0;
     }
     const valueUSD = total * priceUSD;
+    const meta = metaForBase(w.asset);
+    const changePct = w.asset === 'GHS' || w.asset === 'USDT' || w.asset === 'USDC' ? 0 : (meta ? changeBySymbol.get(meta.symbol) ?? 0 : 0);
+    // value now vs value 24h ago for the same quantity
+    const pnl24hUSD = changePct !== 0 ? valueUSD - valueUSD / (1 + changePct / 100) : 0;
+    if (w.asset === 'GHS') fundingUSD += valueUSD;
+    else tradingUSD += valueUSD;
     assets.push({
       asset: w.asset,
       available,
@@ -102,9 +126,32 @@ export async function getPortfolio(userId: string): Promise<Portfolio> {
       priceUSD,
       valueUSD,
       valueGHS: valueUSD * fx.rate,
+      changePct,
+      pnl24hUSD,
     });
   }
   assets.sort((a, b) => b.valueUSD - a.valueUSD);
-  const totalUSD = assets.reduce((s, a) => s + a.valueUSD, 0);
-  return { assets, totalUSD, totalGHS: totalUSD * fx.rate, ghsPerUsd: fx.rate };
+
+  let earnUSD = 0;
+  for (const pos of positions) {
+    const amount = Number(pos.amount) + Number(pos.accrued);
+    const price =
+      pos.product.asset === 'GHS' ? 1 / fx.rate : (await getBaseAssetPrice(pos.product.asset)) ?? 0;
+    earnUSD += amount * price;
+  }
+
+  const totalUSD = fundingUSD + tradingUSD + earnUSD;
+  const pnl24hUSD = assets.reduce((s, a) => s + a.pnl24hUSD, 0);
+  const base = totalUSD - pnl24hUSD;
+  return {
+    assets,
+    totalUSD,
+    totalGHS: totalUSD * fx.rate,
+    ghsPerUsd: fx.rate,
+    fundingUSD,
+    tradingUSD,
+    earnUSD,
+    pnl24hUSD,
+    pnl24hPct: base > 0 ? (pnl24hUSD / base) * 100 : 0,
+  };
 }

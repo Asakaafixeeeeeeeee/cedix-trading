@@ -1,8 +1,43 @@
 @import "tailwindcss";
 
+/* ───────── CediX theme tokens ─────────
+   Light mode is the default. `.dark` on <html> switches to dark mode.
+   "white"/"black"/"gray-200" are remapped to semantic contrast tokens so
+   emphasis text and primary buttons adapt to both themes automatically. */
+
 :root {
+  /* Light (default) */
+  --background: #ffffff;
+  --foreground: #121418;
+  --c-bg: #ffffff;
+  --c-panel: #f5f6f8;
+  --c-panel2: #eceef2;
+  --c-line: #e6e8ec;
+  --c-muted: #7e8694;
+  --c-strong: #0b0e11; /* replaces `white` accents: emphasis text, primary buttons */
+  --c-contrast: #ffffff; /* replaces `black`: text on primary buttons, overlays */
+  --c-strong-hover: #2b3139; /* replaces gray-200: hover state of primary buttons */
+  --c-up: #0aa869;
+  --c-down: #ef3d55;
+  --c-accent: #2466eb;
+  --c-gold: #c99400;
+}
+
+.dark {
   --background: #0a0c0f;
   --foreground: #eaecef;
+  --c-bg: #0a0c0f;
+  --c-panel: #12161c;
+  --c-panel2: #181d25;
+  --c-line: #232931;
+  --c-muted: #848e9c;
+  --c-strong: #ffffff;
+  --c-contrast: #0b0e11;
+  --c-strong-hover: #d6dae0;
+  --c-up: #0ecb81;
+  --c-down: #f6465d;
+  --c-accent: #4c82fb;
+  --c-gold: #f0b90b;
 }
 
 @theme inline {
@@ -11,19 +46,26 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
-  /* CediX design tokens */
-  --color-bg: #0a0c0f;
-  --color-panel: #12161c;
-  --color-panel2: #181d25;
-  --color-line: #232931;
-  --color-muted: #848e9c;
-  --color-up: #0ecb81;
-  --color-down: #f6465d;
-  --color-accent: #4c82fb;
-  --color-gold: #f0b90b;
+  --color-bg: var(--c-bg);
+  --color-panel: var(--c-panel);
+  --color-panel2: var(--c-panel2);
+  --color-line: var(--c-line);
+  --color-muted: var(--c-muted);
+  --color-up: var(--c-up);
+  --color-down: var(--c-down);
+  --color-accent: var(--c-accent);
+  --color-gold: var(--c-gold);
+
+  /* Semantic remaps — keep existing markup working in both themes */
+  --color-white: var(--c-strong);
+  --color-black: var(--c-contrast);
+  --color-gray-200: var(--c-strong-hover);
 }
 
 html {
+  color-scheme: light;
+}
+html.dark {
   color-scheme: dark;
 }
 
@@ -31,15 +73,23 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #2a313a transparent;
+  scrollbar-color: var(--c-line) transparent;
 }
 
 .num {
   font-variant-numeric: tabular-nums;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 @keyframes flash-up {

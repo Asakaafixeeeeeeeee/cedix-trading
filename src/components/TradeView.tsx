@@ -9,6 +9,7 @@ import OpenOrders from '@/components/OpenOrders';
 import { usePoll } from '@/lib/hooks';
 import { fmtCompact, fmtGHS, fmtPct, fmtPrice } from '@/lib/format';
 import type { MarketRow } from '@/components/MarketTable';
+import CoinIcon from '@/components/CoinIcon';
 
 /** Live last-price via Binance WebSocket (crypto), with graceful fallback to polling. */
 function useLivePrice(symbol: string, isSim: boolean) {
@@ -73,12 +74,7 @@ export default function TradeView({ symbol }: { symbol: string }) {
       {/* Ticker header */}
       <div className="mb-3 flex flex-wrap items-center gap-6 rounded-xl border border-line bg-panel px-4 py-3">
         <div className="flex items-center gap-3">
-          <span
-            className="flex h-8 w-8 items-center justify-center rounded-full text-[10px] font-bold text-white"
-            style={{ backgroundColor: market?.color ?? '#333' }}
-          >
-            {market?.base?.slice(0, 3) ?? '…'}
-          </span>
+          <CoinIcon asset={market?.base ?? ''} size={32} />
           <div>
             <div className="font-bold">
               {market?.base}

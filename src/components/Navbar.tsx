@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useUser, post } from '@/lib/hooks';
+import { useDisplayPrefs } from '@/lib/prefs';
+import { IconSun, IconMoon } from '@/components/icons';
 
 const LINKS = [
   { href: '/markets', label: 'Markets' },
@@ -18,6 +20,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { theme, setTheme, currency, setCurrency } = useDisplayPrefs();
 
   async function logout() {
     await post('/api/auth/logout');
@@ -50,6 +53,13 @@ export default function Navbar() {
           })}
         </nav>
         <div className="ml-auto flex items-center gap-3">
+          <button
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            className="rounded-full border border-line p-2 text-muted transition hover:text-foreground"
+            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {theme === 'dark' ? <IconSun size={16} /> : <IconMoon size={16} />}
+          </button>
           {!loading && user ? (
             <>
               <Link
@@ -75,7 +85,21 @@ export default function Navbar() {
                   >
                     <Link href="/assets" className="block px-4 py-2.5 text-sm hover:bg-panel2" onClick={() => setMenuOpen(false)}>My Assets</Link>
                     <Link href="/withdraw" className="block px-4 py-2.5 text-sm hover:bg-panel2" onClick={() => setMenuOpen(false)}>Withdraw (Fiat)</Link>
-                    <Link href="/m" className="block px-4 py-2.5 text-sm hover:bg-panel2" onClick={() => setMenuOpen(false)}>📱 Mobile App</Link>
+                    <div className="flex items-center justify-between px-4 py-2.5 text-sm">
+                      <span className="text-muted">Currency</span>
+                      <span className="flex overflow-hidden rounded-md border border-line text-xs">
+                        {(['USD', 'GHS'] as const).map((c) => (
+                          <button
+                            key={c}
+                            onClick={() => setCurrency(c)}
+                            className={`px-2.5 py-1 font-semibold ${currency === c ? 'bg-white text-black' : 'text-muted'}`}
+                          >
+                            {c}
+                          </button>
+                        ))}
+                      </span>
+                    </div>
+                    <Link href="/m" className="block px-4 py-2.5 text-sm hover:bg-panel2" onClick={() => setMenuOpen(false)}>Mobile App</Link>
                     {user.role === 'ADMIN' && (
                       <Link href="/admin" className="block px-4 py-2.5 text-sm text-gold hover:bg-panel2" onClick={() => setMenuOpen(false)}>Admin Dashboard</Link>
                     )}

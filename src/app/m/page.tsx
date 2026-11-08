@@ -2,12 +2,16 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { usePoll, useUser } from '@/lib/hooks';
+import { useDisplayPrefs } from '@/lib/prefs';
 import { fmtGHS, fmtPct, fmtPrice, fmtUSD } from '@/lib/format';
 import type { Portfolio } from '@/lib/wallet';
 import type { MarketRow } from '@/components/MarketTable';
+import CoinIcon from '@/components/CoinIcon';
+import { IconDeposit, IconWithdraw, IconP2P, IconEarn, IconEye, IconEyeOff } from '@/components/icons';
 
 export default function MobileHome() {
   const { user, loading } = useUser();
+  const { currency, rate, money } = useDisplayPrefs();
   const { data: portfolio } = usePoll<Portfolio>(user ? '/api/portfolio' : null, 10000);
   const { data: markets } = usePoll<{ markets: MarketRow[] }>('/api/markets?type=spot', 6000);
   const [hidden, setHidden] = useState(false);
@@ -38,19 +42,29 @@ export default function MobileHome() {
 
       {/* Portfolio card */}
       {user ? (
-        <div className="mt-4 rounded-2xl bg-gradient-to-br from-[#1a2230] to-panel2 p-5">
+        <div className="mt-4 rounded-2xl bg-panel p-5 ring-1 ring-line">
           <div className="flex items-center gap-2 text-xs text-muted">
             Total Balance
-            <button onClick={() => setHidden((v) => !v)}>{hidden ? '🙈' : '👁'}</button>
+            <button onClick={() => setHidden((v) => !v)} className="p-0.5">{hidden ? <IconEyeOff size={15} /> : <IconEye size={15} />}</button>
           </div>
           <div className="num mt-1 text-3xl font-bold">
-            {hidden ? '••••••' : portfolio ? fmtGHS(portfolio.totalGHS) : '—'}
+            {hidden ? '••••••' : portfolio ? money(portfolio.totalUSD) : '—'}
           </div>
-          <div className="num text-sm text-muted">{hidden ? '' : portfolio ? `≈ ${fmtUSD(portfolio.totalUSD)}` : ''}</div>
+          <div className="num text-sm text-muted">
+            {hidden
+              ? ''
+              : portfolio
+                ? currency === 'GHS'
+                  ? `≈ ${fmtUSD(portfolio.totalUSD)}`
+                  : rate
+                    ? `≈ ${fmtGHS(portfolio.totalUSD * rate)}`
+                    : ''
+                : ''}
+          </div>
         </div>
       ) : (
         !loading && (
-          <div className="mt-4 rounded-2xl bg-gradient-to-br from-[#1a2230] to-panel2 p-5 text-center">
+          <div className="mt-4 rounded-2xl bg-panel p-5 text-center ring-1 ring-line">
             <div className="text-lg font-bold">Trade crypto with GH₵</div>
             <p className="mt-1 text-xs text-muted">MoMo deposits · P2P · instant fiat withdrawals</p>
             <Link href="/m/login" className="mt-3 inline-block rounded-lg bg-white px-6 py-2 text-sm font-semibold text-black">
@@ -63,14 +77,14 @@ export default function MobileHome() {
       {/* Quick actions */}
       <div className="mt-4 grid grid-cols-4 gap-2">
         {[
-          ['/m/deposit', '💳', 'Deposit'],
-          ['/m/withdraw', '🏦', 'Withdraw'],
-          ['/p2p', '🤝', 'P2P'],
-          ['/m/explore', '🌱', 'Earn'],
-        ].map(([href, icon, label]) => (
-          <Link key={label} href={href} className="flex flex-col items-center gap-1.5 rounded-xl bg-panel py-3.5">
-            <span className="text-xl">{icon}</span>
-            <span className="text-[11px] font-medium text-muted">{label}</span>
+          { href: '/m/deposit', icon: <IconDeposit size={20} />, label: 'Deposit' },
+          { href: '/m/withdraw', icon: <IconWithdraw size={20} />, label: 'Withdraw' },
+          { href: '/p2p', icon: <IconP2P size={20} />, label: 'P2P' },
+          { href: '/m/explore', icon: <IconEarn size={20} />, label: 'Earn' },
+        ].map((a) => (
+          <Link key={a.label} href={a.href} className="flex flex-col items-center gap-1.5 rounded-xl bg-panel py-3.5 text-foreground">
+            {a.icon}
+            <span className="text-[11px] font-medium text-muted">{a.label}</span>
           </Link>
         ))}
       </div>
@@ -112,12 +126,7 @@ export default function MobileHome() {
 export function MarketRowItem({ m }: { m: MarketRow }) {
   return (
     <Link href={`/m/trade/${m.symbol}`} className="flex items-center gap-3 rounded-xl px-2 py-2.5 active:bg-panel">
-      <span
-        className="flex h-9 w-9 items-center justify-center rounded-full text-[10px] font-bold text-white"
-        style={{ backgroundColor: m.color }}
-      >
-        {m.base.slice(0, 3)}
-      </span>
+      <CoinIcon asset={m.base} size={36} />
       <div className="min-w-0 flex-1">
         <div className="text-sm font-semibold">
           {m.base}

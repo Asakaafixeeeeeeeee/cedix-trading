@@ -22,13 +22,29 @@ export default function TradeChart({ symbol }: { symbol: string }) {
 
   useEffect(() => {
     if (!containerRef.current) return;
+    const dark = () => document.documentElement.classList.contains('dark');
+    const palette = () =>
+      dark()
+        ? { text: '#848e9c', grid: '#1c2128', border: '#232931' }
+        : { text: '#7e8694', grid: '#eef0f3', border: '#e6e8ec' };
+    let p = palette();
     const chart = createChart(containerRef.current, {
-      layout: { background: { color: 'transparent' }, textColor: '#848e9c' },
-      grid: { vertLines: { color: '#1c2128' }, horzLines: { color: '#1c2128' } },
-      rightPriceScale: { borderColor: '#232931' },
-      timeScale: { borderColor: '#232931', timeVisible: true },
+      layout: { background: { color: 'transparent' }, textColor: p.text },
+      grid: { vertLines: { color: p.grid }, horzLines: { color: p.grid } },
+      rightPriceScale: { borderColor: p.border },
+      timeScale: { borderColor: p.border, timeVisible: true },
       autoSize: true,
     });
+    const observer = new MutationObserver(() => {
+      p = palette();
+      chart.applyOptions({
+        layout: { background: { color: 'transparent' }, textColor: p.text },
+        grid: { vertLines: { color: p.grid }, horzLines: { color: p.grid } },
+        rightPriceScale: { borderColor: p.border },
+        timeScale: { borderColor: p.border, timeVisible: true },
+      });
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
     const candles = chart.addSeries(CandlestickSeries, {
       upColor: '#0ecb81',
       downColor: '#f6465d',
@@ -46,6 +62,7 @@ export default function TradeChart({ symbol }: { symbol: string }) {
     candleRef.current = candles;
     volRef.current = volume;
     return () => {
+      observer.disconnect();
       chart.remove();
       chartRef.current = null;
     };
