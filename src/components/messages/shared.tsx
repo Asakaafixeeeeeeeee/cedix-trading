@@ -107,7 +107,7 @@ function urlBase64ToUint8Array(base64: string) {
   return arr;
 }
 
-/** Redirects to /messages/login when the Messages session is missing. */
+/** Redirects to the activation notice when the device has no Messages session. */
 export function useMessagesUser() {
   const router = useRouter();
   const [user, setUser] = useState<{ displayName: string; email: string } | null>(null);
@@ -119,10 +119,10 @@ export function useMessagesUser() {
     checked.current = true;
     jfetch<{ user: { displayName: string; email: string } | null }>('/api/messages/auth/me')
       .then((d) => {
-        if (!d.user) router.replace('/messages/login');
+        if (!d.user) router.replace('/messages/welcome');
         else setUser(d.user);
       })
-      .catch(() => router.replace('/messages/login'))
+      .catch(() => router.replace('/messages/welcome'))
       .finally(() => setLoading(false));
   }, [router]);
 

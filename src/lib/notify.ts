@@ -12,6 +12,7 @@
 import { generateVAPIDKeys, sendNotification, setVapidDetails } from 'web-push';
 import { prisma } from './db';
 import { sendEmail, emailHtml } from './email';
+import { getPortfolio } from './wallet';
 
 export type TemplateKind =
   | 'withdrawal_requested'
@@ -27,7 +28,7 @@ export type Template = { title: string; body: string };
 export const DEFAULT_TEMPLATES: Record<TemplateKind, Template> = {
   withdrawal_requested: {
     title: 'Withdrawal Request Received',
-    body: 'Amount: {{amountUSD}}\nEstimated GHS Value: {{amountGHS}}\nStatus: Pending Review\nReference: {{reference}}\n\nYour withdrawal request has been received and is awaiting review.',
+    body: 'Amount: {{amountUSD}}\nEstimated GHS Value: {{amountGHS}}\nStatus: Pending Review\nReference: {{reference}}\nCurrent Balance: {{balanceGHS}}\n\nYour withdrawal request has been received and is awaiting review.',
   },
   withdrawal_approved: {
     title: 'Withdrawal Approved',
@@ -35,7 +36,7 @@ export const DEFAULT_TEMPLATES: Record<TemplateKind, Template> = {
   },
   withdrawal_rejected: {
     title: 'Withdrawal Rejected',
-    body: 'Amount: {{amountUSD}}\nStatus: Rejected\nReference: {{reference}}\nReason: {{reason}}\n\nYour funds have been returned to your wallet.',
+    body: 'Amount: {{amountUSD}}\nStatus: Rejected\nReference: {{reference}}\nReason: {{reason}}\nCurrent Balance: {{balanceGHS}}\n\nYour funds have been returned to your wallet.',
   },
   withdrawal_payment_sent: {
     title: 'Withdrawal Payment Sent',
@@ -43,11 +44,11 @@ export const DEFAULT_TEMPLATES: Record<TemplateKind, Template> = {
   },
   withdrawal_completed: {
     title: 'Withdrawal Completed',
-    body: 'Amount: {{amountGHS}}\nStatus: Completed\nReference: {{reference}}\n\nYour withdrawal payment has been confirmed.',
+    body: 'Amount: {{amountGHS}}\nStatus: Completed\nReference: {{reference}}\nCurrent Balance: {{balanceGHS}}\n\nYour withdrawal payment has been confirmed.',
   },
   deposit_completed: {
     title: 'Deposit Successful',
-    body: 'Amount: {{amountGHS}}\nCredited: {{amountAsset}}\nReference: {{reference}}\n\nYour deposit has been credited to your funding wallet.',
+    body: 'Amount: {{amountGHS}}\nCredited: {{amountAsset}}\nReference: {{reference}}\nCurrent Balance: {{balanceGHS}}\nAvailable Balance: {{balanceGHS}}\n\nYour deposit has been credited to your funding wallet.',
   },
   announcement: {
     title: '{{title}}',
@@ -132,8 +133,24 @@ export type NotifyOptions = {
 export async function notifyUser(userId: string, opts: NotifyOptions) {
   const templates = await getTemplates();
   const tpl = templates[opts.kind] ?? DEFAULT_TEMPLATES[opts.kind];
-  const title = renderTemplate(tpl.title, opts.vars);
-  const body = renderTemplate(tpl.body, opts.vars);
+
+  // Real account balance (never a fixed example): computed live from the
+  // user's wallets whenever a template asks for {{balanceGHS}}.
+  const vars = { ...opts.vars };
+  if (vars.balanceGHS === undefined && `${tpl.title}\n${tpl.body}`.includes('{{balanceGHS}}')) {
+    try {
+      const portfolio = await getPortfolio(userId);
+      vars.balanceGHS = `GH₵${portfolio.totalGHS.toLocaleString('en-GH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    } catch {
+      vars.balanceGHS = '';
+    }
+  }
+
+  const title = renderTemplate(tpl.title, vars);
+  const body = renderTemplate(tpl.body, vars)
+    .split('\n')
+    .filter((line) => !/:\s*$/.test(line.trim())) // drop lines whose value is unavailable
+    .join('\n');
 
   const user = await prisma.user.findUnique({ where: { id: userId } });
   if (!user) return;

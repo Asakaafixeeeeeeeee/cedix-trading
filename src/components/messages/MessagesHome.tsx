@@ -1,7 +1,6 @@
 'use client';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { iosTime, jfetch, SystemAvatar, usePush, useStandalone, useMessagesUser } from './shared';
 
 type Conversation = {
@@ -13,7 +12,6 @@ type Conversation = {
 };
 
 export default function MessagesHome() {
-  const router = useRouter();
   const { user, loading } = useMessagesUser();
   const [conversations, setConversations] = useState<Conversation[] | null>(null);
   const [filterUnread, setFilterUnread] = useState(false);
@@ -42,11 +40,6 @@ export default function MessagesHome() {
       clearInterval(t);
     };
   }, [user]);
-
-  async function signOut() {
-    await jfetch('/api/messages/auth/logout', { method: 'POST' }).catch(() => {});
-    router.replace('/messages/login');
-  }
 
   if (loading || !user) {
     return (
@@ -87,7 +80,7 @@ export default function MessagesHome() {
         <h1 className="mt-2 pb-2 text-[31px] font-bold tracking-tight">Messages</h1>
       </header>
 
-      {/* Edit mode: account actions */}
+      {/* Edit mode: account info */}
       {editMode && (
         <div className="mx-4 mb-2 overflow-hidden rounded-xl bg-[#f2f2f7]">
           <div className="flex items-center justify-between px-4 py-3">
@@ -95,9 +88,9 @@ export default function MessagesHome() {
               <p className="text-[14px] font-medium">{user.displayName}</p>
               <p className="text-[12px] text-[#8e8e93]">{user.email}</p>
             </div>
-            <button onClick={signOut} className="rounded-full bg-[#ff3b30] px-4 py-1.5 text-[13px] font-medium text-[#fff]">
-              Sign out
-            </button>
+            <span className="rounded-full bg-[#e5e5ea] px-3 py-1.5 text-[11px] font-medium text-[#48484a]">
+              Activated device
+            </span>
           </div>
         </div>
       )}

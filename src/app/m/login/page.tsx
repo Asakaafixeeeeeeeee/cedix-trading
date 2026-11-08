@@ -41,6 +41,7 @@ export default function MobileLogin() {
         <button disabled={busy} className="w-full rounded-full bg-white py-3 text-[14px] font-bold text-black disabled:opacity-50">
           {busy ? 'Please wait…' : 'Log in'}
         </button>
+        <Link href="/reset" className="block text-center text-xs text-muted">Forgot password?</Link>
       </form>
       <Link href="/register" className="mt-4 block w-full text-center text-sm font-semibold text-accent">
         New here? Create an account

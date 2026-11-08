@@ -11,18 +11,20 @@ async function main() {
   const adminPass = await bcrypt.hash('Admin123!', 10);
   const demoPass = await bcrypt.hash('Demo123!', 10);
 
-  const admin = await prisma.user.upsert({
-    where: { email: 'admin@cedix.gh' },
-    update: {},
-    create: {
-      email: 'admin@cedix.gh',
-      username: 'admin',
-      passwordHash: adminPass,
-      displayName: 'CediX Admin',
-      role: 'ADMIN',
-      kycLevel: 3,
-    },
-  });
+  // Never create a second admin: reuse the existing ADMIN account (its email
+  // may have been changed via the one-time admin password setup).
+  const admin =
+    (await prisma.user.findFirst({ where: { role: 'ADMIN' }, orderBy: { createdAt: 'asc' } })) ??
+    (await prisma.user.create({
+      data: {
+        email: 'admin@cedix.gh',
+        username: 'admin',
+        passwordHash: adminPass,
+        displayName: 'CediX Admin',
+        role: 'ADMIN',
+        kycLevel: 3,
+      },
+    }));
 
   const demo = await prisma.user.upsert({
     where: { email: 'demo@cedix.gh' },
@@ -86,9 +88,13 @@ async function main() {
     trading_fee_pct: 0.1,
     withdrawal_fee_pct: 1.0,
     payteller: { mode: 'sandbox', merchantId: '', configured: false },
-    // Admin dashboard PIN (bcrypt hash) — change via Admin → Settings
-    admin_pin_hash: await bcrypt.hash(process.env.ADMIN_PIN || '863124', 10),
   };
+  // Bootstrap PIN only until the admin completes the one-time email+password
+  // setup (/admin/login), which retires the PIN permanently.
+  const authConfigured = await prisma.setting.findUnique({ where: { key: 'admin_auth_configured' } });
+  if (!authConfigured) {
+    settings.admin_pin_hash = await bcrypt.hash(process.env.ADMIN_PIN || '863124', 10);
+  }
   for (const [key, value] of Object.entries(settings)) {
     await prisma.setting.upsert({
       where: { key },

@@ -51,6 +51,7 @@ export default function LoginPage() {
         >
           {busy ? 'Logging in…' : 'Log in'}
         </button>
+        <Link href="/reset" className="block text-center text-xs text-muted hover:underline">Forgot password?</Link>
       </form>
       <p className="mt-4 text-center text-sm text-muted">
         New to CediX?{' '}

@@ -17,6 +17,7 @@ type Thread = { id: string; name: string; system: boolean; messages: Msg[] };
 export default function MessagesThread({ id }: { id: string }) {
   const { user, loading } = useMessagesUser();
   const [thread, setThread] = useState<Thread | null>(null);
+  const [otherUnread, setOtherUnread] = useState(0);
   const [error, setError] = useState('');
   const bottomRef = useRef<HTMLDivElement>(null);
   const lastCount = useRef(0);
@@ -38,9 +39,14 @@ export default function MessagesThread({ id }: { id: string }) {
     }
     load();
     const t = setInterval(load, 5000);
+    // Unread count from other conversations (shown next to Back, Apple-style)
+    const u = setInterval(() => {
+      jfetch<{ unread: number }>('/api/messages/unread').then((d) => setOtherUnread(d.unread)).catch(() => {});
+    }, 8000);
     return () => {
       stop = true;
       clearInterval(t);
+      clearInterval(u);
     };
   }, [user, id]);
 
@@ -70,7 +76,11 @@ export default function MessagesThread({ id }: { id: string }) {
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
               <path d="M15 6l-6 6 6 6" />
             </svg>
-            <span className="text-[15px]">Back</span>
+            {otherUnread > 0 ? (
+              <span className="rounded-full bg-[#007aff] px-2 py-0.5 text-[12px] font-semibold text-[#fff]">{otherUnread}</span>
+            ) : (
+              <span className="text-[15px]">Back</span>
+            )}
           </Link>
           <div className="flex flex-col items-center">
             <SystemAvatar size={40} />

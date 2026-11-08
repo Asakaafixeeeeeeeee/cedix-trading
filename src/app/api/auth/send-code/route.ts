@@ -1,12 +1,13 @@
 import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/db';
 import { sendMail, mailerConfigured } from '@/lib/mailer';
+import { sendEmail, emailHtml, emailEnabled } from '@/lib/email';
 import { api } from '@/lib/api';
 
 /**
  * Send a 6-digit email verification code (10-minute expiry).
- * With SMTP configured the code is emailed; otherwise sandbox mode returns it
- * in the response so the flow stays fully functional in development.
+ * Delivery order: Resend (preferred) → SMTP → sandbox (code shown in the UI
+ * with a clear notice so development flows stay fully functional).
  */
 export async function POST(req: Request) {
   return api(async () => {
@@ -31,6 +32,20 @@ export async function POST(req: Request) {
         expiresAt: new Date(Date.now() + 10 * 60 * 1000),
       },
     });
+
+    if (emailEnabled()) {
+      await sendEmail({
+        to: addr,
+        subject: 'Your CediX verification code',
+        template: 'email_verification',
+        html: emailHtml('Email verification', [
+          `Your CediX verification code is:`,
+          `<span style="font-size:24px;font-weight:700;letter-spacing:6px">${code}</span>`,
+          'It expires in 10 minutes. If you did not request this, you can ignore this email.',
+        ]),
+      });
+      return { sent: true };
+    }
 
     const sent = await sendMail(
       addr,

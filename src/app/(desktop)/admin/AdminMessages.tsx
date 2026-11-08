@@ -133,7 +133,7 @@ export default function AdminMessages() {
                     </td>
                     <td>
                       <span className={a.suspended ? 'text-down' : a.registered ? 'text-up' : 'text-gold'}>
-                        {a.suspended ? 'Suspended' : a.registered ? 'Registered' : 'Awaiting registration'}
+                        {a.suspended ? 'Suspended' : a.registered ? 'Active' : 'Awaiting activation'}
                       </span>
                     </td>
                     <td>{a.devices}</td>
@@ -144,7 +144,7 @@ export default function AdminMessages() {
                           disabled={busy}
                           onClick={() =>
                             act({ action: 'invite', userId: a.userId }, (r) =>
-                              setInviteLink(`${location.origin}/messages/register?token=${(r as { token: string }).token}`),
+                              setInviteLink(`${location.origin}/messages/activate?token=${(r as { token: string }).token}`),
                             )
                           }
                           className="rounded-lg bg-panel2 px-2.5 py-1 font-medium text-white"
@@ -204,7 +204,7 @@ export default function AdminMessages() {
                         {status === 'Active' && (
                           <div className="flex justify-end gap-1.5">
                             <button
-                              onClick={() => navigator.clipboard?.writeText(`${location.origin}/messages/register?token=${i.token}`)}
+                              onClick={() => navigator.clipboard?.writeText(`${location.origin}/messages/activate?token=${i.token}`)}
                               className="rounded-lg bg-panel2 px-2.5 py-1 font-medium text-white"
                             >
                               Copy link

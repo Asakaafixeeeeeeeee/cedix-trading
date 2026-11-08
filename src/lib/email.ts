@@ -8,7 +8,7 @@
 
 import { prisma } from './db';
 
-const FROM = process.env.EMAIL_FROM || 'CediX Trading <noreply@cedix.app>';
+const FROM = process.env.EMAIL_FROM || 'CediX Trading <noreply@cedixtrading.com>';
 
 export function emailEnabled() {
   return Boolean(process.env.RESEND_API_KEY);

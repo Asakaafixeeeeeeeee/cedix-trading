@@ -2,6 +2,7 @@ import { prisma } from '@/lib/db';
 import { hashPassword, setSessionCookie } from '@/lib/auth';
 import { verifyEmailCode } from '@/lib/verification';
 import { api } from '@/lib/api';
+import { sendEmail, emailHtml } from '@/lib/email';
 
 export async function POST(req: Request) {
   return api(async () => {
@@ -30,6 +31,20 @@ export async function POST(req: Request) {
       },
     });
     await setSessionCookie(user.id, user.role);
+
+    // Welcome email (queued honestly until the email provider is connected)
+    sendEmail({
+      userId: user.id,
+      to: user.email,
+      subject: 'Welcome to CediX Trading',
+      template: 'welcome',
+      html: emailHtml('Welcome to CediX Trading', [
+        `Hi ${user.username}, your account has been created successfully.`,
+        'You can now deposit, trade and manage your portfolio at https://cedixtrading.com.',
+        'For your security, complete identity verification before making withdrawals.',
+      ]),
+    }).catch(() => {});
+
     return { id: user.id, email: user.email, username: user.username, role: user.role };
   });
 }

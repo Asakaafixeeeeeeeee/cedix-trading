@@ -30,7 +30,7 @@ export default function AdminSettings() {
   const [form, setForm] = useState({ fx_margin_pct: '', fx_override: '', trading_fee_pct: '', withdrawal_fee_pct: '' });
   const [msg, setMsg] = useState('');
   const [busy, setBusy] = useState(false);
-  const [newPin, setNewPin] = useState('');
+  const [newPin, setNewPin] = useState({ current: '', next: '' });
   const [pinMsg, setPinMsg] = useState('');
 
   useEffect(() => {
@@ -68,12 +68,12 @@ export default function AdminSettings() {
     }
   }
 
-  async function changePin() {
+  async function changePassword() {
     setPinMsg('');
     try {
-      await post('/api/admin/pin', { newPin }, 'PATCH');
-      setPinMsg('PIN changed ✓');
-      setNewPin('');
+      await post('/api/admin/auth', { currentPassword: newPin.current, newPassword: newPin.next }, 'PATCH');
+      setPinMsg('Password changed ✓');
+      setNewPin({ current: '', next: '' });
     } catch (e) {
       setPinMsg(e instanceof Error ? e.message : 'Failed');
     }
@@ -112,17 +112,26 @@ export default function AdminSettings() {
         </button>
         {msg && <span className={`ml-3 text-sm ${msg.includes('✓') ? 'text-up' : 'text-down'}`}>{msg}</span>}
 
-        <h3 className="mt-8 font-semibold">Admin Access PIN</h3>
-        <div className="mt-2 flex gap-2">
+        <h3 className="mt-8 font-semibold">Administrator Password</h3>
+        <div className="mt-2 flex flex-wrap gap-2">
           <input
-            value={newPin}
-            onChange={(e) => setNewPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
-            placeholder="New 6-digit PIN"
-            inputMode="numeric"
-            className="num w-44 rounded-lg border border-line bg-bg px-3 py-2.5 text-sm outline-none focus:border-accent"
+            value={newPin.current}
+            onChange={(e) => setNewPin((v) => ({ ...v, current: e.target.value }))}
+            placeholder="Current password"
+            type="password"
+            autoComplete="current-password"
+            className="w-44 rounded-lg border border-line bg-bg px-3 py-2.5 text-sm outline-none focus:border-accent"
           />
-          <button onClick={changePin} disabled={newPin.length !== 6} className="rounded-lg bg-white px-5 text-sm font-semibold text-black disabled:opacity-40">
-            Change PIN
+          <input
+            value={newPin.next}
+            onChange={(e) => setNewPin((v) => ({ ...v, next: e.target.value }))}
+            placeholder="New password (min 10)"
+            type="password"
+            autoComplete="new-password"
+            className="w-44 rounded-lg border border-line bg-bg px-3 py-2.5 text-sm outline-none focus:border-accent"
+          />
+          <button onClick={changePassword} disabled={newPin.next.length < 10 || !newPin.current} className="rounded-lg bg-white px-5 text-sm font-semibold text-black disabled:opacity-40">
+            Change password
           </button>
           {pinMsg && <span className={`self-center text-sm ${pinMsg.includes('✓') ? 'text-up' : 'text-down'}`}>{pinMsg}</span>}
         </div>

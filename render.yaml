@@ -43,6 +43,13 @@ services:
         sync: false
       - key: PAYTELLER_WEBHOOK_SECRET
         sync: false
+      # ── Email (Resend) ───────────────────────────────────────────────────
+      - key: EMAIL_FROM
+        value: CediX Trading <noreply@cedixtrading.com>
+      # SECRET — set in the Render dashboard. Emails stay in the outbox
+      # (QUEUED) until this is configured.
+      - key: RESEND_API_KEY
+        sync: false
     # Persistent storage for Orbit media uploads (requires a paid instance).
     # Without a disk, uploads are lost on each deploy/restart.
     disk:

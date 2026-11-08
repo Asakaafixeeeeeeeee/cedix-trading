@@ -10,7 +10,10 @@ import type { MessagesAccount, User } from '@/generated/prisma/client';
 
 const SECRET = new TextEncoder().encode((process.env.JWT_SECRET || 'dev-secret') + ':messages');
 export const MESSAGES_COOKIE = 'cedix_msg_session';
-const SESSION_DAYS = 30;
+// Like a real messaging app: once a device is activated through an admin
+// invitation it stays signed in. Access is revoked instantly server-side when
+// the admin suspends/disables the account (checked on every request).
+const SESSION_DAYS = 365;
 
 export async function setMessagesSession(userId: string) {
   const token = await new SignJWT({ app: 'messages' })

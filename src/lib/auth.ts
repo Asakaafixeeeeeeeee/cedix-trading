@@ -91,7 +91,7 @@ export async function requireAdmin(): Promise<User> {
 // short-lived elevation token obtained by entering the admin PIN.
 
 export const ELEVATION_COOKIE = 'cedix_admin_elev';
-const ELEVATION_MINUTES = 30;
+const ELEVATION_MINUTES = 480; // 8h — granted by admin email+password login
 
 export async function setElevationCookie(userId: string) {
   const token = await new SignJWT({ elev: true })
