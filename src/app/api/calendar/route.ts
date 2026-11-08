@@ -19,6 +19,16 @@ const HEADERS = {
   Accept: 'application/json',
 };
 
+// Popular/trending tickers prioritized in the calendar (the names traders watch),
+// matching the selection style of major exchanges. Earnings dates remain 100% real.
+const WATCHLIST = new Set([
+  'RKLB','ASTS','CRWV','FLY','NBIS','CBRS','PLTR','COIN','HOOD','SOFI','MSTR','SMCI','ARM','IONQ','JOBY','ACHR',
+  'OKLO','SMR','RBLX','U','PATH','UPST','AFRM','DKNG','ROKU','NET','DDOG','SNOW','SHOP','SPOT','UBER','ABNB',
+  'AMD','NVDA','TSLA','AAPL','MSFT','AMZN','GOOGL','GOOG','META','NFLX','AVGO','INTC','MU','QCOM','ORCL','CRM',
+  'DIS','BA','PYPL','XYZ','SQ','GME','AMC','RIVN','LCID','NIO','LI','XPEV','BABA','JD','PDD','SE','GRAB','CVNA',
+  'CELH','ELF','DUOL','APP','TTD','ZS','CRWD','PANW','MDB','OSCR','RDDT','DJT','TEM','LUNR','RGTI','QBTS','BBAI',
+]);
+
 function fmtDate(d: Date) {
   return d.toISOString().slice(0, 10);
 }
@@ -30,14 +40,18 @@ async function fetchEarnings(date: string) {
   });
   if (!res.ok) return [];
   const json = await res.json();
-  const rows = (json?.data?.rows ?? []) as { symbol: string; name: string; marketCap: string }[];
-  // largest companies first (marketCap like "$1,234,000"), dedupe share classes (PBR / PBR.A)
-  const sorted = rows
-    .map((r) => ({ symbol: r.symbol, name: r.name, cap: Number(String(r.marketCap).replace(/[^0-9]/g, '')) || 0 }))
-    .sort((a, b) => b.cap - a.cap);
+  const rows = (json?.data?.rows ?? []) as { symbol: string; name: string; marketCap: string; noOfEsts?: string }[];
+  const mapped = rows.map((r) => ({
+    symbol: r.symbol,
+    name: r.name,
+    cap: Number(String(r.marketCap).replace(/[^0-9]/g, '')) || 0,
+    hot: WATCHLIST.has(r.symbol.split('.')[0]),
+  }));
+  // trending watchlist names first, then by size; dedupe share classes (PBR / PBR.A)
+  mapped.sort((a, b) => (Number(b.hot) - Number(a.hot)) || b.cap - a.cap);
   const seen = new Set<string>();
   const out: { symbol: string; name: string }[] = [];
-  for (const r of sorted) {
+  for (const r of mapped) {
     const root = r.symbol.split('.')[0];
     if (seen.has(root)) continue;
     seen.add(root);
@@ -48,28 +62,45 @@ async function fetchEarnings(date: string) {
 }
 
 async function fetchEconHighlight(dates: string[]) {
-  for (const date of dates) {
-    try {
-      const res = await fetch(`https://api.nasdaq.com/api/calendar/economicevents?date=${date}`, {
-        headers: HEADERS,
-        signal: AbortSignal.timeout(8000),
-      });
-      if (!res.ok) continue;
-      const json = await res.json();
-      const rows = (json?.data?.rows ?? []) as { country: string; eventName: string }[];
-      const keywords = /inflation|cpi|interest rate|fed|fomc|gdp|unemployment|non.?farm|payroll/i;
-      const major =
-        rows.find((r) => r.country === 'United States' && keywords.test(r.eventName)) ??
-        rows.find((r) => keywords.test(r.eventName)) ??
-        rows.find((r) => r.country === 'United States');
-      if (major) {
-        return { event: major.eventName.trim(), country: major.country, date };
+  // Collect events across all days, then pick the strongest:
+  // U.S. inflation/rates/jobs first, then other U.S. majors, then foreign majors.
+  type Candidate = { event: string; country: string; date: string; score: number };
+  const inflation = /core inflation|inflation rate|\bcpi\b/i;
+  const strong = /interest rate decision|fomc minutes|fomc statement|non.?farm|payrolls?\b/i;
+  const medium = /gdp\b|unemployment rate|\bppi\b|retail sales|consumer confidence/i;
+  const candidates: Candidate[] = [];
+
+  await Promise.all(
+    dates.map(async (date) => {
+      try {
+        const res = await fetch(`https://api.nasdaq.com/api/calendar/economicevents?date=${date}`, {
+          headers: HEADERS,
+          signal: AbortSignal.timeout(8000),
+        });
+        if (!res.ok) return;
+        const json = await res.json();
+        const rows = (json?.data?.rows ?? []) as { country: string; eventName: string }[];
+        for (const r of rows) {
+          const name = r.eventName.trim();
+          const isUS = r.country === 'United States';
+          let score = 0;
+          if (isUS && inflation.test(name)) score = 6;
+          else if (isUS && strong.test(name)) score = 5;
+          else if (isUS && medium.test(name)) score = 4;
+          else if (inflation.test(name) || strong.test(name)) score = 2;
+          else if (isUS) score = 1;
+          // prefer actual data releases over speeches/testimony
+          if (/speaks|speech|testif|remarks/i.test(name)) score -= 2;
+          if (score > 0) candidates.push({ event: name, country: isUS ? 'U.S.' : r.country, date, score });
+        }
+      } catch {
+        /* skip date */
       }
-    } catch {
-      /* try next date */
-    }
-  }
-  return null;
+    }),
+  );
+
+  candidates.sort((a, b) => b.score - a.score || a.date.localeCompare(b.date));
+  return candidates[0] ?? null;
 }
 
 export async function GET() {

@@ -98,7 +98,7 @@ function CalendarSection() {
           {data.highlight && (
             <div className="mt-2.5 flex items-center gap-2 rounded-xl bg-panel px-3.5 py-2.5">
               <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-foreground text-[8px] font-bold text-background">
-                {data.highlight.country === 'United States' ? 'US' : data.highlight.country.slice(0, 2).toUpperCase()}
+                {data.highlight.country === 'U.S.' ? 'US' : data.highlight.country.slice(0, 2).toUpperCase()}
               </span>
               <span className="truncate text-[12.5px]">
                 {data.highlight.event} ({data.highlight.country}) is scheduled for{' '}
