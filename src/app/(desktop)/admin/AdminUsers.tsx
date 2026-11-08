@@ -42,7 +42,7 @@ export default function AdminUsers() {
         <button className="rounded-lg bg-panel2 px-4 py-2 text-sm font-medium">Search</button>
       </form>
       <div className="overflow-x-auto rounded-xl border border-line bg-panel">
-        <table className="w-full text-sm">
+        <table className="w-full min-w-[620px] text-sm">
           <thead>
             <tr className="text-left text-xs text-muted">
               <th className="py-2.5 pl-4 font-medium">User</th>

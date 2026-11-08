@@ -140,7 +140,7 @@ export default function AdminPayteller() {
 
       {/* Payments table */}
       <div className="overflow-x-auto rounded-xl border border-line bg-panel">
-        <table className="w-full text-sm">
+        <table className="w-full min-w-[620px] text-sm">
           <thead>
             <tr className="text-left text-xs text-muted">
               <th className="py-2.5 pl-4 font-medium">Date / time</th>
@@ -185,7 +185,7 @@ export default function AdminPayteller() {
       {/* Webhook deliveries */}
       <h3 className="mt-6 text-sm font-semibold">Recent webhook events</h3>
       <div className="mt-2 overflow-x-auto rounded-xl border border-line bg-panel">
-        <table className="w-full text-sm">
+        <table className="w-full min-w-[620px] text-sm">
           <thead>
             <tr className="text-left text-xs text-muted">
               <th className="py-2.5 pl-4 font-medium">Received</th>

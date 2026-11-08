@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { post, usePoll } from '@/lib/hooks';
 
 type Account = {
@@ -44,7 +44,7 @@ type Data = {
 
 const dt = (s: string) => new Date(s).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
 
-export default function AdminMessages() {
+export default function AdminMessages({ initialSub = 'users' }: { initialSub?: 'users' | 'senders' | 'templates' | 'delivery' }) {
   const { data, refresh } = usePoll<Data>('/api/admin/messages', 20000);
   const [email, setEmail] = useState('');
   const [msg, setMsg] = useState('');
@@ -54,7 +54,8 @@ export default function AdminMessages() {
   const [annBody, setAnnBody] = useState('');
   const [annEmailToo, setAnnEmailToo] = useState(false);
   const [templates, setTemplates] = useState<Record<string, Template> | null>(null);
-  const [sub, setSub] = useState<'users' | 'senders' | 'templates' | 'delivery'>('users');
+  const [sub, setSub] = useState<'users' | 'senders' | 'templates' | 'delivery'>(initialSub);
+  useEffect(() => setSub(initialSub), [initialSub]);
   const emptySender = { id: '', name: '', phone: '', avatarType: 'HUMAN', letter: '', allowReplies: false };
   const [senderForm, setSenderForm] = useState(emptySender);
   const [compose, setCompose] = useState({ senderId: '', email: '', title: '', body: '', sendEmail: false, toAll: false });
@@ -126,9 +127,60 @@ export default function AdminMessages() {
             )}
           </div>
 
-          {/* Users */}
-          <div className="overflow-x-auto rounded-xl border border-line bg-panel">
-            <table className="w-full text-sm">
+          {/* Users — stacked cards on mobile, table on desktop */}
+          <div className="space-y-2.5 md:hidden">
+            {data.accounts.map((a) => (
+              <div key={a.userId} className="rounded-2xl border border-line bg-panel p-3.5">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="truncate text-[13px] font-semibold">{a.displayName}</p>
+                    <p className="truncate text-[11px] text-muted">{a.email}</p>
+                  </div>
+                  <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${a.suspended ? 'bg-down/15 text-down' : a.registered ? 'bg-up/15 text-up' : 'bg-gold/15 text-gold'}`}>
+                    {a.suspended ? 'Suspended' : a.registered ? 'Active' : 'Awaiting activation'}
+                  </span>
+                </div>
+                <div className="mt-2 grid grid-cols-2 gap-1 text-[11px] text-muted">
+                  <p>Devices: <span className="text-foreground">{a.devices}</span></p>
+                  <p>Enabled: <span className="text-foreground">{dt(a.createdAt)}</span></p>
+                </div>
+                <div className="mt-2.5 flex flex-wrap gap-1.5">
+                  <button
+                    disabled={busy}
+                    onClick={() =>
+                      act({ action: 'invite', userId: a.userId }, (r) =>
+                        setInviteLink(`${location.origin}/messages/activate?token=${(r as { token: string }).token}`),
+                      )
+                    }
+                    className="rounded-lg bg-panel2 px-3 py-1.5 text-[11px] font-medium text-white"
+                  >
+                    Invite link
+                  </button>
+                  <button
+                    disabled={busy}
+                    onClick={() => act({ action: a.suspended ? 'restore' : 'suspend', userId: a.userId })}
+                    className="rounded-lg bg-panel2 px-3 py-1.5 text-[11px] font-medium text-white"
+                  >
+                    {a.suspended ? 'Restore' : 'Suspend'}
+                  </button>
+                  <button
+                    disabled={busy}
+                    onClick={() => { if (confirm(`Remove Messages access for ${a.email}?`)) act({ action: 'disable', userId: a.userId }); }}
+                    className="rounded-lg bg-down/15 px-3 py-1.5 text-[11px] font-medium text-down"
+                  >
+                    Disable
+                  </button>
+                </div>
+              </div>
+            ))}
+            {data.accounts.length === 0 && (
+              <p className="rounded-2xl border border-line bg-panel py-8 text-center text-xs text-muted">No users enabled yet. Enter a CediX email above.</p>
+            )}
+          </div>
+
+          {/* Users — desktop table */}
+          <div className="hidden overflow-x-auto rounded-xl border border-line bg-panel md:block">
+            <table className="w-full min-w-[620px] text-sm">
               <thead>
                 <tr className="text-left text-xs text-muted">
                   <th className="py-2.5 pl-4 font-medium">User</th>
@@ -195,7 +247,7 @@ export default function AdminMessages() {
           {/* Invites */}
           <h3 className="mt-6 text-sm font-semibold">Invitations</h3>
           <div className="mt-2 overflow-x-auto rounded-xl border border-line bg-panel">
-            <table className="w-full text-sm">
+            <table className="w-full min-w-[620px] text-sm">
               <thead>
                 <tr className="text-left text-xs text-muted">
                   <th className="py-2.5 pl-4 font-medium">User</th>
@@ -354,7 +406,7 @@ export default function AdminMessages() {
 
           {/* Senders list */}
           <div className="overflow-x-auto rounded-xl border border-line bg-panel">
-            <table className="w-full text-sm">
+            <table className="w-full min-w-[620px] text-sm">
               <thead>
                 <tr className="text-left text-xs text-muted">
                   <th className="py-2.5 pl-4 font-medium">Profile</th>
@@ -521,7 +573,7 @@ export default function AdminMessages() {
         <>
           <h3 className="text-sm font-semibold">Recent in-app messages</h3>
           <div className="mt-2 overflow-x-auto rounded-xl border border-line bg-panel">
-            <table className="w-full text-sm">
+            <table className="w-full min-w-[620px] text-sm">
               <thead>
                 <tr className="text-left text-xs text-muted">
                   <th className="py-2.5 pl-4 font-medium">Time</th>
@@ -558,7 +610,7 @@ export default function AdminMessages() {
             honest — nothing is marked sent unless the provider accepted it.
           </p>
           <div className="mt-2 overflow-x-auto rounded-xl border border-line bg-panel">
-            <table className="w-full text-sm">
+            <table className="w-full min-w-[620px] text-sm">
               <thead>
                 <tr className="text-left text-xs text-muted">
                   <th className="py-2.5 pl-4 font-medium">Time</th>

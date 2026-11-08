@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { post, usePoll } from '@/lib/hooks';
 import { fmtGHS, fmtNum, timeAgo } from '@/lib/format';
 
@@ -30,10 +30,11 @@ type Tx = {
 const statusColor = (s: string) =>
   s === 'COMPLETED' ? 'text-up' : ['FAILED', 'CANCELLED'].includes(s) ? 'text-down' : 'text-gold';
 
-export default function AdminFinance() {
+export default function AdminFinance({ initialSub = 'deposits' }: { initialSub?: 'deposits' | 'withdrawals' | 'transactions' }) {
   const { data, refresh } = usePoll<{ deposits: Dep[]; withdrawals: Wd[] }>('/api/admin/finance', 15000);
   const { data: txData } = usePoll<{ transactions: Tx[] }>('/api/admin/transactions', 20000);
-  const [sub, setSub] = useState<'deposits' | 'withdrawals' | 'transactions'>('deposits');
+  const [sub, setSub] = useState<'deposits' | 'withdrawals' | 'transactions'>(initialSub);
+  useEffect(() => setSub(initialSub), [initialSub]);
   const [busy, setBusy] = useState<string | null>(null);
 
   async function override(kind: 'deposit' | 'withdrawal', id: string, status: string) {
@@ -65,7 +66,7 @@ export default function AdminFinance() {
 
       {sub !== 'transactions' && (
         <div className="overflow-x-auto rounded-xl border border-line bg-panel">
-          <table className="w-full text-sm">
+          <table className="w-full min-w-[620px] text-sm">
             <thead>
               <tr className="text-left text-xs text-muted">
                 <th className="py-2.5 pl-4 font-medium">Time</th>
@@ -124,7 +125,7 @@ export default function AdminFinance() {
 
       {sub === 'transactions' && (
         <div className="overflow-x-auto rounded-xl border border-line bg-panel">
-          <table className="w-full text-sm">
+          <table className="w-full min-w-[620px] text-sm">
             <thead>
               <tr className="text-left text-xs text-muted">
                 <th className="py-2.5 pl-4 font-medium">Time</th>

@@ -59,7 +59,7 @@ export default function AdminP2P() {
       <section>
         <h3 className="mb-2 font-bold">Advertisements</h3>
         <div className="overflow-x-auto rounded-xl border border-line bg-panel">
-          <table className="w-full text-sm">
+          <table className="w-full min-w-[620px] text-sm">
             <thead>
               <tr className="text-left text-xs text-muted">
                 <th className="py-2.5 pl-4 font-medium">Advertiser</th>
@@ -104,7 +104,7 @@ export default function AdminP2P() {
       <section>
         <h3 className="mb-2 font-bold">Recent Orders</h3>
         <div className="overflow-x-auto rounded-xl border border-line bg-panel">
-          <table className="w-full text-sm">
+          <table className="w-full min-w-[620px] text-sm">
             <tbody>
               {(data?.orders ?? []).slice(0, 30).map((o) => (
                 <tr key={o.id} className="border-t border-line/60 first:border-0">

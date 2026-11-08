@@ -162,7 +162,7 @@ export default function MessagesHome() {
           <ul>
             {list.map((c) => (
               <li key={c.id}>
-                <Link href={`/messages/t/${c.id}`} className="flex items-center gap-3 px-4 py-2 active:bg-[#f2f2f7]">
+                <Link href={`/messages/t/${c.id}`} className="flex items-center gap-3 py-2 pl-2.5 pr-4 active:bg-[#f2f2f7]">
                   <span className="flex w-2.5 shrink-0 items-center justify-center">
                     {c.unread > 0 && <span className="h-2.5 w-2.5 rounded-full bg-[#007aff]" />}
                   </span>
