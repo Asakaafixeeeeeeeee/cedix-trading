@@ -31,12 +31,20 @@ async function fetchEarnings(date: string) {
   if (!res.ok) return [];
   const json = await res.json();
   const rows = (json?.data?.rows ?? []) as { symbol: string; name: string; marketCap: string }[];
-  // largest companies first (marketCap like "$1,234,000")
-  return rows
+  // largest companies first (marketCap like "$1,234,000"), dedupe share classes (PBR / PBR.A)
+  const sorted = rows
     .map((r) => ({ symbol: r.symbol, name: r.name, cap: Number(String(r.marketCap).replace(/[^0-9]/g, '')) || 0 }))
-    .sort((a, b) => b.cap - a.cap)
-    .slice(0, 2)
-    .map(({ symbol, name }) => ({ symbol, name }));
+    .sort((a, b) => b.cap - a.cap);
+  const seen = new Set<string>();
+  const out: { symbol: string; name: string }[] = [];
+  for (const r of sorted) {
+    const root = r.symbol.split('.')[0];
+    if (seen.has(root)) continue;
+    seen.add(root);
+    out.push({ symbol: r.symbol, name: r.name });
+    if (out.length === 2) break;
+  }
+  return out;
 }
 
 async function fetchEconHighlight(dates: string[]) {

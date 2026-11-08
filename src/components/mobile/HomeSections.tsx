@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { useState } from 'react';
 import { usePoll } from '@/lib/hooks';
 import { fmtPrice } from '@/lib/format';
 import { IconChevronRight } from '@/components/icons';
@@ -32,11 +33,31 @@ function SectionHeading({ title }: { title: string }) {
   );
 }
 
-function Monogram({ symbol }: { symbol: string }) {
+/** Real company logo by ticker (Parqet CDN), with a monogram fallback. */
+function CompanyLogo({ symbol, size = 20 }: { symbol: string; size?: number }) {
+  const [failed, setFailed] = useState(false);
+  const clean = symbol.split('.')[0].split('^')[0]; // PBR.A -> PBR
+  if (failed) {
+    return (
+      <span
+        className="flex shrink-0 items-center justify-center rounded-full bg-foreground font-bold text-background"
+        style={{ width: size, height: size, fontSize: size * 0.38 }}
+      >
+        {clean.slice(0, 2)}
+      </span>
+    );
+  }
   return (
-    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-foreground text-[7.5px] font-bold text-background">
-      {symbol.slice(0, 3)}
-    </span>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={`https://assets.parqet.com/logos/symbol/${encodeURIComponent(clean)}?format=png&size=64`}
+      alt={symbol}
+      width={size}
+      height={size}
+      onError={() => setFailed(true)}
+      className="shrink-0 rounded-full bg-panel2 object-contain"
+      style={{ width: size, height: size }}
+    />
   );
 }
 
@@ -65,7 +86,7 @@ function CalendarSection() {
                   <div className="mt-2.5 space-y-2">
                     {d.items.map((it) => (
                       <div key={it.symbol} className="flex items-center gap-1.5" title={it.name}>
-                        <Monogram symbol={it.symbol} />
+                        <CompanyLogo symbol={it.symbol} />
                         <span className="text-[13px] font-semibold">{it.symbol}</span>
                       </div>
                     ))}
