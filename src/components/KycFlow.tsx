@@ -341,8 +341,8 @@ function StatusView({ info }: { info: KycInfo }) {
   const s = info.kyc!.status;
   const cfg =
     s === 'APPROVED'
-      ? { icon: <IconCheckCircle size={36} />, cls: 'bg-up/10 text-up', title: 'Verified', body: 'Your identity has been verified. You have full access to all CediX features.' }
-      : { icon: <IconClock size={36} />, cls: 'bg-gold/10 text-gold', title: 'Pending review', body: 'Your identity verification has been submitted successfully. We will notify you when the review is complete.' };
+      ? { icon: <IconCheckCircle size={36} />, cls: 'bg-up/10 text-up', title: 'Verification Successful', body: 'Your identity verification has been completed successfully. You now have full access to all CediX features.' }
+      : { icon: <IconClock size={36} />, cls: 'bg-gold/10 text-gold', title: 'Verification Submitted', body: 'Your identity verification has been submitted for review. We will notify you when the review is complete.' };
   return (
     <div className="mx-auto max-w-md px-5 pt-16 text-center">
       <span className={`inline-flex rounded-full p-4 ${cfg.cls}`}>{cfg.icon}</span>

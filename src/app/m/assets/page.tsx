@@ -269,7 +269,7 @@ function BucketSheet({ bucket, data, positions, hidden, money, onClose }: {
   const value = bucket === 'funding' ? data?.fundingUSD : bucket === 'trading' ? data?.tradingUSD : data?.earnUSD;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end bg-black/60" onClick={onClose}>
+    <div className="fixed inset-0 z-[70] flex items-end bg-black/60" onClick={onClose}>
       <div
         className="max-h-[75vh] w-full overflow-y-auto rounded-t-3xl bg-bg p-5 pb-10"
         onClick={(e) => e.stopPropagation()}
