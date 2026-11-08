@@ -28,12 +28,20 @@ services:
         generateValue: true
       - key: NODE_VERSION
         value: "22"
-      # Payteller — leave empty for sandbox mode, fill in to go live
-      - key: PAYTELLER_BASE_URL
-        sync: false
+      # ── PAYTELLER live payments ──────────────────────────────────────────
+      # Non-secret identifiers (safe to keep in this file):
+      - key: PAYTELLER_API_BASE_URL
+        value: https://paytelller.com/api/v1
+      - key: PAYTELLER_MERCHANT_ID
+        value: TTM-44546097
+      - key: PAYTELLER_USERNAME
+        value: pt_ttm-44546097
+      # SECRETS — set these two in the Render dashboard (Environment tab),
+      # never in this file or in chat. Until both are set the platform stays
+      # in sandbox mode and live deposits are disabled.
       - key: PAYTELLER_API_KEY
         sync: false
-      - key: PAYTELLER_MERCHANT_ID
+      - key: PAYTELLER_WEBHOOK_SECRET
         sync: false
     # Persistent storage for Orbit media uploads (requires a paid instance).
     # Without a disk, uploads are lost on each deploy/restart.

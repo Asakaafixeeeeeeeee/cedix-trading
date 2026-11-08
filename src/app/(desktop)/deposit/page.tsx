@@ -70,7 +70,9 @@ export default function DepositPage() {
         method,
         payerPhone: phone,
       });
-      router.push(res.checkoutUrl);
+      // Live checkout is an external Payteller URL; sandbox is in-app.
+      if (res.checkoutUrl.startsWith('http')) window.location.assign(res.checkoutUrl);
+      else router.push(res.checkoutUrl);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Failed to start payment');
       setBusy(false);

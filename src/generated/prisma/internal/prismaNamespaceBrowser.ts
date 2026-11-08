@@ -68,6 +68,7 @@ export const ModelName = {
   Position: 'Position',
   Favorite: 'Favorite',
   Setting: 'Setting',
+  WebhookEvent: 'WebhookEvent',
   AuditLog: 'AuditLog',
   KycApplication: 'KycApplication',
   Banner: 'Banner',
@@ -353,6 +354,18 @@ export const SettingScalarFieldEnum = {
 } as const
 
 export type SettingScalarFieldEnum = (typeof SettingScalarFieldEnum)[keyof typeof SettingScalarFieldEnum]
+
+
+export const WebhookEventScalarFieldEnum = {
+  id: 'id',
+  gateway: 'gateway',
+  type: 'type',
+  reference: 'reference',
+  payload: 'payload',
+  createdAt: 'createdAt'
+} as const
+
+export type WebhookEventScalarFieldEnum = (typeof WebhookEventScalarFieldEnum)[keyof typeof WebhookEventScalarFieldEnum]
 
 
 export const AuditLogScalarFieldEnum = {

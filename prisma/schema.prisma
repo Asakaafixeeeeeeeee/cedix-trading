@@ -417,6 +417,20 @@ model Setting {
   updatedAt DateTime @updatedAt
 }
 
+// Payment-gateway webhook events, stored for idempotency (at-least-once
+// delivery) and auditing. The primary key is the gateway's own event id, so a
+// retried delivery can never be fulfilled twice.
+model WebhookEvent {
+  id        String   @id
+  gateway   String   @default("payteller")
+  type      String
+  reference String?
+  payload   Json
+  createdAt DateTime @default(now())
+
+  @@index([gateway, createdAt])
+}
+
 model AuditLog {
   id         String   @id @default(cuid())
   adminId    String

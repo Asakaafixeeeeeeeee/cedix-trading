@@ -2,7 +2,7 @@ import { requireUser } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { getFx } from '@/lib/fx';
 import { getBaseAssetPrice } from '@/lib/markets';
-import { createCollection } from '@/lib/payteller';
+import { createPayment } from '@/lib/payteller';
 import { api } from '@/lib/api';
 
 export async function GET() {
@@ -49,20 +49,21 @@ export async function POST(req: Request) {
     });
 
     const origin = new URL(req.url).origin;
-    const collection = await createCollection({
+    const payment = await createPayment({
       reference: intent.id,
       amountGHS: amt,
-      method: fiatMethod,
-      payerPhone,
-      description: `CediX deposit: ${amountAsset.toFixed(8)} ${asset}`,
-      callbackUrl: `${origin}/api/payteller/webhook`,
+      customerEmail: user.email,
+      description: `CediX deposit - ${amountAsset.toFixed(8)} ${asset}`,
+      // Customer returns here after checkout records an outcome. Returning is
+      // NEVER proof of payment — the page only polls our verified status.
+      returnUrl: `${origin}/m/deposit/status/${intent.id}`,
     });
 
     await prisma.depositIntent.update({
       where: { id: intent.id },
-      data: { status: 'AWAITING_PAYMENT', gatewayRef: collection.gatewayRef },
+      data: { status: 'AWAITING_PAYMENT', gatewayRef: payment.gatewayRef },
     });
 
-    return { id: intent.id, checkoutUrl: collection.checkoutUrl };
+    return { id: intent.id, checkoutUrl: payment.checkoutUrl };
   });
 }

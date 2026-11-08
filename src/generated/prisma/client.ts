@@ -127,6 +127,11 @@ export type Favorite = Prisma.FavoriteModel
  */
 export type Setting = Prisma.SettingModel
 /**
+ * Model WebhookEvent
+ * 
+ */
+export type WebhookEvent = Prisma.WebhookEventModel
+/**
  * Model AuditLog
  * 
  */

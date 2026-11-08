@@ -10,6 +10,7 @@ import AdminSettings from './AdminSettings';
 import AdminKyc from './AdminKyc';
 import AdminP2P from './AdminP2P';
 import AdminBanners from './AdminBanners';
+import AdminPayteller from './AdminPayteller';
 import Link from 'next/link';
 
 type Stats = {
@@ -27,7 +28,7 @@ type Stats = {
   openDisputes: number;
 };
 
-const TABS = ['Overview', 'Users', 'KYC', 'Finance', 'P2P', 'Orbit & Moderation', 'Content', 'Settings & Audit'] as const;
+const TABS = ['Overview', 'Users', 'KYC', 'Finance', 'Payteller', 'P2P', 'Orbit & Moderation', 'Content', 'Settings & Audit'] as const;
 
 export default function AdminPage() {
   const { user, loading } = useUser();
@@ -75,6 +76,7 @@ export default function AdminPage() {
         {tab === 'Users' && <AdminUsers />}
         {tab === 'KYC' && <AdminKyc />}
         {tab === 'Finance' && <AdminFinance />}
+        {tab === 'Payteller' && <AdminPayteller />}
         {tab === 'P2P' && <AdminP2P />}
         {tab === 'Orbit & Moderation' && <AdminContent />}
         {tab === 'Content' && <AdminBanners />}
