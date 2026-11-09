@@ -18,7 +18,7 @@ services:
     plan: starter # "free" works for testing (service sleeps when idle; uploads are ephemeral)
     buildCommand: npm ci --include=dev && npx prisma generate && npm run build
     startCommand: npm run start:prod
-    healthCheckPath: /api/fx
+    healthCheckPath: /api/health
     envVars:
       - key: DATABASE_URL
         fromDatabase:
