@@ -406,6 +406,7 @@ export const ModelName = {
   Withdrawal: 'Withdrawal',
   P2POffer: 'P2POffer',
   P2POrder: 'P2POrder',
+  P2PChatMessage: 'P2PChatMessage',
   OrbitPost: 'OrbitPost',
   OrbitComment: 'OrbitComment',
   OrbitLike: 'OrbitLike',
@@ -442,7 +443,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "wallet" | "transaction" | "order" | "trade" | "depositIntent" | "withdrawal" | "p2POffer" | "p2POrder" | "orbitPost" | "orbitComment" | "orbitLike" | "moderationEvent" | "product" | "position" | "favorite" | "setting" | "webhookEvent" | "messagesAccount" | "messagesInvite" | "messageSender" | "conversation" | "message" | "pushSubscription" | "emailLog" | "auditLog" | "kycApplication" | "banner" | "announcement" | "verificationCode"
+    modelProps: "user" | "wallet" | "transaction" | "order" | "trade" | "depositIntent" | "withdrawal" | "p2POffer" | "p2POrder" | "p2PChatMessage" | "orbitPost" | "orbitComment" | "orbitLike" | "moderationEvent" | "product" | "position" | "favorite" | "setting" | "webhookEvent" | "messagesAccount" | "messagesInvite" | "messageSender" | "conversation" | "message" | "pushSubscription" | "emailLog" | "auditLog" | "kycApplication" | "banner" | "announcement" | "verificationCode"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1109,6 +1110,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.P2POrderCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.P2POrderCountAggregateOutputType> | number
+        }
+      }
+    }
+    P2PChatMessage: {
+      payload: Prisma.$P2PChatMessagePayload<ExtArgs>
+      fields: Prisma.P2PChatMessageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.P2PChatMessageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$P2PChatMessagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.P2PChatMessageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$P2PChatMessagePayload>
+        }
+        findFirst: {
+          args: Prisma.P2PChatMessageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$P2PChatMessagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.P2PChatMessageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$P2PChatMessagePayload>
+        }
+        findMany: {
+          args: Prisma.P2PChatMessageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$P2PChatMessagePayload>[]
+        }
+        create: {
+          args: Prisma.P2PChatMessageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$P2PChatMessagePayload>
+        }
+        createMany: {
+          args: Prisma.P2PChatMessageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.P2PChatMessageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$P2PChatMessagePayload>[]
+        }
+        delete: {
+          args: Prisma.P2PChatMessageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$P2PChatMessagePayload>
+        }
+        update: {
+          args: Prisma.P2PChatMessageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$P2PChatMessagePayload>
+        }
+        deleteMany: {
+          args: Prisma.P2PChatMessageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.P2PChatMessageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.P2PChatMessageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$P2PChatMessagePayload>[]
+        }
+        upsert: {
+          args: Prisma.P2PChatMessageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$P2PChatMessagePayload>
+        }
+        aggregate: {
+          args: Prisma.P2PChatMessageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateP2PChatMessage>
+        }
+        groupBy: {
+          args: Prisma.P2PChatMessageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.P2PChatMessageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.P2PChatMessageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.P2PChatMessageCountAggregateOutputType> | number
         }
       }
     }
@@ -2864,10 +2939,29 @@ export const P2POrderScalarFieldEnum = {
   totalGHS: 'totalGHS',
   status: 'status',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  expiresAt: 'expiresAt',
+  paymentMethod: 'paymentMethod',
+  providerPaymentId: 'providerPaymentId',
+  providerRef: 'providerRef',
+  feeGHS: 'feeGHS',
+  paidAt: 'paidAt',
+  releasedAt: 'releasedAt'
 } as const
 
 export type P2POrderScalarFieldEnum = (typeof P2POrderScalarFieldEnum)[keyof typeof P2POrderScalarFieldEnum]
+
+
+export const P2PChatMessageScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  role: 'role',
+  body: 'body',
+  meta: 'meta',
+  createdAt: 'createdAt'
+} as const
+
+export type P2PChatMessageScalarFieldEnum = (typeof P2PChatMessageScalarFieldEnum)[keyof typeof P2PChatMessageScalarFieldEnum]
 
 
 export const OrbitPostScalarFieldEnum = {
@@ -3450,6 +3544,20 @@ export type ListEnumP2POrderStatusFieldRefInput<$PrismaModel> = FieldRefInputTyp
 
 
 /**
+ * Reference to a field of type 'P2PChatRole'
+ */
+export type EnumP2PChatRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'P2PChatRole'>
+    
+
+
+/**
+ * Reference to a field of type 'P2PChatRole[]'
+ */
+export type ListEnumP2PChatRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'P2PChatRole[]'>
+    
+
+
+/**
  * Reference to a field of type 'ContentStatus'
  */
 export type EnumContentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContentStatus'>
@@ -3678,6 +3786,7 @@ export type GlobalOmitConfig = {
   withdrawal?: Prisma.WithdrawalOmit
   p2POffer?: Prisma.P2POfferOmit
   p2POrder?: Prisma.P2POrderOmit
+  p2PChatMessage?: Prisma.P2PChatMessageOmit
   orbitPost?: Prisma.OrbitPostOmit
   orbitComment?: Prisma.OrbitCommentOmit
   orbitLike?: Prisma.OrbitLikeOmit

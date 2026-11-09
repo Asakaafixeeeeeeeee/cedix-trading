@@ -528,6 +528,23 @@ export type EnumP2POrderStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumP2POrderStatusFilter<$PrismaModel>
 }
 
+export type EnumP2PChatRoleFilter<$PrismaModel = never> = {
+  equals?: $Enums.P2PChatRole | Prisma.EnumP2PChatRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.P2PChatRole[] | Prisma.ListEnumP2PChatRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.P2PChatRole[] | Prisma.ListEnumP2PChatRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumP2PChatRoleFilter<$PrismaModel> | $Enums.P2PChatRole
+}
+
+export type EnumP2PChatRoleWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.P2PChatRole | Prisma.EnumP2PChatRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.P2PChatRole[] | Prisma.ListEnumP2PChatRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.P2PChatRole[] | Prisma.ListEnumP2PChatRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumP2PChatRoleWithAggregatesFilter<$PrismaModel> | $Enums.P2PChatRole
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumP2PChatRoleFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumP2PChatRoleFilter<$PrismaModel>
+}
+
 export type EnumContentStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.ContentStatus | Prisma.EnumContentStatusFieldRefInput<$PrismaModel>
   in?: $Enums.ContentStatus[] | Prisma.ListEnumContentStatusFieldRefInput<$PrismaModel>
@@ -1100,6 +1117,23 @@ export type NestedEnumP2POrderStatusWithAggregatesFilter<$PrismaModel = never> =
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumP2POrderStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumP2POrderStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumP2PChatRoleFilter<$PrismaModel = never> = {
+  equals?: $Enums.P2PChatRole | Prisma.EnumP2PChatRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.P2PChatRole[] | Prisma.ListEnumP2PChatRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.P2PChatRole[] | Prisma.ListEnumP2PChatRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumP2PChatRoleFilter<$PrismaModel> | $Enums.P2PChatRole
+}
+
+export type NestedEnumP2PChatRoleWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.P2PChatRole | Prisma.EnumP2PChatRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.P2PChatRole[] | Prisma.ListEnumP2PChatRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.P2PChatRole[] | Prisma.ListEnumP2PChatRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumP2PChatRoleWithAggregatesFilter<$PrismaModel> | $Enums.P2PChatRole
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumP2PChatRoleFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumP2PChatRoleFilter<$PrismaModel>
 }
 
 export type NestedEnumContentStatusFilter<$PrismaModel = never> = {

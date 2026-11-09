@@ -11,10 +11,13 @@ type Order = {
   id: string; status: string; asset: string; amount: string; totalGHS: string; createdAt: string;
   buyer: { username: string }; seller: { username: string };
 };
+type Settings = { enabled: boolean; expressEnabled: boolean; assistantEnabled: boolean; expiryMinutes: number; feePct: number };
+type Limits = { minDepositUSD: number; minWithdrawalUSD: number };
 
 export default function AdminP2P() {
-  const { data, refresh } = usePoll<{ offers: Offer[]; orders: Order[]; disputes: Order[] }>('/api/admin/p2p', 15000);
+  const { data, refresh } = usePoll<{ offers: Offer[]; orders: Order[]; disputes: Order[]; settings?: Settings; limits?: Limits }>('/api/admin/p2p', 15000);
   const [busy, setBusy] = useState<string | null>(null);
+  const [draft, setDraft] = useState<Record<string, string>>({});
 
   async function act(kind: string, id: string, action: string) {
     if (kind === 'dispute' && !confirm(`Resolve dispute: ${action}?`)) return;
@@ -29,10 +32,62 @@ export default function AdminP2P() {
     }
   }
 
+  async function saveSettings(patch: Record<string, boolean | number>) {
+    setBusy('settings');
+    try {
+      await post('/api/admin/p2p', { kind: 'settings', action: patch }, 'PATCH');
+      refresh();
+    } catch (e) {
+      alert(e instanceof Error ? e.message : 'Failed');
+    } finally {
+      setBusy(null);
+    }
+  }
+
   const disputes = data?.disputes ?? [];
+  const s = data?.settings;
+  const lim = data?.limits;
 
   return (
     <div className="space-y-6">
+      {/* Global P2P + limits controls */}
+      <section>
+        <h3 className="mb-2 font-bold">Controls</h3>
+        <div className="grid gap-3 rounded-xl border border-line bg-panel p-4 sm:grid-cols-2 lg:grid-cols-3">
+          {s && (
+            <>
+              {([
+                ['P2P trading', 'enabled', s.enabled],
+                ['Express trading', 'expressEnabled', s.expressEnabled],
+                ['Payment assistant', 'assistantEnabled', s.assistantEnabled],
+              ] as const).map(([label, key, value]) => (
+                <label key={key} className="flex items-center justify-between gap-3 rounded-lg border border-line px-3 py-2.5 text-sm">
+                  <span>{label}</span>
+                  <button
+                    disabled={busy === 'settings'}
+                    onClick={() => saveSettings({ [key]: !value })}
+                    className={`h-6 w-11 rounded-full p-0.5 transition-colors ${value ? 'bg-up' : 'bg-line'}`}
+                  >
+                    <span className={`block h-5 w-5 rounded-full bg-white transition-transform ${value ? 'translate-x-5' : ''}`} />
+                  </button>
+                </label>
+              ))}
+              {([
+                ['Order expiry (minutes)', 'expiryMinutes', s.expiryMinutes],
+                ['P2P fee (%)', 'feePct', s.feePct],
+              ] as const).map(([label, key, value]) => (
+                <NumberSetting key={key} label={label} value={value} draft={draft[key]} setDraft={(v) => setDraft((d) => ({ ...d, [key]: v }))} onSave={(n) => saveSettings({ [key]: n })} busy={busy === 'settings'} />
+              ))}
+            </>
+          )}
+          {lim && ([
+            ['Min deposit (USD)', 'minDepositUSD', lim.minDepositUSD],
+            ['Min withdrawal (USD)', 'minWithdrawalUSD', lim.minWithdrawalUSD],
+          ] as const).map(([label, key, value]) => (
+            <NumberSetting key={key} label={label} value={value} draft={draft[key]} setDraft={(v) => setDraft((d) => ({ ...d, [key]: v }))} onSave={(n) => saveSettings({ [key]: n })} busy={busy === 'settings'} />
+          ))}
+        </div>
+      </section>
       <section>
         <h3 className="mb-2 font-bold">Disputes {disputes.length > 0 && <span className="text-down">({disputes.length})</span>}</h3>
         {disputes.length === 0 ? (
@@ -122,5 +177,35 @@ export default function AdminP2P() {
         </div>
       </section>
     </div>
+  );
+}
+
+function NumberSetting(props: {
+  label: string;
+  value: number;
+  draft: string | undefined;
+  setDraft: (v: string) => void;
+  onSave: (n: number) => void;
+  busy: boolean;
+}) {
+  const { label, value, draft, setDraft, onSave, busy } = props;
+  const current = draft ?? String(value);
+  const changed = parseFloat(current) !== value && parseFloat(current) >= 0;
+  return (
+    <label className="flex items-center justify-between gap-3 rounded-lg border border-line px-3 py-2 text-sm">
+      <span className="min-w-0 flex-1">{label}</span>
+      <input
+        value={current}
+        onChange={(e) => setDraft(e.target.value.replace(/[^\d.]/g, ''))}
+        className="num w-20 rounded-lg border border-line bg-panel2 px-2 py-1 text-right text-sm"
+      />
+      <button
+        disabled={!changed || busy}
+        onClick={() => onSave(parseFloat(current))}
+        className="rounded-lg bg-white px-2.5 py-1 text-xs font-bold text-black disabled:opacity-30"
+      >
+        Save
+      </button>
+    </label>
   );
 }

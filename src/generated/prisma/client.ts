@@ -87,6 +87,11 @@ export type P2POffer = Prisma.P2POfferModel
  */
 export type P2POrder = Prisma.P2POrderModel
 /**
+ * Model P2PChatMessage
+ * 
+ */
+export type P2PChatMessage = Prisma.P2PChatMessageModel
+/**
  * Model OrbitPost
  * 
  */

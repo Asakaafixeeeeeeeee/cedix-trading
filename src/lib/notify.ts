@@ -21,6 +21,7 @@ export type TemplateKind =
   | 'withdrawal_payment_sent'
   | 'withdrawal_completed'
   | 'deposit_completed'
+  | 'p2p_released'
   | 'announcement';
 
 export type Template = { title: string; body: string };
@@ -49,6 +50,10 @@ export const DEFAULT_TEMPLATES: Record<TemplateKind, Template> = {
   deposit_completed: {
     title: 'Deposit Successful',
     body: 'Amount: {{amountGHS}}\nCredited: {{amountAsset}}\nReference: {{reference}}\nCurrent Balance: {{balanceGHS}}\nAvailable Balance: {{balanceGHS}}\n\nYour deposit has been credited to your funding wallet.',
+  },
+  p2p_released: {
+    title: 'P2P Order Completed',
+    body: 'Received: {{amountAsset}}\nPaid: {{amountGHS}}\nOrder: {{reference}}\n\nYour P2P purchase has been released to your wallet.',
   },
   announcement: {
     title: '{{title}}',

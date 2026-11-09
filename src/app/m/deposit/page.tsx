@@ -13,33 +13,45 @@ const METHODS = [
 ] as const;
 
 type Quote = { amountAsset: number; rateGHSUSD: number };
+type Limits = { minDepositUSD: number; minDepositGHS: number; rateGHSUSD: number };
 
 export default function MobileDeposit() {
   const { user, loading } = useUser();
   const router = useRouter();
   const [asset, setAsset] = useState('USDT');
-  const [amount, setAmount] = useState('');
+  const [amount, setAmount] = useState(''); // USD — main currency
   const [method, setMethod] = useState('MOMO');
   const [phone, setPhone] = useState('');
   const [quote, setQuote] = useState<Quote | null>(null);
+  const [limits, setLimits] = useState<Limits | null>(null);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
-  const amt = parseFloat(amount) || 0;
+
+  const usd = parseFloat(amount) || 0;
+  const rate = quote?.rateGHSUSD ?? limits?.rateGHSUSD ?? 0;
+  const ghs = rate > 0 ? usd * rate : 0;
+  const minUSD = limits?.minDepositUSD ?? 50;
+  const valid = usd >= minUSD;
 
   useEffect(() => {
-    if (!(amt >= 10)) return setQuote(null);
+    fetch('/api/limits').then((r) => r.json()).then(setLimits).catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (!(usd > 0) || !(rate > 0)) return setQuote(null);
     const t = setTimeout(async () => {
-      const res = await fetch(`/api/deposit/quote?asset=${asset}&amountGHS=${amt}`);
+      const res = await fetch(`/api/deposit/quote?asset=${asset}&amountGHS=${(usd * rate).toFixed(2)}`);
       if (res.ok) setQuote(await res.json());
     }, 300);
     return () => clearTimeout(t);
-  }, [asset, amt]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [asset, usd, rate > 0]);
 
   async function pay() {
     setBusy(true);
     setError('');
     try {
-      const res = await post<{ checkoutUrl: string }>('/api/deposit', { asset, amountGHS: amt, method, payerPhone: phone });
+      const res = await post<{ checkoutUrl: string }>('/api/deposit', { asset, amountGHS: +ghs.toFixed(2), method, payerPhone: phone });
       // Live checkout is an external Payteller URL; sandbox is in-app.
       if (res.checkoutUrl.startsWith('http')) window.location.assign(res.checkoutUrl);
       else router.push(res.checkoutUrl);
@@ -60,8 +72,11 @@ export default function MobileDeposit() {
 
   return (
     <div className="px-4 pt-4">
-      <h1 className="text-[17px] font-bold">Deposit GH₵</h1>
-      <p className="mt-1 text-xs text-muted">Pay with MoMo, card or bank via Payteller — receive crypto instantly.</p>
+      <h1 className="text-[17px] font-bold">Deposit</h1>
+      <p className="mt-1 text-xs text-muted">
+        Pay with MoMo, card or bank via Payteller — receive crypto instantly.
+        {limits && <> Minimum deposit: <b className="text-white/80">${fmtNum(limits.minDepositUSD)}</b>.</>}
+      </p>
 
       <div className="-mx-1 mt-4 flex gap-1.5 overflow-x-auto px-1 [scrollbar-width:none]">
         {ASSETS.map((a) => (
@@ -76,18 +91,21 @@ export default function MobileDeposit() {
       </div>
 
       <div className="mt-4 rounded-2xl bg-panel p-4">
-        <span className="text-xs text-muted">Amount (GH₵)</span>
-        <input
-          type="number"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          placeholder="0.00"
-          className="num mt-1 w-full bg-transparent text-[26px] font-bold outline-none placeholder:text-line"
-        />
+        <span className="text-xs text-muted">Deposit amount (USD)</span>
+        <div className="flex items-center gap-1">
+          <span className="text-[26px] font-bold text-muted">$</span>
+          <input
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            placeholder="0.00"
+            className="num mt-1 w-full bg-transparent text-[26px] font-bold outline-none placeholder:text-line"
+          />
+        </div>
         <div className="mt-2 flex gap-2">
-          {[50, 200, 1000].map((v) => (
+          {[50, 100, 500].map((v) => (
             <button key={v} onClick={() => setAmount(String(v))} className="rounded-full bg-panel2 px-3 py-1 text-[11px] text-muted">
-              {v}
+              ${v}
             </button>
           ))}
         </div>
@@ -125,26 +143,39 @@ export default function MobileDeposit() {
         </>
       )}
 
-      {quote && amt >= 10 && (
+      {usd > 0 && rate > 0 && (
         <div className="num mt-4 rounded-xl border border-line bg-panel p-4 text-sm">
           <div className="flex justify-between text-muted">
-            <span>Rate</span>
-            <span>1 USD = {quote.rateGHSUSD.toFixed(4)} GH₵</span>
+            <span>Deposit amount</span>
+            <span>${fmtNum(usd)}</span>
+          </div>
+          <div className="mt-1 flex justify-between text-muted">
+            <span>Exchange rate</span>
+            <span>GH₵{rate.toFixed(4)} per $1</span>
           </div>
           <div className="mt-1 flex justify-between font-bold">
-            <span>You receive</span>
-            <span className="text-up">{asset === 'GHS' ? fmtGHS(amt) : `${fmtNum(quote.amountAsset)} ${asset}`}</span>
+            <span>Amount payable</span>
+            <span>{fmtGHS(ghs)}</span>
           </div>
+          {quote && (
+            <div className="mt-1 flex justify-between font-bold">
+              <span>You receive</span>
+              <span className="text-up">{asset === 'GHS' ? fmtGHS(ghs) : `${fmtNum(quote.amountAsset)} ${asset}`}</span>
+            </div>
+          )}
         </div>
+      )}
+      {usd > 0 && !valid && (
+        <p className="mt-2 text-xs text-gold">Minimum deposit is ${fmtNum(minUSD)}{limits ? ` (≈ ${fmtGHS(limits.minDepositGHS)})` : ''}.</p>
       )}
 
       {error && <p className="mt-2 text-sm text-down">{error}</p>}
       <button
         onClick={pay}
-        disabled={busy || !(amt >= 10) || (method === 'MOMO' && phone.replace(/\D/g, '').length < 9)}
+        disabled={busy || !valid || !(rate > 0) || (method === 'MOMO' && phone.replace(/\D/g, '').length < 9)}
         className="mt-4 w-full rounded-full bg-up py-3 text-[14px] font-bold text-white disabled:opacity-40"
       >
-        {busy ? 'Connecting…' : `Pay ${amt >= 10 ? fmtGHS(amt) : ''} with Payteller`}
+        {busy ? 'Connecting…' : valid ? `Pay ${fmtGHS(ghs)} with Payteller` : 'Pay with Payteller'}
       </button>
     </div>
   );

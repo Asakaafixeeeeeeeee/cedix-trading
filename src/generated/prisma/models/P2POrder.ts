@@ -30,12 +30,14 @@ export type P2POrderAvgAggregateOutputType = {
   amount: runtime.Decimal | null
   priceGHS: runtime.Decimal | null
   totalGHS: runtime.Decimal | null
+  feeGHS: runtime.Decimal | null
 }
 
 export type P2POrderSumAggregateOutputType = {
   amount: runtime.Decimal | null
   priceGHS: runtime.Decimal | null
   totalGHS: runtime.Decimal | null
+  feeGHS: runtime.Decimal | null
 }
 
 export type P2POrderMinAggregateOutputType = {
@@ -50,6 +52,13 @@ export type P2POrderMinAggregateOutputType = {
   status: $Enums.P2POrderStatus | null
   createdAt: Date | null
   updatedAt: Date | null
+  expiresAt: Date | null
+  paymentMethod: string | null
+  providerPaymentId: string | null
+  providerRef: string | null
+  feeGHS: runtime.Decimal | null
+  paidAt: Date | null
+  releasedAt: Date | null
 }
 
 export type P2POrderMaxAggregateOutputType = {
@@ -64,6 +73,13 @@ export type P2POrderMaxAggregateOutputType = {
   status: $Enums.P2POrderStatus | null
   createdAt: Date | null
   updatedAt: Date | null
+  expiresAt: Date | null
+  paymentMethod: string | null
+  providerPaymentId: string | null
+  providerRef: string | null
+  feeGHS: runtime.Decimal | null
+  paidAt: Date | null
+  releasedAt: Date | null
 }
 
 export type P2POrderCountAggregateOutputType = {
@@ -78,6 +94,13 @@ export type P2POrderCountAggregateOutputType = {
   status: number
   createdAt: number
   updatedAt: number
+  expiresAt: number
+  paymentMethod: number
+  providerPaymentId: number
+  providerRef: number
+  feeGHS: number
+  paidAt: number
+  releasedAt: number
   _all: number
 }
 
@@ -86,12 +109,14 @@ export type P2POrderAvgAggregateInputType = {
   amount?: true
   priceGHS?: true
   totalGHS?: true
+  feeGHS?: true
 }
 
 export type P2POrderSumAggregateInputType = {
   amount?: true
   priceGHS?: true
   totalGHS?: true
+  feeGHS?: true
 }
 
 export type P2POrderMinAggregateInputType = {
@@ -106,6 +131,13 @@ export type P2POrderMinAggregateInputType = {
   status?: true
   createdAt?: true
   updatedAt?: true
+  expiresAt?: true
+  paymentMethod?: true
+  providerPaymentId?: true
+  providerRef?: true
+  feeGHS?: true
+  paidAt?: true
+  releasedAt?: true
 }
 
 export type P2POrderMaxAggregateInputType = {
@@ -120,6 +152,13 @@ export type P2POrderMaxAggregateInputType = {
   status?: true
   createdAt?: true
   updatedAt?: true
+  expiresAt?: true
+  paymentMethod?: true
+  providerPaymentId?: true
+  providerRef?: true
+  feeGHS?: true
+  paidAt?: true
+  releasedAt?: true
 }
 
 export type P2POrderCountAggregateInputType = {
@@ -134,6 +173,13 @@ export type P2POrderCountAggregateInputType = {
   status?: true
   createdAt?: true
   updatedAt?: true
+  expiresAt?: true
+  paymentMethod?: true
+  providerPaymentId?: true
+  providerRef?: true
+  feeGHS?: true
+  paidAt?: true
+  releasedAt?: true
   _all?: true
 }
 
@@ -235,6 +281,13 @@ export type P2POrderGroupByOutputType = {
   status: $Enums.P2POrderStatus
   createdAt: Date
   updatedAt: Date
+  expiresAt: Date | null
+  paymentMethod: string | null
+  providerPaymentId: string | null
+  providerRef: string | null
+  feeGHS: runtime.Decimal
+  paidAt: Date | null
+  releasedAt: Date | null
   _count: P2POrderCountAggregateOutputType | null
   _avg: P2POrderAvgAggregateOutputType | null
   _sum: P2POrderSumAggregateOutputType | null
@@ -272,9 +325,17 @@ export type P2POrderWhereInput = {
   status?: Prisma.EnumP2POrderStatusFilter<"P2POrder"> | $Enums.P2POrderStatus
   createdAt?: Prisma.DateTimeFilter<"P2POrder"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"P2POrder"> | Date | string
+  expiresAt?: Prisma.DateTimeNullableFilter<"P2POrder"> | Date | string | null
+  paymentMethod?: Prisma.StringNullableFilter<"P2POrder"> | string | null
+  providerPaymentId?: Prisma.StringNullableFilter<"P2POrder"> | string | null
+  providerRef?: Prisma.StringNullableFilter<"P2POrder"> | string | null
+  feeGHS?: Prisma.DecimalFilter<"P2POrder"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Prisma.DateTimeNullableFilter<"P2POrder"> | Date | string | null
+  releasedAt?: Prisma.DateTimeNullableFilter<"P2POrder"> | Date | string | null
   offer?: Prisma.XOR<Prisma.P2POfferScalarRelationFilter, Prisma.P2POfferWhereInput>
   buyer?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   seller?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  chat?: Prisma.P2PChatMessageListRelationFilter
 }
 
 export type P2POrderOrderByWithRelationInput = {
@@ -289,9 +350,17 @@ export type P2POrderOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  expiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  paymentMethod?: Prisma.SortOrderInput | Prisma.SortOrder
+  providerPaymentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  providerRef?: Prisma.SortOrderInput | Prisma.SortOrder
+  feeGHS?: Prisma.SortOrder
+  paidAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  releasedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   offer?: Prisma.P2POfferOrderByWithRelationInput
   buyer?: Prisma.UserOrderByWithRelationInput
   seller?: Prisma.UserOrderByWithRelationInput
+  chat?: Prisma.P2PChatMessageOrderByRelationAggregateInput
 }
 
 export type P2POrderWhereUniqueInput = Prisma.AtLeast<{
@@ -309,9 +378,17 @@ export type P2POrderWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumP2POrderStatusFilter<"P2POrder"> | $Enums.P2POrderStatus
   createdAt?: Prisma.DateTimeFilter<"P2POrder"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"P2POrder"> | Date | string
+  expiresAt?: Prisma.DateTimeNullableFilter<"P2POrder"> | Date | string | null
+  paymentMethod?: Prisma.StringNullableFilter<"P2POrder"> | string | null
+  providerPaymentId?: Prisma.StringNullableFilter<"P2POrder"> | string | null
+  providerRef?: Prisma.StringNullableFilter<"P2POrder"> | string | null
+  feeGHS?: Prisma.DecimalFilter<"P2POrder"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Prisma.DateTimeNullableFilter<"P2POrder"> | Date | string | null
+  releasedAt?: Prisma.DateTimeNullableFilter<"P2POrder"> | Date | string | null
   offer?: Prisma.XOR<Prisma.P2POfferScalarRelationFilter, Prisma.P2POfferWhereInput>
   buyer?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   seller?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  chat?: Prisma.P2PChatMessageListRelationFilter
 }, "id">
 
 export type P2POrderOrderByWithAggregationInput = {
@@ -326,6 +403,13 @@ export type P2POrderOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  expiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  paymentMethod?: Prisma.SortOrderInput | Prisma.SortOrder
+  providerPaymentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  providerRef?: Prisma.SortOrderInput | Prisma.SortOrder
+  feeGHS?: Prisma.SortOrder
+  paidAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  releasedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.P2POrderCountOrderByAggregateInput
   _avg?: Prisma.P2POrderAvgOrderByAggregateInput
   _max?: Prisma.P2POrderMaxOrderByAggregateInput
@@ -348,6 +432,13 @@ export type P2POrderScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumP2POrderStatusWithAggregatesFilter<"P2POrder"> | $Enums.P2POrderStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"P2POrder"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"P2POrder"> | Date | string
+  expiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"P2POrder"> | Date | string | null
+  paymentMethod?: Prisma.StringNullableWithAggregatesFilter<"P2POrder"> | string | null
+  providerPaymentId?: Prisma.StringNullableWithAggregatesFilter<"P2POrder"> | string | null
+  providerRef?: Prisma.StringNullableWithAggregatesFilter<"P2POrder"> | string | null
+  feeGHS?: Prisma.DecimalWithAggregatesFilter<"P2POrder"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Prisma.DateTimeNullableWithAggregatesFilter<"P2POrder"> | Date | string | null
+  releasedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"P2POrder"> | Date | string | null
 }
 
 export type P2POrderCreateInput = {
@@ -359,9 +450,17 @@ export type P2POrderCreateInput = {
   status?: $Enums.P2POrderStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  expiresAt?: Date | string | null
+  paymentMethod?: string | null
+  providerPaymentId?: string | null
+  providerRef?: string | null
+  feeGHS?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Date | string | null
+  releasedAt?: Date | string | null
   offer: Prisma.P2POfferCreateNestedOneWithoutOrdersInput
   buyer: Prisma.UserCreateNestedOneWithoutP2pOrdersAsBuyerInput
   seller: Prisma.UserCreateNestedOneWithoutP2pOrdersAsSellerInput
+  chat?: Prisma.P2PChatMessageCreateNestedManyWithoutOrderInput
 }
 
 export type P2POrderUncheckedCreateInput = {
@@ -376,6 +475,14 @@ export type P2POrderUncheckedCreateInput = {
   status?: $Enums.P2POrderStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  expiresAt?: Date | string | null
+  paymentMethod?: string | null
+  providerPaymentId?: string | null
+  providerRef?: string | null
+  feeGHS?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Date | string | null
+  releasedAt?: Date | string | null
+  chat?: Prisma.P2PChatMessageUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type P2POrderUpdateInput = {
@@ -387,9 +494,17 @@ export type P2POrderUpdateInput = {
   status?: Prisma.EnumP2POrderStatusFieldUpdateOperationsInput | $Enums.P2POrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  feeGHS?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  releasedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   offer?: Prisma.P2POfferUpdateOneRequiredWithoutOrdersNestedInput
   buyer?: Prisma.UserUpdateOneRequiredWithoutP2pOrdersAsBuyerNestedInput
   seller?: Prisma.UserUpdateOneRequiredWithoutP2pOrdersAsSellerNestedInput
+  chat?: Prisma.P2PChatMessageUpdateManyWithoutOrderNestedInput
 }
 
 export type P2POrderUncheckedUpdateInput = {
@@ -404,6 +519,14 @@ export type P2POrderUncheckedUpdateInput = {
   status?: Prisma.EnumP2POrderStatusFieldUpdateOperationsInput | $Enums.P2POrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  feeGHS?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  releasedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  chat?: Prisma.P2PChatMessageUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type P2POrderCreateManyInput = {
@@ -418,6 +541,13 @@ export type P2POrderCreateManyInput = {
   status?: $Enums.P2POrderStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  expiresAt?: Date | string | null
+  paymentMethod?: string | null
+  providerPaymentId?: string | null
+  providerRef?: string | null
+  feeGHS?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Date | string | null
+  releasedAt?: Date | string | null
 }
 
 export type P2POrderUpdateManyMutationInput = {
@@ -429,6 +559,13 @@ export type P2POrderUpdateManyMutationInput = {
   status?: Prisma.EnumP2POrderStatusFieldUpdateOperationsInput | $Enums.P2POrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  feeGHS?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  releasedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type P2POrderUncheckedUpdateManyInput = {
@@ -443,6 +580,13 @@ export type P2POrderUncheckedUpdateManyInput = {
   status?: Prisma.EnumP2POrderStatusFieldUpdateOperationsInput | $Enums.P2POrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  feeGHS?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  releasedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type P2POrderListRelationFilter = {
@@ -467,12 +611,20 @@ export type P2POrderCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  expiresAt?: Prisma.SortOrder
+  paymentMethod?: Prisma.SortOrder
+  providerPaymentId?: Prisma.SortOrder
+  providerRef?: Prisma.SortOrder
+  feeGHS?: Prisma.SortOrder
+  paidAt?: Prisma.SortOrder
+  releasedAt?: Prisma.SortOrder
 }
 
 export type P2POrderAvgOrderByAggregateInput = {
   amount?: Prisma.SortOrder
   priceGHS?: Prisma.SortOrder
   totalGHS?: Prisma.SortOrder
+  feeGHS?: Prisma.SortOrder
 }
 
 export type P2POrderMaxOrderByAggregateInput = {
@@ -487,6 +639,13 @@ export type P2POrderMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  expiresAt?: Prisma.SortOrder
+  paymentMethod?: Prisma.SortOrder
+  providerPaymentId?: Prisma.SortOrder
+  providerRef?: Prisma.SortOrder
+  feeGHS?: Prisma.SortOrder
+  paidAt?: Prisma.SortOrder
+  releasedAt?: Prisma.SortOrder
 }
 
 export type P2POrderMinOrderByAggregateInput = {
@@ -501,12 +660,25 @@ export type P2POrderMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  expiresAt?: Prisma.SortOrder
+  paymentMethod?: Prisma.SortOrder
+  providerPaymentId?: Prisma.SortOrder
+  providerRef?: Prisma.SortOrder
+  feeGHS?: Prisma.SortOrder
+  paidAt?: Prisma.SortOrder
+  releasedAt?: Prisma.SortOrder
 }
 
 export type P2POrderSumOrderByAggregateInput = {
   amount?: Prisma.SortOrder
   priceGHS?: Prisma.SortOrder
   totalGHS?: Prisma.SortOrder
+  feeGHS?: Prisma.SortOrder
+}
+
+export type P2POrderScalarRelationFilter = {
+  is?: Prisma.P2POrderWhereInput
+  isNot?: Prisma.P2POrderWhereInput
 }
 
 export type P2POrderCreateNestedManyWithoutBuyerInput = {
@@ -639,6 +811,20 @@ export type EnumP2POrderStatusFieldUpdateOperationsInput = {
   set?: $Enums.P2POrderStatus
 }
 
+export type P2POrderCreateNestedOneWithoutChatInput = {
+  create?: Prisma.XOR<Prisma.P2POrderCreateWithoutChatInput, Prisma.P2POrderUncheckedCreateWithoutChatInput>
+  connectOrCreate?: Prisma.P2POrderCreateOrConnectWithoutChatInput
+  connect?: Prisma.P2POrderWhereUniqueInput
+}
+
+export type P2POrderUpdateOneRequiredWithoutChatNestedInput = {
+  create?: Prisma.XOR<Prisma.P2POrderCreateWithoutChatInput, Prisma.P2POrderUncheckedCreateWithoutChatInput>
+  connectOrCreate?: Prisma.P2POrderCreateOrConnectWithoutChatInput
+  upsert?: Prisma.P2POrderUpsertWithoutChatInput
+  connect?: Prisma.P2POrderWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.P2POrderUpdateToOneWithWhereWithoutChatInput, Prisma.P2POrderUpdateWithoutChatInput>, Prisma.P2POrderUncheckedUpdateWithoutChatInput>
+}
+
 export type P2POrderCreateWithoutBuyerInput = {
   id?: string
   asset: string
@@ -648,8 +834,16 @@ export type P2POrderCreateWithoutBuyerInput = {
   status?: $Enums.P2POrderStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  expiresAt?: Date | string | null
+  paymentMethod?: string | null
+  providerPaymentId?: string | null
+  providerRef?: string | null
+  feeGHS?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Date | string | null
+  releasedAt?: Date | string | null
   offer: Prisma.P2POfferCreateNestedOneWithoutOrdersInput
   seller: Prisma.UserCreateNestedOneWithoutP2pOrdersAsSellerInput
+  chat?: Prisma.P2PChatMessageCreateNestedManyWithoutOrderInput
 }
 
 export type P2POrderUncheckedCreateWithoutBuyerInput = {
@@ -663,6 +857,14 @@ export type P2POrderUncheckedCreateWithoutBuyerInput = {
   status?: $Enums.P2POrderStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  expiresAt?: Date | string | null
+  paymentMethod?: string | null
+  providerPaymentId?: string | null
+  providerRef?: string | null
+  feeGHS?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Date | string | null
+  releasedAt?: Date | string | null
+  chat?: Prisma.P2PChatMessageUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type P2POrderCreateOrConnectWithoutBuyerInput = {
@@ -684,8 +886,16 @@ export type P2POrderCreateWithoutSellerInput = {
   status?: $Enums.P2POrderStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  expiresAt?: Date | string | null
+  paymentMethod?: string | null
+  providerPaymentId?: string | null
+  providerRef?: string | null
+  feeGHS?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Date | string | null
+  releasedAt?: Date | string | null
   offer: Prisma.P2POfferCreateNestedOneWithoutOrdersInput
   buyer: Prisma.UserCreateNestedOneWithoutP2pOrdersAsBuyerInput
+  chat?: Prisma.P2PChatMessageCreateNestedManyWithoutOrderInput
 }
 
 export type P2POrderUncheckedCreateWithoutSellerInput = {
@@ -699,6 +909,14 @@ export type P2POrderUncheckedCreateWithoutSellerInput = {
   status?: $Enums.P2POrderStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  expiresAt?: Date | string | null
+  paymentMethod?: string | null
+  providerPaymentId?: string | null
+  providerRef?: string | null
+  feeGHS?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Date | string | null
+  releasedAt?: Date | string | null
+  chat?: Prisma.P2PChatMessageUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type P2POrderCreateOrConnectWithoutSellerInput = {
@@ -742,6 +960,13 @@ export type P2POrderScalarWhereInput = {
   status?: Prisma.EnumP2POrderStatusFilter<"P2POrder"> | $Enums.P2POrderStatus
   createdAt?: Prisma.DateTimeFilter<"P2POrder"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"P2POrder"> | Date | string
+  expiresAt?: Prisma.DateTimeNullableFilter<"P2POrder"> | Date | string | null
+  paymentMethod?: Prisma.StringNullableFilter<"P2POrder"> | string | null
+  providerPaymentId?: Prisma.StringNullableFilter<"P2POrder"> | string | null
+  providerRef?: Prisma.StringNullableFilter<"P2POrder"> | string | null
+  feeGHS?: Prisma.DecimalFilter<"P2POrder"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Prisma.DateTimeNullableFilter<"P2POrder"> | Date | string | null
+  releasedAt?: Prisma.DateTimeNullableFilter<"P2POrder"> | Date | string | null
 }
 
 export type P2POrderUpsertWithWhereUniqueWithoutSellerInput = {
@@ -769,8 +994,16 @@ export type P2POrderCreateWithoutOfferInput = {
   status?: $Enums.P2POrderStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  expiresAt?: Date | string | null
+  paymentMethod?: string | null
+  providerPaymentId?: string | null
+  providerRef?: string | null
+  feeGHS?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Date | string | null
+  releasedAt?: Date | string | null
   buyer: Prisma.UserCreateNestedOneWithoutP2pOrdersAsBuyerInput
   seller: Prisma.UserCreateNestedOneWithoutP2pOrdersAsSellerInput
+  chat?: Prisma.P2PChatMessageCreateNestedManyWithoutOrderInput
 }
 
 export type P2POrderUncheckedCreateWithoutOfferInput = {
@@ -784,6 +1017,14 @@ export type P2POrderUncheckedCreateWithoutOfferInput = {
   status?: $Enums.P2POrderStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  expiresAt?: Date | string | null
+  paymentMethod?: string | null
+  providerPaymentId?: string | null
+  providerRef?: string | null
+  feeGHS?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Date | string | null
+  releasedAt?: Date | string | null
+  chat?: Prisma.P2PChatMessageUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type P2POrderCreateOrConnectWithoutOfferInput = {
@@ -812,6 +1053,106 @@ export type P2POrderUpdateManyWithWhereWithoutOfferInput = {
   data: Prisma.XOR<Prisma.P2POrderUpdateManyMutationInput, Prisma.P2POrderUncheckedUpdateManyWithoutOfferInput>
 }
 
+export type P2POrderCreateWithoutChatInput = {
+  id?: string
+  asset: string
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  priceGHS: runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalGHS: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.P2POrderStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  expiresAt?: Date | string | null
+  paymentMethod?: string | null
+  providerPaymentId?: string | null
+  providerRef?: string | null
+  feeGHS?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Date | string | null
+  releasedAt?: Date | string | null
+  offer: Prisma.P2POfferCreateNestedOneWithoutOrdersInput
+  buyer: Prisma.UserCreateNestedOneWithoutP2pOrdersAsBuyerInput
+  seller: Prisma.UserCreateNestedOneWithoutP2pOrdersAsSellerInput
+}
+
+export type P2POrderUncheckedCreateWithoutChatInput = {
+  id?: string
+  offerId: string
+  buyerId: string
+  sellerId: string
+  asset: string
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  priceGHS: runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalGHS: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.P2POrderStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  expiresAt?: Date | string | null
+  paymentMethod?: string | null
+  providerPaymentId?: string | null
+  providerRef?: string | null
+  feeGHS?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Date | string | null
+  releasedAt?: Date | string | null
+}
+
+export type P2POrderCreateOrConnectWithoutChatInput = {
+  where: Prisma.P2POrderWhereUniqueInput
+  create: Prisma.XOR<Prisma.P2POrderCreateWithoutChatInput, Prisma.P2POrderUncheckedCreateWithoutChatInput>
+}
+
+export type P2POrderUpsertWithoutChatInput = {
+  update: Prisma.XOR<Prisma.P2POrderUpdateWithoutChatInput, Prisma.P2POrderUncheckedUpdateWithoutChatInput>
+  create: Prisma.XOR<Prisma.P2POrderCreateWithoutChatInput, Prisma.P2POrderUncheckedCreateWithoutChatInput>
+  where?: Prisma.P2POrderWhereInput
+}
+
+export type P2POrderUpdateToOneWithWhereWithoutChatInput = {
+  where?: Prisma.P2POrderWhereInput
+  data: Prisma.XOR<Prisma.P2POrderUpdateWithoutChatInput, Prisma.P2POrderUncheckedUpdateWithoutChatInput>
+}
+
+export type P2POrderUpdateWithoutChatInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  asset?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  priceGHS?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalGHS?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumP2POrderStatusFieldUpdateOperationsInput | $Enums.P2POrderStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  feeGHS?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  releasedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  offer?: Prisma.P2POfferUpdateOneRequiredWithoutOrdersNestedInput
+  buyer?: Prisma.UserUpdateOneRequiredWithoutP2pOrdersAsBuyerNestedInput
+  seller?: Prisma.UserUpdateOneRequiredWithoutP2pOrdersAsSellerNestedInput
+}
+
+export type P2POrderUncheckedUpdateWithoutChatInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  offerId?: Prisma.StringFieldUpdateOperationsInput | string
+  buyerId?: Prisma.StringFieldUpdateOperationsInput | string
+  sellerId?: Prisma.StringFieldUpdateOperationsInput | string
+  asset?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  priceGHS?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalGHS?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumP2POrderStatusFieldUpdateOperationsInput | $Enums.P2POrderStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  feeGHS?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  releasedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
 export type P2POrderCreateManyBuyerInput = {
   id?: string
   offerId: string
@@ -823,6 +1164,13 @@ export type P2POrderCreateManyBuyerInput = {
   status?: $Enums.P2POrderStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  expiresAt?: Date | string | null
+  paymentMethod?: string | null
+  providerPaymentId?: string | null
+  providerRef?: string | null
+  feeGHS?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Date | string | null
+  releasedAt?: Date | string | null
 }
 
 export type P2POrderCreateManySellerInput = {
@@ -836,6 +1184,13 @@ export type P2POrderCreateManySellerInput = {
   status?: $Enums.P2POrderStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  expiresAt?: Date | string | null
+  paymentMethod?: string | null
+  providerPaymentId?: string | null
+  providerRef?: string | null
+  feeGHS?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Date | string | null
+  releasedAt?: Date | string | null
 }
 
 export type P2POrderUpdateWithoutBuyerInput = {
@@ -847,8 +1202,16 @@ export type P2POrderUpdateWithoutBuyerInput = {
   status?: Prisma.EnumP2POrderStatusFieldUpdateOperationsInput | $Enums.P2POrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  feeGHS?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  releasedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   offer?: Prisma.P2POfferUpdateOneRequiredWithoutOrdersNestedInput
   seller?: Prisma.UserUpdateOneRequiredWithoutP2pOrdersAsSellerNestedInput
+  chat?: Prisma.P2PChatMessageUpdateManyWithoutOrderNestedInput
 }
 
 export type P2POrderUncheckedUpdateWithoutBuyerInput = {
@@ -862,6 +1225,14 @@ export type P2POrderUncheckedUpdateWithoutBuyerInput = {
   status?: Prisma.EnumP2POrderStatusFieldUpdateOperationsInput | $Enums.P2POrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  feeGHS?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  releasedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  chat?: Prisma.P2PChatMessageUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type P2POrderUncheckedUpdateManyWithoutBuyerInput = {
@@ -875,6 +1246,13 @@ export type P2POrderUncheckedUpdateManyWithoutBuyerInput = {
   status?: Prisma.EnumP2POrderStatusFieldUpdateOperationsInput | $Enums.P2POrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  feeGHS?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  releasedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type P2POrderUpdateWithoutSellerInput = {
@@ -886,8 +1264,16 @@ export type P2POrderUpdateWithoutSellerInput = {
   status?: Prisma.EnumP2POrderStatusFieldUpdateOperationsInput | $Enums.P2POrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  feeGHS?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  releasedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   offer?: Prisma.P2POfferUpdateOneRequiredWithoutOrdersNestedInput
   buyer?: Prisma.UserUpdateOneRequiredWithoutP2pOrdersAsBuyerNestedInput
+  chat?: Prisma.P2PChatMessageUpdateManyWithoutOrderNestedInput
 }
 
 export type P2POrderUncheckedUpdateWithoutSellerInput = {
@@ -901,6 +1287,14 @@ export type P2POrderUncheckedUpdateWithoutSellerInput = {
   status?: Prisma.EnumP2POrderStatusFieldUpdateOperationsInput | $Enums.P2POrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  feeGHS?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  releasedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  chat?: Prisma.P2PChatMessageUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type P2POrderUncheckedUpdateManyWithoutSellerInput = {
@@ -914,6 +1308,13 @@ export type P2POrderUncheckedUpdateManyWithoutSellerInput = {
   status?: Prisma.EnumP2POrderStatusFieldUpdateOperationsInput | $Enums.P2POrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  feeGHS?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  releasedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type P2POrderCreateManyOfferInput = {
@@ -927,6 +1328,13 @@ export type P2POrderCreateManyOfferInput = {
   status?: $Enums.P2POrderStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  expiresAt?: Date | string | null
+  paymentMethod?: string | null
+  providerPaymentId?: string | null
+  providerRef?: string | null
+  feeGHS?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Date | string | null
+  releasedAt?: Date | string | null
 }
 
 export type P2POrderUpdateWithoutOfferInput = {
@@ -938,8 +1346,16 @@ export type P2POrderUpdateWithoutOfferInput = {
   status?: Prisma.EnumP2POrderStatusFieldUpdateOperationsInput | $Enums.P2POrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  feeGHS?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  releasedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   buyer?: Prisma.UserUpdateOneRequiredWithoutP2pOrdersAsBuyerNestedInput
   seller?: Prisma.UserUpdateOneRequiredWithoutP2pOrdersAsSellerNestedInput
+  chat?: Prisma.P2PChatMessageUpdateManyWithoutOrderNestedInput
 }
 
 export type P2POrderUncheckedUpdateWithoutOfferInput = {
@@ -953,6 +1369,14 @@ export type P2POrderUncheckedUpdateWithoutOfferInput = {
   status?: Prisma.EnumP2POrderStatusFieldUpdateOperationsInput | $Enums.P2POrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  feeGHS?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  releasedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  chat?: Prisma.P2PChatMessageUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type P2POrderUncheckedUpdateManyWithoutOfferInput = {
@@ -966,8 +1390,44 @@ export type P2POrderUncheckedUpdateManyWithoutOfferInput = {
   status?: Prisma.EnumP2POrderStatusFieldUpdateOperationsInput | $Enums.P2POrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  feeGHS?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  releasedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
+
+/**
+ * Count Type P2POrderCountOutputType
+ */
+
+export type P2POrderCountOutputType = {
+  chat: number
+}
+
+export type P2POrderCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  chat?: boolean | P2POrderCountOutputTypeCountChatArgs
+}
+
+/**
+ * P2POrderCountOutputType without action
+ */
+export type P2POrderCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the P2POrderCountOutputType
+   */
+  select?: Prisma.P2POrderCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * P2POrderCountOutputType without action
+ */
+export type P2POrderCountOutputTypeCountChatArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.P2PChatMessageWhereInput
+}
 
 
 export type P2POrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -982,9 +1442,18 @@ export type P2POrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  expiresAt?: boolean
+  paymentMethod?: boolean
+  providerPaymentId?: boolean
+  providerRef?: boolean
+  feeGHS?: boolean
+  paidAt?: boolean
+  releasedAt?: boolean
   offer?: boolean | Prisma.P2POfferDefaultArgs<ExtArgs>
   buyer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   seller?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  chat?: boolean | Prisma.P2POrder$chatArgs<ExtArgs>
+  _count?: boolean | Prisma.P2POrderCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["p2POrder"]>
 
 export type P2POrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -999,6 +1468,13 @@ export type P2POrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  expiresAt?: boolean
+  paymentMethod?: boolean
+  providerPaymentId?: boolean
+  providerRef?: boolean
+  feeGHS?: boolean
+  paidAt?: boolean
+  releasedAt?: boolean
   offer?: boolean | Prisma.P2POfferDefaultArgs<ExtArgs>
   buyer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   seller?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1016,6 +1492,13 @@ export type P2POrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  expiresAt?: boolean
+  paymentMethod?: boolean
+  providerPaymentId?: boolean
+  providerRef?: boolean
+  feeGHS?: boolean
+  paidAt?: boolean
+  releasedAt?: boolean
   offer?: boolean | Prisma.P2POfferDefaultArgs<ExtArgs>
   buyer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   seller?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1033,13 +1516,22 @@ export type P2POrderSelectScalar = {
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  expiresAt?: boolean
+  paymentMethod?: boolean
+  providerPaymentId?: boolean
+  providerRef?: boolean
+  feeGHS?: boolean
+  paidAt?: boolean
+  releasedAt?: boolean
 }
 
-export type P2POrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "offerId" | "buyerId" | "sellerId" | "asset" | "amount" | "priceGHS" | "totalGHS" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["p2POrder"]>
+export type P2POrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "offerId" | "buyerId" | "sellerId" | "asset" | "amount" | "priceGHS" | "totalGHS" | "status" | "createdAt" | "updatedAt" | "expiresAt" | "paymentMethod" | "providerPaymentId" | "providerRef" | "feeGHS" | "paidAt" | "releasedAt", ExtArgs["result"]["p2POrder"]>
 export type P2POrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   offer?: boolean | Prisma.P2POfferDefaultArgs<ExtArgs>
   buyer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   seller?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  chat?: boolean | Prisma.P2POrder$chatArgs<ExtArgs>
+  _count?: boolean | Prisma.P2POrderCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type P2POrderIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   offer?: boolean | Prisma.P2POfferDefaultArgs<ExtArgs>
@@ -1058,6 +1550,7 @@ export type $P2POrderPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     offer: Prisma.$P2POfferPayload<ExtArgs>
     buyer: Prisma.$UserPayload<ExtArgs>
     seller: Prisma.$UserPayload<ExtArgs>
+    chat: Prisma.$P2PChatMessagePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1071,6 +1564,13 @@ export type $P2POrderPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     status: $Enums.P2POrderStatus
     createdAt: Date
     updatedAt: Date
+    expiresAt: Date | null
+    paymentMethod: string | null
+    providerPaymentId: string | null
+    providerRef: string | null
+    feeGHS: runtime.Decimal
+    paidAt: Date | null
+    releasedAt: Date | null
   }, ExtArgs["result"]["p2POrder"]>
   composites: {}
 }
@@ -1468,6 +1968,7 @@ export interface Prisma__P2POrderClient<T, Null = never, ExtArgs extends runtime
   offer<T extends Prisma.P2POfferDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.P2POfferDefaultArgs<ExtArgs>>): Prisma.Prisma__P2POfferClient<runtime.Types.Result.GetResult<Prisma.$P2POfferPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   buyer<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   seller<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  chat<T extends Prisma.P2POrder$chatArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.P2POrder$chatArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$P2PChatMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1508,6 +2009,13 @@ export interface P2POrderFieldRefs {
   readonly status: Prisma.FieldRef<"P2POrder", 'P2POrderStatus'>
   readonly createdAt: Prisma.FieldRef<"P2POrder", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"P2POrder", 'DateTime'>
+  readonly expiresAt: Prisma.FieldRef<"P2POrder", 'DateTime'>
+  readonly paymentMethod: Prisma.FieldRef<"P2POrder", 'String'>
+  readonly providerPaymentId: Prisma.FieldRef<"P2POrder", 'String'>
+  readonly providerRef: Prisma.FieldRef<"P2POrder", 'String'>
+  readonly feeGHS: Prisma.FieldRef<"P2POrder", 'Decimal'>
+  readonly paidAt: Prisma.FieldRef<"P2POrder", 'DateTime'>
+  readonly releasedAt: Prisma.FieldRef<"P2POrder", 'DateTime'>
 }
     
 
@@ -1906,6 +2414,30 @@ export type P2POrderDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Limit how many P2POrders to delete.
    */
   limit?: number
+}
+
+/**
+ * P2POrder.chat
+ */
+export type P2POrder$chatArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the P2PChatMessage
+   */
+  select?: Prisma.P2PChatMessageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the P2PChatMessage
+   */
+  omit?: Prisma.P2PChatMessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.P2PChatMessageInclude<ExtArgs> | null
+  where?: Prisma.P2PChatMessageWhereInput
+  orderBy?: Prisma.P2PChatMessageOrderByWithRelationInput | Prisma.P2PChatMessageOrderByWithRelationInput[]
+  cursor?: Prisma.P2PChatMessageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.P2PChatMessageScalarFieldEnum | Prisma.P2PChatMessageScalarFieldEnum[]
 }
 
 /**

@@ -3,6 +3,7 @@ import { prisma } from '@/lib/db';
 import { getFx } from '@/lib/fx';
 import { getBaseAssetPrice } from '@/lib/markets';
 import { createPayment } from '@/lib/payteller';
+import { getLimits } from '@/lib/limits';
 import { api } from '@/lib/api';
 
 export async function GET() {
@@ -23,11 +24,16 @@ export async function POST(req: Request) {
     const user = await requireUser();
     const { asset, amountGHS, method, payerPhone } = await req.json();
     const amt = Number(amountGHS);
-    if (!(amt >= 10)) throw new Error('Minimum deposit is GHS 10');
+    if (!(amt > 0)) throw new Error('Enter a deposit amount');
     if (amt > 500000) throw new Error('Maximum deposit is GHS 500,000');
     const fiatMethod = ['MOMO', 'CARD', 'BANK'].includes(method) ? method : 'MOMO';
 
     const fx = await getFx();
+    const limits = await getLimits();
+    const minGHS = limits.minDepositUSD * fx.rate;
+    if (amt / fx.rate < limits.minDepositUSD - 1e-9) {
+      throw new Error(`Minimum deposit is $${limits.minDepositUSD.toFixed(2)} (≈ GH₵${minGHS.toFixed(2)})`);
+    }
     // GHS = fiat wallet deposit (1 GHS); crypto priced live
     const assetPrice = asset === 'GHS' ? 1 / fx.rate : await getBaseAssetPrice(asset);
     if (!assetPrice) throw new Error('Live price unavailable for this asset — please try again in a moment');

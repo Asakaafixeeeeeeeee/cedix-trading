@@ -1,20 +1,40 @@
 import { getCurrentUser, requireUser } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { api } from '@/lib/api';
+import { getP2PSettings, merchantStats } from '@/lib/p2p';
 
 export async function GET(req: Request) {
   return api(async () => {
     const url = new URL(req.url);
     const side = url.searchParams.get('side') === 'BUY' ? 'BUY' : 'SELL';
     const asset = url.searchParams.get('asset') ?? undefined;
+    const amount = parseFloat(url.searchParams.get('amount') ?? '');
+    const payment = url.searchParams.get('payment') ?? undefined;
     const me = await getCurrentUser();
-    const offers = await prisma.p2POffer.findMany({
-      where: { active: true, side, ...(asset ? { asset } : {}) },
-      include: { user: { select: { id: true, username: true, displayName: true, kycLevel: true, createdAt: true } } },
-      orderBy: side === 'SELL' ? { priceGHS: 'asc' } : { priceGHS: 'desc' },
-      take: 50,
+    const [settings, offers] = await Promise.all([
+      getP2PSettings(),
+      prisma.p2POffer.findMany({
+        where: { active: true, side, ...(asset ? { asset } : {}) },
+        include: { user: { select: { id: true, username: true, displayName: true, kycLevel: true, createdAt: true } } },
+        orderBy: side === 'SELL' ? { priceGHS: 'asc' } : { priceGHS: 'desc' },
+        take: 50,
+      }),
+    ]);
+    // Amount / payment-method filters + merchant stats from REAL recorded orders
+    const filtered = offers.filter((o) => {
+      if (Number.isFinite(amount) && amount > 0 && (amount < Number(o.minGHS) || amount > Number(o.maxGHS))) return false;
+      if (payment) {
+        const methods = Array.isArray(o.paymentMethods) ? (o.paymentMethods as string[]) : [];
+        if (!methods.some((m) => m.toLowerCase().includes(payment.toLowerCase()))) return false;
+      }
+      return true;
     });
-    return { offers, myId: me?.id ?? null };
+    const stats = await merchantStats([...new Set(filtered.map((o) => o.userId))]);
+    return {
+      offers: filtered.map((o) => ({ ...o, stats: stats.get(o.userId) ?? { trades: 0, completionPct: null } })),
+      myId: me?.id ?? null,
+      settings: { enabled: settings.enabled, expressEnabled: settings.expressEnabled, expiryMinutes: settings.expiryMinutes },
+    };
   });
 }
 

@@ -147,7 +147,7 @@ export default function MobileAssets() {
       </div>
 
       {/* P2P banner */}
-      <Link href="/p2p" className="mt-6 flex items-center gap-4 rounded-2xl bg-panel p-4 active:opacity-80">
+      <Link href="/m/p2p" className="mt-6 flex items-center gap-4 rounded-2xl bg-panel p-4 active:opacity-80">
         <div className="min-w-0 flex-1">
           <div className="text-[14px] font-semibold">Trade P2P with GH₵</div>
           <div className="mt-0.5 truncate text-[12px] text-muted">Buy & sell crypto with MoMo — escrow protected</div>

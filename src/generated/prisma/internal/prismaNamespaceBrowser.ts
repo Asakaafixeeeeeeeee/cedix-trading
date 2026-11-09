@@ -60,6 +60,7 @@ export const ModelName = {
   Withdrawal: 'Withdrawal',
   P2POffer: 'P2POffer',
   P2POrder: 'P2POrder',
+  P2PChatMessage: 'P2PChatMessage',
   OrbitPost: 'OrbitPost',
   OrbitComment: 'OrbitComment',
   OrbitLike: 'OrbitLike',
@@ -258,10 +259,29 @@ export const P2POrderScalarFieldEnum = {
   totalGHS: 'totalGHS',
   status: 'status',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  expiresAt: 'expiresAt',
+  paymentMethod: 'paymentMethod',
+  providerPaymentId: 'providerPaymentId',
+  providerRef: 'providerRef',
+  feeGHS: 'feeGHS',
+  paidAt: 'paidAt',
+  releasedAt: 'releasedAt'
 } as const
 
 export type P2POrderScalarFieldEnum = (typeof P2POrderScalarFieldEnum)[keyof typeof P2POrderScalarFieldEnum]
+
+
+export const P2PChatMessageScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  role: 'role',
+  body: 'body',
+  meta: 'meta',
+  createdAt: 'createdAt'
+} as const
+
+export type P2PChatMessageScalarFieldEnum = (typeof P2PChatMessageScalarFieldEnum)[keyof typeof P2PChatMessageScalarFieldEnum]
 
 
 export const OrbitPostScalarFieldEnum = {

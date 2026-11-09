@@ -3,6 +3,7 @@ import { prisma } from '@/lib/db';
 import { getFx } from '@/lib/fx';
 import { getBaseAssetPrice } from '@/lib/markets';
 import { debit } from '@/lib/wallet';
+import { getLimits } from '@/lib/limits';
 import { api } from '@/lib/api';
 import { notifyUser } from '@/lib/notify';
 
@@ -48,7 +49,10 @@ export async function POST(req: Request) {
     const amountUSD = qty * assetPrice;
     const grossGHS = amountUSD * fx.rate;
     const netGHS = grossGHS * (1 - feePct / 100);
-    if (netGHS < 10) throw new Error('Minimum withdrawal is GHS 10 (net)');
+    const limits = await getLimits();
+    if (amountUSD < limits.minWithdrawalUSD - 1e-9) {
+      throw new Error(`Minimum withdrawal is $${limits.minWithdrawalUSD.toFixed(2)} (≈ GH₵${(limits.minWithdrawalUSD * fx.rate).toFixed(2)})`);
+    }
 
     // Debit and hold the funds; they are refunded if the request is rejected.
     const withdrawal = await prisma.$transaction(async (db) => {

@@ -252,6 +252,7 @@ enum P2POrderStatus {
   RELEASED
   CANCELLED
   DISPUTED
+  EXPIRED
 }
 
 model P2POffer {
@@ -287,12 +288,44 @@ model P2POrder {
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
 
-  offer  P2POffer @relation(fields: [offerId], references: [id], onDelete: Cascade)
-  buyer  User     @relation("P2PBuyer", fields: [buyerId], references: [id], onDelete: Cascade)
-  seller User     @relation("P2PSeller", fields: [sellerId], references: [id], onDelete: Cascade)
+  // Payment window + official checkout (CediX Automated Payment Assistant)
+  expiresAt         DateTime?
+  paymentMethod     String? // e.g. "MTN Mobile Money", "Telecel Cash"
+  providerPaymentId String? // Payteller payment id (real, never invented)
+  providerRef       String? // provider transaction reference from verification
+  feeGHS            Decimal   @default(0) @db.Decimal(32, 2)
+  paidAt            DateTime?
+  releasedAt        DateTime?
+
+  offer  P2POffer         @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  buyer  User             @relation("P2PBuyer", fields: [buyerId], references: [id], onDelete: Cascade)
+  seller User             @relation("P2PSeller", fields: [sellerId], references: [id], onDelete: Cascade)
+  chat   P2PChatMessage[]
 
   @@index([buyerId])
   @@index([sellerId])
+  @@index([status, expiresAt])
+}
+
+enum P2PChatRole {
+  ASSISTANT
+  BUYER
+  SELLER
+  SYSTEM
+}
+
+model P2PChatMessage {
+  id        String      @id @default(cuid())
+  orderId   String
+  role      P2PChatRole
+  body      String
+  /** Action payloads: network buttons, checkout links, status updates */
+  meta      Json?
+  createdAt DateTime    @default(now())
+
+  order P2POrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId, createdAt])
 }
 
 // ─────────────────────────── Orbit (community) ───────────────────────────

@@ -2,12 +2,14 @@ import { requireElevatedAdmin, getIp } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { unlockFunds, spendLocked, credit } from '@/lib/wallet';
 import { api } from '@/lib/api';
+import { getP2PSettings } from '@/lib/p2p';
+import { getLimits } from '@/lib/limits';
 
 /** Admin P2P management: all offers and orders (disputes first). */
 export async function GET() {
   return api(async () => {
     await requireElevatedAdmin();
-    const [offers, orders] = await Promise.all([
+    const [offers, orders, settings, limits] = await Promise.all([
       prisma.p2POffer.findMany({
         include: { user: { select: { username: true, email: true } }, _count: { select: { orders: true } } },
         orderBy: { createdAt: 'desc' },
@@ -22,9 +24,11 @@ export async function GET() {
         orderBy: [{ status: 'asc' }, { createdAt: 'desc' }],
         take: 100,
       }),
+      getP2PSettings(),
+      getLimits(),
     ]);
     const disputes = orders.filter((o) => o.status === 'DISPUTED');
-    return { offers, orders, disputes };
+    return { offers, orders, disputes, settings, limits };
   });
 }
 
@@ -38,6 +42,26 @@ export async function PATCH(req: Request) {
     const admin = await requireElevatedAdmin();
     const { kind, id, action } = await req.json();
     const ip = getIp(req);
+
+    if (kind === 'settings') {
+      const body = await Promise.resolve(action as Record<string, unknown>);
+      const updates: Array<[string, boolean | number]> = [];
+      if (typeof body?.enabled === 'boolean') updates.push(['p2p_enabled', body.enabled]);
+      if (typeof body?.expressEnabled === 'boolean') updates.push(['p2p_express_enabled', body.expressEnabled]);
+      if (typeof body?.assistantEnabled === 'boolean') updates.push(['p2p_assistant_enabled', body.assistantEnabled]);
+      if (typeof body?.expiryMinutes === 'number' && body.expiryMinutes >= 5 && body.expiryMinutes <= 240) updates.push(['p2p_expiry_minutes', body.expiryMinutes]);
+      if (typeof body?.feePct === 'number' && body.feePct >= 0 && body.feePct <= 10) updates.push(['p2p_fee_pct', body.feePct]);
+      if (typeof body?.minDepositUSD === 'number' && body.minDepositUSD >= 0) updates.push(['min_deposit_usd', body.minDepositUSD]);
+      if (typeof body?.minWithdrawalUSD === 'number' && body.minWithdrawalUSD >= 0) updates.push(['min_withdrawal_usd', body.minWithdrawalUSD]);
+      if (updates.length === 0) throw new Error('No valid settings supplied');
+      for (const [key, value] of updates) {
+        await prisma.setting.upsert({ where: { key }, update: { value }, create: { key, value } });
+      }
+      await prisma.auditLog.create({
+        data: { adminId: admin.id, action: 'p2p.settings', targetType: 'SETTINGS', targetId: 'p2p', meta: Object.fromEntries(updates), ip },
+      });
+      return { ok: true };
+    }
 
     if (kind === 'offer') {
       if (!['suspend', 'activate'].includes(action)) throw new Error('Invalid action');

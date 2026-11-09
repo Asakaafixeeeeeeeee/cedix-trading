@@ -161,7 +161,7 @@ export default function MobileHome() {
           Deposit crypto
         </Link>
         <Link
-          href="/p2p"
+          href="/m/p2p"
           className="rounded-full bg-[#0B4F3F] py-2.5 text-center text-[13.5px] font-bold text-[#ffffff] transition active:scale-[0.98] dark:bg-up"
         >
           P2P trading

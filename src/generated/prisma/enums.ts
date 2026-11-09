@@ -109,10 +109,21 @@ export const P2POrderStatus = {
   PAID: 'PAID',
   RELEASED: 'RELEASED',
   CANCELLED: 'CANCELLED',
-  DISPUTED: 'DISPUTED'
+  DISPUTED: 'DISPUTED',
+  EXPIRED: 'EXPIRED'
 } as const
 
 export type P2POrderStatus = (typeof P2POrderStatus)[keyof typeof P2POrderStatus]
+
+
+export const P2PChatRole = {
+  ASSISTANT: 'ASSISTANT',
+  BUYER: 'BUYER',
+  SELLER: 'SELLER',
+  SYSTEM: 'SYSTEM'
+} as const
+
+export type P2PChatRole = (typeof P2PChatRole)[keyof typeof P2PChatRole]
 
 
 export const ContentStatus = {

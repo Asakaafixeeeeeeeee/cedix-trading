@@ -2,11 +2,12 @@ import { requireUser } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { lockFunds } from '@/lib/wallet';
 import { api } from '@/lib/api';
+import { addP2PChat, expireP2POrderIfDue, getP2PSettings, orderNumber } from '@/lib/p2p';
 
 export async function GET() {
   return api(async () => {
     const user = await requireUser();
-    const orders = await prisma.p2POrder.findMany({
+    let orders = await prisma.p2POrder.findMany({
       where: { OR: [{ buyerId: user.id }, { sellerId: user.id }] },
       include: {
         offer: true,
@@ -16,7 +17,23 @@ export async function GET() {
       orderBy: { createdAt: 'desc' },
       take: 50,
     });
-    return { orders, myId: user.id };
+    // Lazily expire overdue unpaid orders (server-side timer keeps running)
+    for (const o of orders) {
+      if (o.status === 'PENDING_PAYMENT' && o.expiresAt && o.expiresAt.getTime() < Date.now()) {
+        await expireP2POrderIfDue(o).catch(() => {});
+      }
+    }
+    orders = await prisma.p2POrder.findMany({
+      where: { OR: [{ buyerId: user.id }, { sellerId: user.id }] },
+      include: {
+        offer: true,
+        buyer: { select: { username: true } },
+        seller: { select: { username: true } },
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 50,
+    });
+    return { orders: orders.map((o) => ({ ...o, orderNo: orderNumber(o) })), myId: user.id };
   });
 }
 
@@ -24,6 +41,8 @@ export async function GET() {
 export async function POST(req: Request) {
   return api(async () => {
     const user = await requireUser();
+    const settings = await getP2PSettings();
+    if (!settings.enabled) throw new Error('P2P trading is temporarily unavailable');
     const { offerId, amountGHS } = await req.json();
     const ghs = Number(amountGHS);
     const offer = await prisma.p2POffer.findUnique({ where: { id: offerId } });
@@ -55,9 +74,27 @@ export async function POST(req: Request) {
           priceGHS: offer.priceGHS,
           totalGHS: ghs,
           status: 'PENDING_PAYMENT',
+          expiresAt: new Date(Date.now() + settings.expiryMinutes * 60 * 1000),
         },
       });
     });
-    return { order };
+
+    // CediX Automated Payment Assistant opens the order conversation.
+    if (settings.assistantEnabled && buyerId === user.id) {
+      const offerTerms = offer.terms ? `${offer.terms}\n\nThis is an automated message` : null;
+      if (offerTerms) await addP2PChat(order.id, 'SELLER', offerTerms, { kind: 'terms', automated: true }).catch(() => {});
+      await addP2PChat(
+        order.id,
+        'ASSISTANT',
+        'Welcome to CediX P2P. Your order is ready. For your security, payments are accepted only through the official payment checkout provided in this conversation.',
+        { kind: 'welcome' }
+      ).catch(() => {});
+      await addP2PChat(order.id, 'ASSISTANT', 'Which network would you like to use?', {
+        kind: 'choose-network',
+        options: ['MTN Mobile Money', 'Telecel Cash'],
+      }).catch(() => {});
+    }
+
+    return { order: { ...order, orderNo: orderNumber(order) } };
   });
 }

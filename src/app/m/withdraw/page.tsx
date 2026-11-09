@@ -17,7 +17,12 @@ export default function MobileWithdraw() {
   const [destination, setDestination] = useState('');
   const [destName, setDestName] = useState('');
   const [quote, setQuote] = useState<Quote | null>(null);
+  const [limits, setLimits] = useState<{ minWithdrawalUSD: number; minWithdrawalGHS: number } | null>(null);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    fetch('/api/limits').then((r) => r.json()).then(setLimits).catch(() => {});
+  }, []);
   const [phase, setPhase] = useState<'form' | 'processing' | 'submitted'>('form');
   const [submittedGHS, setSubmittedGHS] = useState(0);
 
@@ -105,7 +110,10 @@ export default function MobileWithdraw() {
         <h1 className="text-[17px] font-bold">Withdraw to GH₵</h1>
         <Link href="/m/withdrawals" className="text-xs text-accent">History</Link>
       </div>
-      <p className="mt-1 text-xs text-muted">Cash out any crypto straight to MoMo or bank — requests are reviewed before payment.</p>
+      <p className="mt-1 text-xs text-muted">
+        Cash out any crypto straight to MoMo or bank — requests are reviewed before payment.
+        {limits && <> Minimum withdrawal: <b className="text-white/80">${fmtNum(limits.minWithdrawalUSD)}</b>.</>}
+      </p>
 
       <div className="-mx-1 mt-4 flex gap-1.5 overflow-x-auto px-1 [scrollbar-width:none]">
         {(assets.length ? assets.map((a) => a.asset) : ['USDT']).map((a) => (
@@ -186,9 +194,12 @@ export default function MobileWithdraw() {
       )}
 
       {error && <p className="mt-3 text-sm text-down">{error}</p>}
+      {limits && amountUSD > 0 && amountUSD < limits.minWithdrawalUSD && (
+        <p className="mt-2 text-xs text-gold">Minimum withdrawal is ${fmtNum(limits.minWithdrawalUSD)} (≈ {fmtGHS(limits.minWithdrawalGHS)}).</p>
+      )}
       <button
         onClick={submit}
-        disabled={!(amt > 0) || destination.replace(/\D/g, '').length < 8}
+        disabled={!(amt > 0) || destination.replace(/\D/g, '').length < 8 || (limits ? amountUSD < limits.minWithdrawalUSD : false)}
         className="mt-4 w-full rounded-full bg-white py-3 text-[14px] font-bold text-black disabled:opacity-40"
       >
         Confirm withdrawal request
