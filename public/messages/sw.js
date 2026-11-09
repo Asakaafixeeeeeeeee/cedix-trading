@@ -1,10 +1,47 @@
 /* Messages app service worker — scope /messages/.
- * Handles Web Push: shows the OS notification banner (with sound unless the
- * user muted this device), updates the app badge, and opens the app on tap.
- * No response caching (always fresh). */
+ * 1. Web Push: OS notification banner (sound unless this device is muted),
+ *    app badge updates, open-on-tap.
+ * 2. Resilience: network-first with cached fallback so brief server restarts
+ *    or offline moments show the app instead of the iOS error page. */
 
-self.addEventListener('install', () => self.skipWaiting());
-self.addEventListener('activate', (event) => event.waitUntil(self.clients.claim()));
+const CACHE = 'cedix-msg-v1';
+const PRECACHE = ['/messages', '/messages/welcome', '/messages/manifest.webmanifest', '/messages/icon-192.png', '/messages/icon-512.png'];
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE).then((c) => c.addAll(PRECACHE)).catch(() => {}).then(() => self.skipWaiting())
+  );
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys()
+      .then((keys) => Promise.all(keys.filter((k) => k.startsWith('cedix-msg-') && k !== CACHE).map((k) => caches.delete(k))))
+      .then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  if (request.method !== 'GET') return;
+  const url = new URL(request.url);
+  // Never cache API calls or cross-origin requests
+  if (url.origin !== location.origin || url.pathname.startsWith('/api/')) return;
+
+  event.respondWith(
+    fetch(request)
+      .then((res) => {
+        if (res.ok) {
+          const clone = res.clone();
+          caches.open(CACHE).then((c) => c.put(request, clone)).catch(() => {});
+        }
+        return res;
+      })
+      .catch(() =>
+        caches.match(request).then((cached) => cached ?? caches.match('/messages'))
+      )
+  );
+});
 
 self.addEventListener('push', (event) => {
   let data = { title: 'CediX Trading', body: 'You have a new message.', url: '/messages', badge: undefined, silent: false };
