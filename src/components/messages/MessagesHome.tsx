@@ -68,6 +68,17 @@ export default function MessagesHome() {
     };
   }, [user]);
 
+  const totalUnread = (conversations ?? []).reduce((s, c) => s + c.unread, 0);
+
+  // Keep the installed-app badge in sync with unread messages.
+  // Must run before any early return — hooks cannot be conditional (React #310).
+  useEffect(() => {
+    if (conversations === null) return;
+    const nav = navigator as Navigator & { setAppBadge?: (n: number) => Promise<void>; clearAppBadge?: () => Promise<void> };
+    if (totalUnread > 0) nav.setAppBadge?.(totalUnread).catch(() => {});
+    else nav.clearAppBadge?.().catch(() => {});
+  }, [totalUnread, conversations]);
+
   if (loading || !user) {
     return (
       <div className="flex min-h-dvh items-center justify-center">
@@ -80,15 +91,6 @@ export default function MessagesHome() {
     .filter((c) => (filterUnread ? c.unread > 0 : true))
     .filter((c) => (search ? c.name.toLowerCase().includes(search.toLowerCase()) || (c.last?.body ?? '').toLowerCase().includes(search.toLowerCase()) : true));
 
-  const totalUnread = (conversations ?? []).reduce((s, c) => s + c.unread, 0);
-
-  // Keep the installed-app badge in sync with unread messages
-  useEffect(() => {
-    if (conversations === null) return;
-    const nav = navigator as Navigator & { setAppBadge?: (n: number) => Promise<void>; clearAppBadge?: () => Promise<void> };
-    if (totalUnread > 0) nav.setAppBadge?.(totalUnread).catch(() => {});
-    else nav.clearAppBadge?.().catch(() => {});
-  }, [totalUnread, conversations]);
 
   return (
     <div className="flex min-h-dvh flex-col pb-[calc(76px+env(safe-area-inset-bottom))]">
