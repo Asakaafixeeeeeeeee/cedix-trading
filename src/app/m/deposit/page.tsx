@@ -7,7 +7,7 @@ import { fmtGHS, fmtNum } from '@/lib/format';
 
 const ASSETS = ['USDT', 'BTC', 'ETH', 'SOL', 'BNB', 'GHS'];
 const METHODS = [
-  ['MOMO', 'Mobile Money', '/pay/mtn.svg'],
+  ['MOMO', 'MobileMoney', '/pay/mtn.svg'],
   ['CARD', 'Card', '/pay/card.svg'],
   ['BANK', 'Bank', '/pay/bank.svg'],
 ] as const;

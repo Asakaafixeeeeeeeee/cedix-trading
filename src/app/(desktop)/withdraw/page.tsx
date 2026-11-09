@@ -143,7 +143,7 @@ function WithdrawInner() {
         <div className="mt-4 grid grid-cols-2 gap-2">
           {(
             [
-              ['MOMO', 'Mobile Money', '/pay/mtn.svg'],
+              ['MOMO', 'MobileMoney', '/pay/mtn.svg'],
               ['BANK', 'Bank Account', '/pay/bank.svg'],
             ] as const
           ).map(([id, label, badge]) => (

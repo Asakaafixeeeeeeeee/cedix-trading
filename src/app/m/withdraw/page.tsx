@@ -142,7 +142,7 @@ export default function MobileWithdraw() {
         <button onClick={() => setMethod('MOMO')} className={`flex items-center justify-center gap-2 rounded-xl border py-3 text-xs font-bold ${method === 'MOMO' ? 'border-accent bg-panel2' : 'border-line bg-panel text-muted'}`}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/pay/mtn.svg" alt="" className="h-5 w-5 rounded" />
-          Mobile Money
+          MobileMoney
         </button>
         <button onClick={() => setMethod('BANK')} className={`flex items-center justify-center gap-2 rounded-xl border py-3 text-xs font-bold ${method === 'BANK' ? 'border-accent bg-panel2' : 'border-line bg-panel text-muted'}`}>
           {/* eslint-disable-next-line @next/next/no-img-element */}

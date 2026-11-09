@@ -17,7 +17,7 @@ const ASSETS = [
 ];
 
 const METHODS = [
-  { id: 'MOMO', label: 'Mobile Money', sub: 'MTN MoMo · Telecel Cash · AT Money', badge: '/pay/mtn.svg' },
+  { id: 'MOMO', label: 'MobileMoney', sub: 'MTN MoMo · Telecel Cash · AT Money', badge: '/pay/mtn.svg' },
   { id: 'CARD', label: 'Bank Card', sub: 'Visa · Mastercard', badge: '/pay/card.svg' },
   { id: 'BANK', label: 'Bank Transfer', sub: 'GHIPSS instant transfer', badge: '/pay/bank.svg' },
 ];

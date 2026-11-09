@@ -71,7 +71,7 @@ export default function SandboxCheckout({ refId }: { refId: string }) {
               </div>
               <div className="flex justify-between py-1">
                 <span className="text-muted">Channel</span>
-                <span>{dep.method === 'MOMO' ? `Mobile Money${dep.payerPhone ? ` · ${dep.payerPhone}` : ''}` : dep.method === 'CARD' ? 'Bank Card' : 'Bank Transfer'}</span>
+                <span>{dep.method === 'MOMO' ? `MobileMoney${dep.payerPhone ? ` · ${dep.payerPhone}` : ''}` : dep.method === 'CARD' ? 'Bank Card' : 'Bank Transfer'}</span>
               </div>
               <div className="flex justify-between py-1">
                 <span className="text-muted">Reference</span>
