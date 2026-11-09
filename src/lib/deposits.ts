@@ -5,9 +5,19 @@
 
 import { prisma } from './db';
 import { credit } from './wallet';
-import { notifyUser } from './notify';
+import { notifyUser, sendMomoSms } from './notify';
 
 export type SettleOutcome = 'successful' | 'failed';
+
+/** Verified provider details (from the signed webhook / verify API). */
+export type ProviderMeta = {
+  /** Real MoMo provider transaction reference — never invented. */
+  providerRef?: string | null;
+  /** Decimal GHS the customer actually authorized (principal + MoMo fee). */
+  customerTotal?: string | null;
+  /** Decimal GHS customer-paid processing fee. */
+  customerFee?: string | null;
+};
 
 const OPEN_STATUSES = ['INITIATED', 'AWAITING_PAYMENT', 'PROCESSING'] as const;
 
@@ -16,7 +26,11 @@ const OPEN_STATUSES = ['INITIATED', 'AWAITING_PAYMENT', 'PROCESSING'] as const;
  * Payteller (signed webhook + authenticated verify API — never a browser
  * redirect). Returns what happened so callers can respond accordingly.
  */
-export async function settleDeposit(intentId: string, outcome: SettleOutcome): Promise<'credited' | 'marked-failed' | 'already-settled' | 'not-found'> {
+export async function settleDeposit(
+  intentId: string,
+  outcome: SettleOutcome,
+  provider: ProviderMeta = {},
+): Promise<'credited' | 'marked-failed' | 'already-settled' | 'not-found'> {
   const intent = await prisma.depositIntent.findUnique({ where: { id: intentId } });
   if (!intent) return 'not-found';
 
@@ -50,7 +64,8 @@ export async function settleDeposit(intentId: string, outcome: SettleOutcome): P
     return 'credited';
   }).then((result) => {
     if (result === 'credited') {
-      // Fire-and-forget Messages/email notification; never blocks settlement.
+      // Fire-and-forget Messages/email notifications; never block settlement.
+      // 1. CediX Trading conversation — platform receipt with live balance.
       notifyUser(intent.userId, {
         kind: 'deposit_completed',
         vars: {
@@ -60,6 +75,17 @@ export async function settleDeposit(intentId: string, outcome: SettleOutcome): P
         },
         meta: { depositId: intent.id },
       }).catch(() => {});
+
+      // 2. MobileMoney conversation — SMS-style receipt built ONLY from
+      //    verified provider data (fields are omitted when unavailable; the
+      //    user's real MoMo balance is never known to us, so it is omitted).
+      const paid = provider.customerTotal ?? Number(intent.amountGHS).toFixed(2);
+      const fee = provider.customerFee ?? '0.00';
+      const txnLine = provider.providerRef ? `Transaction Id: ${provider.providerRef}. ` : '';
+      sendMomoSms(
+        intent.userId,
+        `Payment for GHS${paid} to Payswitch .${txnLine}Fee charged: GHS${fee},Tax Charged 0.Download the MoMo App for a Faster & Easier Experience. Click here: https://mtnmymomo.onelink.me/XJOt/MoMo`,
+      ).catch(() => {});
     }
     return result;
   });

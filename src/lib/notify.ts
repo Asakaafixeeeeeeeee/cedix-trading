@@ -68,10 +68,10 @@ export async function getSystemSender() {
 }
 
 /**
- * "MobileMoney" sender — all withdrawal messages arrive here, mirroring the
- * familiar MoMo SMS experience. Auto-created; admin can restyle it.
+ * "MobileMoney" sender — SMS-style transaction receipts arrive here,
+ * mirroring the familiar MoMo experience. Auto-created; admin can restyle it.
  */
-async function getMobileMoneySender() {
+export async function getMobileMoneySender() {
   const existing = await prisma.messageSender.findFirst({ where: { name: 'MobileMoney' } });
   if (existing) return existing;
   return prisma.messageSender.create({
@@ -79,10 +79,37 @@ async function getMobileMoneySender() {
   });
 }
 
-/** Pick the conversation sender for a notification kind. */
-async function senderForKind(kind: TemplateKind) {
-  if (kind.startsWith('withdrawal_')) return getMobileMoneySender();
-  return getSystemSender();
+/**
+ * Deliver an SMS-style MobileMoney receipt (no title, plain body — like the
+ * real MoMo SMS). Only called after the payment provider confirms a
+ * transaction; transaction IDs are always the provider's real references.
+ */
+export async function sendMomoSms(userId: string, body: string) {
+  const account = await prisma.messagesAccount.findUnique({ where: { userId } });
+  if (!account || account.suspended) return;
+  const sender = await getMobileMoneySender();
+  if (sender.disabled) return;
+
+  const conversation = await prisma.conversation.upsert({
+    where: { userId_name: { userId, name: sender.name } },
+    update: { updatedAt: new Date(), senderId: sender.id },
+    create: { userId, name: sender.name, system: true, senderId: sender.id },
+  });
+
+  const push = await pushToUser(userId, {
+    title: 'MobileMoney',
+    body: body.slice(0, 140),
+    url: '/messages',
+  });
+
+  await prisma.message.create({
+    data: {
+      conversationId: conversation.id,
+      sender: 'SYSTEM',
+      body,
+      pushStatus: push.none ? 'no-subscription' : push.sent > 0 ? 'sent' : 'failed',
+    },
+  });
 }
 
 export async function getTemplates(): Promise<Record<TemplateKind, Template>> {
@@ -124,6 +151,11 @@ async function pushToUser(userId: string, payload: { title: string; body: string
   const keys = await getVapidKeys();
   setVapidDetails('mailto:support@cedix.app', keys.publicKey, keys.privateKey);
 
+  // App badge count = unread messages incl. the one being delivered now
+  const unread = await prisma.message.count({
+    where: { conversation: { userId }, readAt: null, sender: 'SYSTEM' },
+  });
+
   let sent = 0;
   let failed = 0;
   await Promise.all(
@@ -131,7 +163,7 @@ async function pushToUser(userId: string, payload: { title: string; body: string
       try {
         await sendNotification(
           { endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } },
-          JSON.stringify(payload),
+          JSON.stringify({ ...payload, badge: unread + 1, silent: s.muted }),
           { TTL: 86400 },
         );
         sent++;
@@ -235,7 +267,7 @@ export async function notifyUser(userId: string, opts: NotifyOptions) {
   // 1-3. In-app message + push — only for users with active Messages access.
   const account = await prisma.messagesAccount.findUnique({ where: { userId } });
   if (account && !account.suspended) {
-    const sysSender = await senderForKind(opts.kind);
+    const sysSender = await getSystemSender();
     const conversation = await prisma.conversation.upsert({
       where: { userId_name: { userId, name: sysSender.name } },
       update: { updatedAt: new Date(), senderId: sysSender.id },

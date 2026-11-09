@@ -42,6 +42,13 @@ export default function MessagesShell({ children }: { children: React.ReactNode 
             0 6px 18px rgba(0,0,0,.08),
             0 1px 3px rgba(0,0,0,.05);
         }
+        /* iMessage bubble tails */
+        .bubble-in{position:relative}
+        .bubble-in::before{content:'';position:absolute;left:-5px;bottom:0;width:13px;height:17px;background:#e9e9eb;border-bottom-right-radius:15px 13px}
+        .bubble-in::after{content:'';position:absolute;left:-11px;bottom:0;width:11px;height:17px;background:#f7f7f8;border-bottom-right-radius:9px}
+        .bubble-out{position:relative}
+        .bubble-out::before{content:'';position:absolute;right:-5px;bottom:0;width:13px;height:17px;background:#007aff;border-bottom-left-radius:15px 13px}
+        .bubble-out::after{content:'';position:absolute;right:-11px;bottom:0;width:11px;height:17px;background:#f7f7f8;border-bottom-left-radius:9px}
       `}</style>
       {children}
     </div>

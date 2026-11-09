@@ -14,6 +14,28 @@ type Msg = {
 
 type Thread = { id: string; name: string; system: boolean; sender: SenderInfo; messages: Msg[] };
 
+/** Render URLs as blue links and long provider references as blue text (iOS SMS style). */
+function renderBody(text: string, mine: boolean) {
+  const parts = text.split(/(https?:\/\/[^\s]+|\b\d{10,}\b)/g);
+  return parts.map((p, i) => {
+    if (/^https?:\/\//.test(p)) {
+      return (
+        <a key={i} href={p} target="_blank" rel="noopener noreferrer" className={`${mine ? 'text-[#dbeaff]' : 'text-[#007aff]'} underline break-all`}>
+          {p}
+        </a>
+      );
+    }
+    if (/^\d{10,}$/.test(p)) {
+      return (
+        <span key={i} className={`${mine ? 'text-[#dbeaff]' : 'text-[#007aff]'} underline`}>
+          {p}
+        </span>
+      );
+    }
+    return p;
+  });
+}
+
 export default function MessagesThread({ id }: { id: string }) {
   const { user, loading } = useMessagesUser();
   const [thread, setThread] = useState<Thread | null>(null);
@@ -130,9 +152,11 @@ export default function MessagesThread({ id }: { id: string }) {
             <div key={m.id}>
               {gap && <p className="py-2 text-center text-[11px] text-[#8e8e93]">{iosFullTime(m.createdAt)}</p>}
               <div className={`flex ${mine ? 'justify-end' : 'justify-start'}`}>
-                <div className={`relative max-w-[80%] rounded-[18px] px-3.5 py-2 ${mine ? 'bg-[#007aff]' : 'bg-[#e9e9eb]'}`}>
-                  {m.title && !mine && <p className="text-[15px] font-semibold leading-snug text-[#111]">{m.title}</p>}
-                  <p className={`whitespace-pre-line text-[15px] leading-snug ${mine ? 'text-[#fff]' : 'text-[#111]'}`}>{m.body}</p>
+                <div className={`relative max-w-[80%] rounded-[18px] px-3.5 py-2 ${mine ? 'bubble-out bg-[#007aff]' : 'bubble-in bg-[#e9e9eb]'}`}>
+                  {m.title && !mine && <p className="relative z-[1] text-[15px] font-semibold leading-snug text-[#111]">{m.title}</p>}
+                  <p className={`relative z-[1] whitespace-pre-line text-[15px] leading-snug ${mine ? 'text-[#fff]' : 'text-[#111]'}`}>
+                    {renderBody(m.body, mine)}
+                  </p>
                 </div>
               </div>
             </div>

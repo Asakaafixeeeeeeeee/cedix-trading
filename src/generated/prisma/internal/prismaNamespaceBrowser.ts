@@ -458,6 +458,7 @@ export const PushSubscriptionScalarFieldEnum = {
   p256dh: 'p256dh',
   auth: 'auth',
   userAgent: 'userAgent',
+  muted: 'muted',
   createdAt: 'createdAt'
 } as const
 

@@ -32,7 +32,7 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> 
         if (v && v.reference === deposit.id && v.currency === 'GHS' && v.environment === paytellerConfig().expectedEnvironment) {
           const amountOk = Math.abs(Number(v.amount) - Number(deposit.amountGHS)) < 0.005;
           if (isSuccessStatus(v.status) && amountOk) {
-            await settleDeposit(deposit.id, 'successful');
+            await settleDeposit(deposit.id, 'successful', { providerRef: v.provider_reference ?? null });
           } else if (v.status === 'failed') {
             await settleDeposit(deposit.id, 'failed');
           }

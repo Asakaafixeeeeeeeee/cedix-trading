@@ -536,6 +536,7 @@ model PushSubscription {
   p256dh    String
   auth      String
   userAgent String?
+  muted     Boolean  @default(false) // user setting: deliver silently
   createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)

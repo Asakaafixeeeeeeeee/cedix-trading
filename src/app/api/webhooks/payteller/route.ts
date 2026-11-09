@@ -85,7 +85,11 @@ export async function POST(req: Request) {
           if (!verified) return NextResponse.json({ error: 'Verification unavailable' }, { status: 500 });
           action = 'verification-mismatch';
         } else {
-          action = await settleDeposit(intent.id, 'successful');
+          action = await settleDeposit(intent.id, 'successful', {
+            providerRef: verified.provider_reference ?? d.provider_reference ?? null,
+            customerTotal: d.customer_total ?? null,
+            customerFee: d.customer_processing_fee ?? null,
+          });
         }
       } else {
         action = await settleDeposit(intent.id, 'failed');

@@ -22,6 +22,32 @@ export default function MessagesHome() {
   const { state: pushState, enable: enablePush } = usePush();
   const [showInstall, setShowInstall] = useState(false);
   const [pushBusy, setPushBusy] = useState(false);
+  const [soundMuted, setSoundMuted] = useState(false);
+  useEffect(() => {
+    try {
+      setSoundMuted(localStorage.getItem('cedix_msg_muted') === '1');
+    } catch {}
+  }, []);
+
+  async function toggleSound() {
+    const next = !soundMuted;
+    setSoundMuted(next);
+    try {
+      localStorage.setItem('cedix_msg_muted', next ? '1' : '0');
+    } catch {}
+    try {
+      const reg = await navigator.serviceWorker?.getRegistration('/messages/');
+      const sub = await reg?.pushManager.getSubscription();
+      if (sub) {
+        await jfetch('/api/messages/push/subscribe', {
+          method: 'PATCH',
+          body: JSON.stringify({ endpoint: sub.endpoint, muted: next }),
+        });
+      }
+    } catch {
+      /* no subscription on this device yet */
+    }
+  }
 
   useEffect(() => {
     if (!user) return;
@@ -56,6 +82,14 @@ export default function MessagesHome() {
 
   const totalUnread = (conversations ?? []).reduce((s, c) => s + c.unread, 0);
 
+  // Keep the installed-app badge in sync with unread messages
+  useEffect(() => {
+    if (conversations === null) return;
+    const nav = navigator as Navigator & { setAppBadge?: (n: number) => Promise<void>; clearAppBadge?: () => Promise<void> };
+    if (totalUnread > 0) nav.setAppBadge?.(totalUnread).catch(() => {});
+    else nav.clearAppBadge?.().catch(() => {});
+  }, [totalUnread, conversations]);
+
   return (
     <div className="flex min-h-dvh flex-col pb-[calc(76px+env(safe-area-inset-bottom))]">
       {/* Top bar — Edit left, centred title, filter with blue unread badge */}
@@ -87,7 +121,7 @@ export default function MessagesHome() {
         </div>
       </header>
 
-      {/* Edit mode: account info */}
+      {/* Edit mode: account info + notification settings */}
       {editMode && (
         <div className="mx-4 mb-2 overflow-hidden rounded-xl bg-[#f2f2f7]">
           <div className="flex items-center justify-between px-4 py-3">
@@ -98,6 +132,23 @@ export default function MessagesHome() {
             <span className="rounded-full bg-[#e5e5ea] px-3 py-1.5 text-[11px] font-medium text-[#48484a]">
               Activated device
             </span>
+          </div>
+          <div className="flex items-center justify-between border-t border-[#e5e5ea] px-4 py-3">
+            <div>
+              <p className="text-[13px] font-medium">Notification sound</p>
+              <p className="text-[11px] text-[#8e8e93]">Play the device sound for new messages on this device</p>
+            </div>
+            <button
+              onClick={toggleSound}
+              role="switch"
+              aria-checked={!soundMuted}
+              className={`relative h-[28px] w-[48px] rounded-full transition-colors ${soundMuted ? 'bg-[#d1d1d6]' : 'bg-[#34c759]'}`}
+            >
+              <span
+                className="absolute top-[2px] h-[24px] w-[24px] rounded-full bg-[#ffffff] shadow transition-transform"
+                style={{ transform: soundMuted ? 'translateX(2px)' : 'translateX(22px)' }}
+              />
+            </button>
           </div>
         </div>
       )}

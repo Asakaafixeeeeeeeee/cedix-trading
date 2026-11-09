@@ -52,6 +52,8 @@ export type PaytellerWebhookEvent = {
     merchant_net?: string;
     platform_commission?: string;
     provider_reference?: string;
+    customer_total?: string;
+    customer_processing_fee?: string;
     completed_at?: string;
   };
 };

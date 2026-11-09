@@ -32,3 +32,17 @@ export async function DELETE(req: Request) {
     return { ok: true };
   });
 }
+
+/** Toggle notification sound for this device (muted = silent delivery). */
+export async function PATCH(req: Request) {
+  return api(async () => {
+    const { user } = await requireMessagesUser();
+    const { endpoint, muted } = await req.json();
+    if (!endpoint) throw new Error('endpoint required');
+    await prisma.pushSubscription.updateMany({
+      where: { endpoint, userId: user.id },
+      data: { muted: muted === true },
+    });
+    return { ok: true, muted: muted === true };
+  });
+}

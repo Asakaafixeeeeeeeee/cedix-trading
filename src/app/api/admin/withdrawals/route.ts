@@ -1,7 +1,7 @@
 import { api } from '@/lib/api';
 import { prisma } from '@/lib/db';
 import { requireElevatedAdmin } from '@/lib/auth';
-import { notifyUser } from '@/lib/notify';
+import { notifyUser, sendMomoSms } from '@/lib/notify';
 
 /**
  * Admin: WITHDRAWAL MANAGEMENT — review pipeline.
@@ -111,6 +111,13 @@ export async function PATCH(req: Request) {
         vars: { ...vars, providerRef: wd.providerRef ?? '' },
         meta: { withdrawalId: wd.id },
       }).catch(() => {});
+      // MobileMoney SMS-style receipt — provider reference is the REAL one
+      // recorded by the operator when the payout was sent.
+      const txnLine = wd.providerRef ? `Transaction Id: ${wd.providerRef}. ` : '';
+      sendMomoSms(
+        wd.userId,
+        `Cash In made for GHS${Number(wd.amountGHS).toFixed(2)} to ${wd.destination}. ${txnLine}TRANSACTION FEE IS 0. CediX Trading withdrawal ${reference} completed.`,
+      ).catch(() => {});
       return { ok: true };
     }
 
