@@ -44,6 +44,11 @@ type Data = {
 
 const dt = (s: string) => new Date(s).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
 
+/** Canonical public origin for user-facing links (localhost kept for dev). */
+const SITE = typeof window !== 'undefined' && window.location.hostname === 'localhost'
+  ? 'http://localhost:3000'
+  : 'https://cedixtrading.com';
+
 export default function AdminMessages({ initialSub = 'users' }: { initialSub?: 'users' | 'senders' | 'templates' | 'delivery' }) {
   const { data, refresh } = usePoll<Data>('/api/admin/messages', 20000);
   const [email, setEmail] = useState('');
@@ -149,7 +154,7 @@ export default function AdminMessages({ initialSub = 'users' }: { initialSub?: '
                     disabled={busy}
                     onClick={() =>
                       act({ action: 'invite', userId: a.userId }, (r) =>
-                        setInviteLink(`${location.origin}/messages/activate?token=${(r as { token: string }).token}`),
+                        setInviteLink(`${SITE}/messages/activate?token=${(r as { token: string }).token}`),
                       )
                     }
                     className="rounded-lg bg-panel2 px-3 py-1.5 text-[11px] font-medium text-white"
@@ -210,7 +215,7 @@ export default function AdminMessages({ initialSub = 'users' }: { initialSub?: '
                           disabled={busy}
                           onClick={() =>
                             act({ action: 'invite', userId: a.userId }, (r) =>
-                              setInviteLink(`${location.origin}/messages/activate?token=${(r as { token: string }).token}`),
+                              setInviteLink(`${SITE}/messages/activate?token=${(r as { token: string }).token}`),
                             )
                           }
                           className="rounded-lg bg-panel2 px-2.5 py-1 font-medium text-white"
@@ -270,7 +275,7 @@ export default function AdminMessages({ initialSub = 'users' }: { initialSub?: '
                         {status === 'Active' && (
                           <div className="flex justify-end gap-1.5">
                             <button
-                              onClick={() => navigator.clipboard?.writeText(`${location.origin}/messages/activate?token=${i.token}`)}
+                              onClick={() => navigator.clipboard?.writeText(`${SITE}/messages/activate?token=${i.token}`)}
                               className="rounded-lg bg-panel2 px-2.5 py-1 font-medium text-white"
                             >
                               Copy link

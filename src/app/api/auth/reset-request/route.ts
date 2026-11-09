@@ -29,8 +29,10 @@ export async function POST(req: Request) {
             expiresAt: new Date(Date.now() + 30 * 60 * 1000),
           },
         });
-        const origin = new URL(req.url).origin;
-        const link = `${origin}/reset?email=${encodeURIComponent(addr)}&token=${encodeURIComponent(token)}`;
+        // Public origin (TLS terminates at the proxy; prefer the forwarded host)
+        const host = (req.headers.get('x-forwarded-host') ?? req.headers.get('host') ?? 'cedixtrading.com').split(',')[0].trim().replace(/:\d+$/, '');
+        const isLocal = host === 'localhost' || host.startsWith('127.');
+        const link = `${isLocal ? `http://${host}:3000` : `https://${host}`}/reset?email=${encodeURIComponent(addr)}&token=${encodeURIComponent(token)}`;
         await sendEmail({
           userId: user.id,
           to: addr,
