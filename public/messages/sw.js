@@ -1,45 +1,16 @@
 /* Messages app service worker — scope /messages/.
- * 1. Web Push: OS notification banner (sound unless this device is muted),
- *    app badge updates, open-on-tap.
- * 2. Resilience: network-first with cached fallback so brief server restarts
- *    or offline moments show the app instead of the iOS error page. */
+ * Web Push only: OS notification banner (sound unless this device is muted),
+ * app badge updates, open-on-tap. Page loads are NOT intercepted — iOS Safari
+ * handles navigations itself (a fetch handler here caused load failures on
+ * some iPhones). */
 
-const CACHE = 'cedix-msg-v1';
-const PRECACHE = ['/messages', '/messages/welcome', '/messages/manifest.webmanifest', '/messages/icon-192.png', '/messages/icon-512.png'];
-
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE).then((c) => c.addAll(PRECACHE)).catch(() => {}).then(() => self.skipWaiting())
-  );
-});
+self.addEventListener('install', () => self.skipWaiting());
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys()
-      .then((keys) => Promise.all(keys.filter((k) => k.startsWith('cedix-msg-') && k !== CACHE).map((k) => caches.delete(k))))
+      .then((keys) => Promise.all(keys.filter((k) => k.startsWith('cedix-msg-')).map((k) => caches.delete(k))))
       .then(() => self.clients.claim())
-  );
-});
-
-self.addEventListener('fetch', (event) => {
-  const { request } = event;
-  if (request.method !== 'GET') return;
-  const url = new URL(request.url);
-  // Never cache API calls or cross-origin requests
-  if (url.origin !== location.origin || url.pathname.startsWith('/api/')) return;
-
-  event.respondWith(
-    fetch(request)
-      .then((res) => {
-        if (res.ok) {
-          const clone = res.clone();
-          caches.open(CACHE).then((c) => c.put(request, clone)).catch(() => {});
-        }
-        return res;
-      })
-      .catch(() =>
-        caches.match(request).then((cached) => cached ?? caches.match('/messages'))
-      )
   );
 });
 

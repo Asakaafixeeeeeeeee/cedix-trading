@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { jfetch, SystemAvatar } from './shared';
 
 /**
@@ -9,7 +9,6 @@ import { jfetch, SystemAvatar } from './shared';
  * to the user's CediX account, then the app always opens straight to messages.
  */
 export default function MessagesActivate() {
-  const router = useRouter();
   const params = useSearchParams();
   const token = params.get('token') ?? '';
 
@@ -32,7 +31,9 @@ export default function MessagesActivate() {
     setError('');
     try {
       await jfetch('/api/messages/register', { method: 'POST', body: JSON.stringify({ token }) });
-      router.replace('/messages');
+      // Hard navigation: most reliable on iOS Safari right after the session
+      // cookie is set (client-side RSC navigation can fail there).
+      window.location.href = '/messages';
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Activation failed');
       setBusy(false);
