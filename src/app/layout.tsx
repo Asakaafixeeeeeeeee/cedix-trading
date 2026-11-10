@@ -42,7 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-full flex flex-col">
         <PrefsProvider>
           <Suspense>{children}</Suspense>
-          <MessageNotifier global />
+          <Suspense><MessageNotifier global /></Suspense>
         </PrefsProvider>
       </body>
     </html>
