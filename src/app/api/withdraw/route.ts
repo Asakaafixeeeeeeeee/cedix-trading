@@ -6,6 +6,8 @@ import { debit } from '@/lib/wallet';
 import { getLimits, completedPurchaseCount } from '@/lib/limits';
 import { api } from '@/lib/api';
 import { notifyUser } from '@/lib/notify';
+import { createPayout } from '@/lib/payteller';
+import { finalizeWithdrawal } from '@/lib/withdrawal-final';
 
 export async function GET() {
   return api(async () => {
@@ -106,6 +108,39 @@ export async function POST(req: Request) {
       meta: { withdrawalId: withdrawal.id },
     }).catch(() => {});
 
-    return { withdrawal, netGHS };
+    // Automatic processing (opt-in per account). Only completes when the
+    // provider confirms a real payout; otherwise stays queued for the operator.
+    let finalStatus = withdrawal.status as string;
+    if (user.autoProcessing) {
+      try {
+        const reference = `CEDIX-${withdrawal.id.slice(-8).toUpperCase()}`;
+        const payout = await createPayout({
+          reference,
+          amountGHS: netGHS,
+          method: fiatMethod,
+          destination: String(destination),
+          destName: destName || undefined,
+          description: `CediX withdrawal ${reference}`,
+        });
+        if (payout.status === 'COMPLETED') {
+          await prisma.withdrawal.update({
+            where: { id: withdrawal.id },
+            data: { status: 'PAYMENT_SENT', providerRef: payout.gatewayRef, gatewayRef: payout.gatewayRef, reviewedAt: new Date(), paidAt: new Date(), reviewNote: 'Auto-processed' },
+          });
+          await finalizeWithdrawal(withdrawal.id, null);
+          finalStatus = 'COMPLETED';
+        } else {
+          await prisma.withdrawal.update({
+            where: { id: withdrawal.id },
+            data: { status: 'APPROVED', reviewedAt: new Date(), reviewNote: 'Auto-approved; awaiting payout provider confirmation' },
+          });
+          finalStatus = 'APPROVED';
+        }
+      } catch (e) {
+        console.error('auto withdrawal failed', e);
+      }
+    }
+
+    return { withdrawal: { ...withdrawal, status: finalStatus }, netGHS };
   });
 }

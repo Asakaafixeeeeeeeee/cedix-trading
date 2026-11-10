@@ -19,7 +19,7 @@ export async function GET(req: Request) {
         : {},
       select: {
         id: true, email: true, username: true, displayName: true, role: true, status: true,
-        kycLevel: true, orbitBanned: true, riskScore: true, createdAt: true, lastLoginAt: true,
+        kycLevel: true, orbitBanned: true, autoProcessing: true, riskScore: true, createdAt: true, lastLoginAt: true,
         wallets: { select: { asset: true, available: true, locked: true } },
       },
       orderBy: { createdAt: 'desc' },

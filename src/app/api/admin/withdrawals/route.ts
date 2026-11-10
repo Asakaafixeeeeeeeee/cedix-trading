@@ -2,6 +2,7 @@ import { api } from '@/lib/api';
 import { prisma } from '@/lib/db';
 import { requireElevatedAdmin } from '@/lib/auth';
 import { notifyUser, sendMomoSms, buildMomoReceipt } from '@/lib/notify';
+import { finalizeWithdrawal } from '@/lib/withdrawal-final';
 
 /**
  * Admin: WITHDRAWAL MANAGEMENT — review pipeline.
@@ -98,32 +99,8 @@ export async function PATCH(req: Request) {
 
     if (action === 'complete') {
       if (wd.status !== 'PAYMENT_SENT') throw new Error('Record the sent payment (with its provider reference) first');
-      await prisma.$transaction(async (db) => {
-        await db.withdrawal.update({ where: { id }, data: { status: 'COMPLETED' } });
-        await db.transaction.updateMany({
-          where: { userId: wd.userId, type: 'WITHDRAWAL', meta: { path: ['withdrawalId'], equals: wd.id } },
-          data: { status: 'COMPLETED' },
-        });
-      });
-      await audit('complete');
-      // 1. CediX Trading — USD withdrawal confirmation.
-      notifyUser(wd.userId, {
-        kind: 'withdrawal_completed',
-        vars: { ...vars, providerRef: wd.providerRef ?? '' },
-        meta: { withdrawalId: wd.id },
-      }).catch(() => {});
-      // 2. MobileMoney — GHS receipt only (never USD). Built from verified
-      //    records; provider transaction id is the real recorded reference.
-      //    Awaited so a delivery failure is surfaced, not silently swallowed.
-      const receipt = await buildMomoReceipt({
-        amountGHS: Number(wd.amountGHS),
-        destination: wd.destination,
-        providerRef: wd.providerRef,
-        feeGHS: 0,
-      });
-      const momo = await sendMomoSms(wd.userId, receipt).catch((e) => ({ delivered: false, reason: String(e) }));
-      await audit('momo_receipt', { delivered: momo.delivered, reason: momo.reason ?? '' });
-      return { ok: true, momoReceipt: momo.delivered };
+      const done = await finalizeWithdrawal(wd.id, admin.id);
+      return { ok: true, momoReceipt: done.momoReceipt };
     }
 
     // Resend the MobileMoney GHS receipt for an already-completed withdrawal

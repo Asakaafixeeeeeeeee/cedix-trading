@@ -12,6 +12,7 @@ type AdminUser = {
   status: string;
   kycLevel: number;
   orbitBanned: boolean;
+  autoProcessing: boolean;
   riskScore: number;
   createdAt: string;
   lastLoginAt: string | null;
@@ -142,6 +143,18 @@ function UserModal({ user, onClose, onChange }: { user: AdminUser; onClose: () =
           <button disabled={busy} onClick={() => patch({ role: user.role === 'ADMIN' ? 'USER' : 'ADMIN' })} className={`${btn} text-gold`}>
             {user.role === 'ADMIN' ? 'Revoke admin' : 'Make admin'}
           </button>
+        </div>
+
+        <h3 className="mt-5 text-sm font-semibold">Automatic Deposit &amp; Withdrawal</h3>
+        <div className="mt-2 flex items-center gap-3">
+          <button
+            disabled={busy}
+            onClick={() => patch({ autoProcessing: !user.autoProcessing })}
+            className={`${btn} ${user.autoProcessing ? 'border-up text-up' : ''}`}
+          >
+            {user.autoProcessing ? 'Enabled — click to disable' : 'Disabled — click to enable'}
+          </button>
+          <span className="text-xs text-muted">Skips manual approval; limits, balance and payment checks still apply.</span>
         </div>
 
         <h3 className="mt-5 text-sm font-semibold">KYC Level</h3>

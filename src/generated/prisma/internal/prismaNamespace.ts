@@ -2943,6 +2943,7 @@ export const UserScalarFieldEnum = {
   status: 'status',
   kycLevel: 'kycLevel',
   orbitBanned: 'orbitBanned',
+  autoProcessing: 'autoProcessing',
   riskScore: 'riskScore',
   createdAt: 'createdAt',
   lastLoginAt: 'lastLoginAt'

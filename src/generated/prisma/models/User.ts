@@ -49,6 +49,7 @@ export type UserMinAggregateOutputType = {
   status: $Enums.UserStatus | null
   kycLevel: number | null
   orbitBanned: boolean | null
+  autoProcessing: boolean | null
   riskScore: number | null
   createdAt: Date | null
   lastLoginAt: Date | null
@@ -67,6 +68,7 @@ export type UserMaxAggregateOutputType = {
   status: $Enums.UserStatus | null
   kycLevel: number | null
   orbitBanned: boolean | null
+  autoProcessing: boolean | null
   riskScore: number | null
   createdAt: Date | null
   lastLoginAt: Date | null
@@ -85,6 +87,7 @@ export type UserCountAggregateOutputType = {
   status: number
   kycLevel: number
   orbitBanned: number
+  autoProcessing: number
   riskScore: number
   createdAt: number
   lastLoginAt: number
@@ -115,6 +118,7 @@ export type UserMinAggregateInputType = {
   status?: true
   kycLevel?: true
   orbitBanned?: true
+  autoProcessing?: true
   riskScore?: true
   createdAt?: true
   lastLoginAt?: true
@@ -133,6 +137,7 @@ export type UserMaxAggregateInputType = {
   status?: true
   kycLevel?: true
   orbitBanned?: true
+  autoProcessing?: true
   riskScore?: true
   createdAt?: true
   lastLoginAt?: true
@@ -151,6 +156,7 @@ export type UserCountAggregateInputType = {
   status?: true
   kycLevel?: true
   orbitBanned?: true
+  autoProcessing?: true
   riskScore?: true
   createdAt?: true
   lastLoginAt?: true
@@ -256,6 +262,7 @@ export type UserGroupByOutputType = {
   status: $Enums.UserStatus
   kycLevel: number
   orbitBanned: boolean
+  autoProcessing: boolean
   riskScore: number
   createdAt: Date
   lastLoginAt: Date | null
@@ -297,6 +304,7 @@ export type UserWhereInput = {
   status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
   kycLevel?: Prisma.IntFilter<"User"> | number
   orbitBanned?: Prisma.BoolFilter<"User"> | boolean
+  autoProcessing?: Prisma.BoolFilter<"User"> | boolean
   riskScore?: Prisma.FloatFilter<"User"> | number
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
@@ -336,6 +344,7 @@ export type UserOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   kycLevel?: Prisma.SortOrder
   orbitBanned?: Prisma.SortOrder
+  autoProcessing?: Prisma.SortOrder
   riskScore?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -378,6 +387,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
   kycLevel?: Prisma.IntFilter<"User"> | number
   orbitBanned?: Prisma.BoolFilter<"User"> | boolean
+  autoProcessing?: Prisma.BoolFilter<"User"> | boolean
   riskScore?: Prisma.FloatFilter<"User"> | number
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
@@ -417,6 +427,7 @@ export type UserOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   kycLevel?: Prisma.SortOrder
   orbitBanned?: Prisma.SortOrder
+  autoProcessing?: Prisma.SortOrder
   riskScore?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -443,6 +454,7 @@ export type UserScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumUserStatusWithAggregatesFilter<"User"> | $Enums.UserStatus
   kycLevel?: Prisma.IntWithAggregatesFilter<"User"> | number
   orbitBanned?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  autoProcessing?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   riskScore?: Prisma.FloatWithAggregatesFilter<"User"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   lastLoginAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
@@ -461,6 +473,7 @@ export type UserCreateInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -500,6 +513,7 @@ export type UserUncheckedCreateInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -539,6 +553,7 @@ export type UserUpdateInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -578,6 +593,7 @@ export type UserUncheckedUpdateInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -617,6 +633,7 @@ export type UserCreateManyInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -635,6 +652,7 @@ export type UserUpdateManyMutationInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -653,6 +671,7 @@ export type UserUncheckedUpdateManyInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -671,6 +690,7 @@ export type UserCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   kycLevel?: Prisma.SortOrder
   orbitBanned?: Prisma.SortOrder
+  autoProcessing?: Prisma.SortOrder
   riskScore?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
@@ -694,6 +714,7 @@ export type UserMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   kycLevel?: Prisma.SortOrder
   orbitBanned?: Prisma.SortOrder
+  autoProcessing?: Prisma.SortOrder
   riskScore?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
@@ -712,6 +733,7 @@ export type UserMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   kycLevel?: Prisma.SortOrder
   orbitBanned?: Prisma.SortOrder
+  autoProcessing?: Prisma.SortOrder
   riskScore?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
@@ -1078,6 +1100,7 @@ export type UserCreateWithoutWalletsInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -1116,6 +1139,7 @@ export type UserUncheckedCreateWithoutWalletsInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -1170,6 +1194,7 @@ export type UserUpdateWithoutWalletsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1208,6 +1233,7 @@ export type UserUncheckedUpdateWithoutWalletsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1246,6 +1272,7 @@ export type UserCreateWithoutTransactionsInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -1284,6 +1311,7 @@ export type UserUncheckedCreateWithoutTransactionsInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -1338,6 +1366,7 @@ export type UserUpdateWithoutTransactionsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1376,6 +1405,7 @@ export type UserUncheckedUpdateWithoutTransactionsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1414,6 +1444,7 @@ export type UserCreateWithoutOrdersInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -1452,6 +1483,7 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -1506,6 +1538,7 @@ export type UserUpdateWithoutOrdersInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1544,6 +1577,7 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1582,6 +1616,7 @@ export type UserCreateWithoutTradesInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -1620,6 +1655,7 @@ export type UserUncheckedCreateWithoutTradesInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -1674,6 +1710,7 @@ export type UserUpdateWithoutTradesInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1712,6 +1749,7 @@ export type UserUncheckedUpdateWithoutTradesInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1750,6 +1788,7 @@ export type UserCreateWithoutDepositIntentsInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -1788,6 +1827,7 @@ export type UserUncheckedCreateWithoutDepositIntentsInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -1842,6 +1882,7 @@ export type UserUpdateWithoutDepositIntentsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1880,6 +1921,7 @@ export type UserUncheckedUpdateWithoutDepositIntentsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1918,6 +1960,7 @@ export type UserCreateWithoutWithdrawalsInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -1956,6 +1999,7 @@ export type UserUncheckedCreateWithoutWithdrawalsInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -2010,6 +2054,7 @@ export type UserUpdateWithoutWithdrawalsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2048,6 +2093,7 @@ export type UserUncheckedUpdateWithoutWithdrawalsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2086,6 +2132,7 @@ export type UserCreateWithoutP2pOffersInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -2124,6 +2171,7 @@ export type UserUncheckedCreateWithoutP2pOffersInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -2178,6 +2226,7 @@ export type UserUpdateWithoutP2pOffersInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2216,6 +2265,7 @@ export type UserUncheckedUpdateWithoutP2pOffersInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2254,6 +2304,7 @@ export type UserCreateWithoutP2pOrdersAsBuyerInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -2292,6 +2343,7 @@ export type UserUncheckedCreateWithoutP2pOrdersAsBuyerInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -2335,6 +2387,7 @@ export type UserCreateWithoutP2pOrdersAsSellerInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -2373,6 +2426,7 @@ export type UserUncheckedCreateWithoutP2pOrdersAsSellerInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -2427,6 +2481,7 @@ export type UserUpdateWithoutP2pOrdersAsBuyerInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2465,6 +2520,7 @@ export type UserUncheckedUpdateWithoutP2pOrdersAsBuyerInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2514,6 +2570,7 @@ export type UserUpdateWithoutP2pOrdersAsSellerInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2552,6 +2609,7 @@ export type UserUncheckedUpdateWithoutP2pOrdersAsSellerInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2590,6 +2648,7 @@ export type UserCreateWithoutOrbitPostsInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -2628,6 +2687,7 @@ export type UserUncheckedCreateWithoutOrbitPostsInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -2682,6 +2742,7 @@ export type UserUpdateWithoutOrbitPostsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2720,6 +2781,7 @@ export type UserUncheckedUpdateWithoutOrbitPostsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2758,6 +2820,7 @@ export type UserCreateWithoutOrbitCommentsInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -2796,6 +2859,7 @@ export type UserUncheckedCreateWithoutOrbitCommentsInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -2850,6 +2914,7 @@ export type UserUpdateWithoutOrbitCommentsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2888,6 +2953,7 @@ export type UserUncheckedUpdateWithoutOrbitCommentsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2926,6 +2992,7 @@ export type UserCreateWithoutOrbitLikesInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -2964,6 +3031,7 @@ export type UserUncheckedCreateWithoutOrbitLikesInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -3018,6 +3086,7 @@ export type UserUpdateWithoutOrbitLikesInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3056,6 +3125,7 @@ export type UserUncheckedUpdateWithoutOrbitLikesInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3094,6 +3164,7 @@ export type UserCreateWithoutModerationEventsInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -3132,6 +3203,7 @@ export type UserUncheckedCreateWithoutModerationEventsInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -3186,6 +3258,7 @@ export type UserUpdateWithoutModerationEventsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3224,6 +3297,7 @@ export type UserUncheckedUpdateWithoutModerationEventsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3262,6 +3336,7 @@ export type UserCreateWithoutPositionsInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -3300,6 +3375,7 @@ export type UserUncheckedCreateWithoutPositionsInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -3354,6 +3430,7 @@ export type UserUpdateWithoutPositionsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3392,6 +3469,7 @@ export type UserUncheckedUpdateWithoutPositionsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3430,6 +3508,7 @@ export type UserCreateWithoutFavoritesInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -3468,6 +3547,7 @@ export type UserUncheckedCreateWithoutFavoritesInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -3522,6 +3602,7 @@ export type UserUpdateWithoutFavoritesInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3560,6 +3641,7 @@ export type UserUncheckedUpdateWithoutFavoritesInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3598,6 +3680,7 @@ export type UserCreateWithoutMessagesAccountInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -3636,6 +3719,7 @@ export type UserUncheckedCreateWithoutMessagesAccountInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -3690,6 +3774,7 @@ export type UserUpdateWithoutMessagesAccountInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3728,6 +3813,7 @@ export type UserUncheckedUpdateWithoutMessagesAccountInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3766,6 +3852,7 @@ export type UserCreateWithoutMessagesInvitesInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -3804,6 +3891,7 @@ export type UserUncheckedCreateWithoutMessagesInvitesInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -3858,6 +3946,7 @@ export type UserUpdateWithoutMessagesInvitesInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3896,6 +3985,7 @@ export type UserUncheckedUpdateWithoutMessagesInvitesInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3934,6 +4024,7 @@ export type UserCreateWithoutConversationsInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -3972,6 +4063,7 @@ export type UserUncheckedCreateWithoutConversationsInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -4026,6 +4118,7 @@ export type UserUpdateWithoutConversationsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4064,6 +4157,7 @@ export type UserUncheckedUpdateWithoutConversationsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4102,6 +4196,7 @@ export type UserCreateWithoutPushSubscriptionsInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -4140,6 +4235,7 @@ export type UserUncheckedCreateWithoutPushSubscriptionsInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -4194,6 +4290,7 @@ export type UserUpdateWithoutPushSubscriptionsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4232,6 +4329,7 @@ export type UserUncheckedUpdateWithoutPushSubscriptionsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4270,6 +4368,7 @@ export type UserCreateWithoutAuditLogsInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -4308,6 +4407,7 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -4362,6 +4462,7 @@ export type UserUpdateWithoutAuditLogsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4400,6 +4501,7 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4438,6 +4540,7 @@ export type UserCreateWithoutKycInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -4476,6 +4579,7 @@ export type UserUncheckedCreateWithoutKycInput = {
   status?: $Enums.UserStatus
   kycLevel?: number
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: number
   createdAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -4530,6 +4634,7 @@ export type UserUpdateWithoutKycInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4568,6 +4673,7 @@ export type UserUncheckedUpdateWithoutKycInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   kycLevel?: Prisma.IntFieldUpdateOperationsInput | number
   orbitBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoProcessing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   riskScore?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4799,6 +4905,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   status?: boolean
   kycLevel?: boolean
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: boolean
   createdAt?: boolean
   lastLoginAt?: boolean
@@ -4839,6 +4946,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   status?: boolean
   kycLevel?: boolean
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: boolean
   createdAt?: boolean
   lastLoginAt?: boolean
@@ -4857,6 +4965,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   status?: boolean
   kycLevel?: boolean
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: boolean
   createdAt?: boolean
   lastLoginAt?: boolean
@@ -4875,12 +4984,13 @@ export type UserSelectScalar = {
   status?: boolean
   kycLevel?: boolean
   orbitBanned?: boolean
+  autoProcessing?: boolean
   riskScore?: boolean
   createdAt?: boolean
   lastLoginAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "username" | "passwordHash" | "displayName" | "avatarUrl" | "phone" | "country" | "role" | "status" | "kycLevel" | "orbitBanned" | "riskScore" | "createdAt" | "lastLoginAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "username" | "passwordHash" | "displayName" | "avatarUrl" | "phone" | "country" | "role" | "status" | "kycLevel" | "orbitBanned" | "autoProcessing" | "riskScore" | "createdAt" | "lastLoginAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   wallets?: boolean | Prisma.User$walletsArgs<ExtArgs>
   transactions?: boolean | Prisma.User$transactionsArgs<ExtArgs>
@@ -4946,6 +5056,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     status: $Enums.UserStatus
     kycLevel: number
     orbitBanned: boolean
+    autoProcessing: boolean
     riskScore: number
     createdAt: Date
     lastLoginAt: Date | null
@@ -5405,6 +5516,7 @@ export interface UserFieldRefs {
   readonly status: Prisma.FieldRef<"User", 'UserStatus'>
   readonly kycLevel: Prisma.FieldRef<"User", 'Int'>
   readonly orbitBanned: Prisma.FieldRef<"User", 'Boolean'>
+  readonly autoProcessing: Prisma.FieldRef<"User", 'Boolean'>
   readonly riskScore: Prisma.FieldRef<"User", 'Float'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly lastLoginAt: Prisma.FieldRef<"User", 'DateTime'>

@@ -13,6 +13,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     if (['USER', 'ADMIN'].includes(body.role)) data.role = body.role;
     if (typeof body.kycLevel === 'number') data.kycLevel = Math.max(0, Math.min(3, body.kycLevel));
     if (typeof body.orbitBanned === 'boolean') data.orbitBanned = body.orbitBanned;
+    if (typeof body.autoProcessing === 'boolean') data.autoProcessing = body.autoProcessing;
     if (body.resetRisk) data.riskScore = 0;
     if (Object.keys(data).length === 0) throw new Error('Nothing to update');
     if (id === admin.id && data.status && data.status !== 'ACTIVE') throw new Error('Cannot suspend yourself');
@@ -21,6 +22,6 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     await prisma.auditLog.create({
       data: { adminId: admin.id, action: 'user.update', targetType: 'USER', targetId: id, meta: data as object },
     });
-    return { user: { id: user.id, status: user.status, role: user.role, kycLevel: user.kycLevel, orbitBanned: user.orbitBanned } };
+    return { user: { id: user.id, status: user.status, role: user.role, kycLevel: user.kycLevel, orbitBanned: user.orbitBanned, autoProcessing: user.autoProcessing } };
   });
 }

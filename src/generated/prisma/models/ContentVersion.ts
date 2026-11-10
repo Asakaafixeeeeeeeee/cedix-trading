@@ -182,7 +182,6 @@ export type ContentVersionWhereInput = {
   value?: Prisma.StringFilter<"ContentVersion"> | string
   createdBy?: Prisma.StringNullableFilter<"ContentVersion"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ContentVersion"> | Date | string
-  entry?: Prisma.XOR<Prisma.ContentEntryScalarRelationFilter, Prisma.ContentEntryWhereInput>
 }
 
 export type ContentVersionOrderByWithRelationInput = {
@@ -191,7 +190,6 @@ export type ContentVersionOrderByWithRelationInput = {
   value?: Prisma.SortOrder
   createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  entry?: Prisma.ContentEntryOrderByWithRelationInput
 }
 
 export type ContentVersionWhereUniqueInput = Prisma.AtLeast<{
@@ -203,7 +201,6 @@ export type ContentVersionWhereUniqueInput = Prisma.AtLeast<{
   value?: Prisma.StringFilter<"ContentVersion"> | string
   createdBy?: Prisma.StringNullableFilter<"ContentVersion"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ContentVersion"> | Date | string
-  entry?: Prisma.XOR<Prisma.ContentEntryScalarRelationFilter, Prisma.ContentEntryWhereInput>
 }, "id">
 
 export type ContentVersionOrderByWithAggregationInput = {
@@ -230,10 +227,10 @@ export type ContentVersionScalarWhereWithAggregatesInput = {
 
 export type ContentVersionCreateInput = {
   id?: string
+  key: string
   value: string
   createdBy?: string | null
   createdAt?: Date | string
-  entry: Prisma.ContentEntryCreateNestedOneWithoutVersionsInput
 }
 
 export type ContentVersionUncheckedCreateInput = {
@@ -246,10 +243,10 @@ export type ContentVersionUncheckedCreateInput = {
 
 export type ContentVersionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
   value?: Prisma.StringFieldUpdateOperationsInput | string
   createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  entry?: Prisma.ContentEntryUpdateOneRequiredWithoutVersionsNestedInput
 }
 
 export type ContentVersionUncheckedUpdateInput = {
@@ -270,6 +267,7 @@ export type ContentVersionCreateManyInput = {
 
 export type ContentVersionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
   value?: Prisma.StringFieldUpdateOperationsInput | string
   createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -281,16 +279,6 @@ export type ContentVersionUncheckedUpdateManyInput = {
   value?: Prisma.StringFieldUpdateOperationsInput | string
   createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type ContentVersionListRelationFilter = {
-  every?: Prisma.ContentVersionWhereInput
-  some?: Prisma.ContentVersionWhereInput
-  none?: Prisma.ContentVersionWhereInput
-}
-
-export type ContentVersionOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
 }
 
 export type ContentVersionCountOrderByAggregateInput = {
@@ -317,127 +305,6 @@ export type ContentVersionMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
 }
 
-export type ContentVersionCreateNestedManyWithoutEntryInput = {
-  create?: Prisma.XOR<Prisma.ContentVersionCreateWithoutEntryInput, Prisma.ContentVersionUncheckedCreateWithoutEntryInput> | Prisma.ContentVersionCreateWithoutEntryInput[] | Prisma.ContentVersionUncheckedCreateWithoutEntryInput[]
-  connectOrCreate?: Prisma.ContentVersionCreateOrConnectWithoutEntryInput | Prisma.ContentVersionCreateOrConnectWithoutEntryInput[]
-  createMany?: Prisma.ContentVersionCreateManyEntryInputEnvelope
-  connect?: Prisma.ContentVersionWhereUniqueInput | Prisma.ContentVersionWhereUniqueInput[]
-}
-
-export type ContentVersionUncheckedCreateNestedManyWithoutEntryInput = {
-  create?: Prisma.XOR<Prisma.ContentVersionCreateWithoutEntryInput, Prisma.ContentVersionUncheckedCreateWithoutEntryInput> | Prisma.ContentVersionCreateWithoutEntryInput[] | Prisma.ContentVersionUncheckedCreateWithoutEntryInput[]
-  connectOrCreate?: Prisma.ContentVersionCreateOrConnectWithoutEntryInput | Prisma.ContentVersionCreateOrConnectWithoutEntryInput[]
-  createMany?: Prisma.ContentVersionCreateManyEntryInputEnvelope
-  connect?: Prisma.ContentVersionWhereUniqueInput | Prisma.ContentVersionWhereUniqueInput[]
-}
-
-export type ContentVersionUpdateManyWithoutEntryNestedInput = {
-  create?: Prisma.XOR<Prisma.ContentVersionCreateWithoutEntryInput, Prisma.ContentVersionUncheckedCreateWithoutEntryInput> | Prisma.ContentVersionCreateWithoutEntryInput[] | Prisma.ContentVersionUncheckedCreateWithoutEntryInput[]
-  connectOrCreate?: Prisma.ContentVersionCreateOrConnectWithoutEntryInput | Prisma.ContentVersionCreateOrConnectWithoutEntryInput[]
-  upsert?: Prisma.ContentVersionUpsertWithWhereUniqueWithoutEntryInput | Prisma.ContentVersionUpsertWithWhereUniqueWithoutEntryInput[]
-  createMany?: Prisma.ContentVersionCreateManyEntryInputEnvelope
-  set?: Prisma.ContentVersionWhereUniqueInput | Prisma.ContentVersionWhereUniqueInput[]
-  disconnect?: Prisma.ContentVersionWhereUniqueInput | Prisma.ContentVersionWhereUniqueInput[]
-  delete?: Prisma.ContentVersionWhereUniqueInput | Prisma.ContentVersionWhereUniqueInput[]
-  connect?: Prisma.ContentVersionWhereUniqueInput | Prisma.ContentVersionWhereUniqueInput[]
-  update?: Prisma.ContentVersionUpdateWithWhereUniqueWithoutEntryInput | Prisma.ContentVersionUpdateWithWhereUniqueWithoutEntryInput[]
-  updateMany?: Prisma.ContentVersionUpdateManyWithWhereWithoutEntryInput | Prisma.ContentVersionUpdateManyWithWhereWithoutEntryInput[]
-  deleteMany?: Prisma.ContentVersionScalarWhereInput | Prisma.ContentVersionScalarWhereInput[]
-}
-
-export type ContentVersionUncheckedUpdateManyWithoutEntryNestedInput = {
-  create?: Prisma.XOR<Prisma.ContentVersionCreateWithoutEntryInput, Prisma.ContentVersionUncheckedCreateWithoutEntryInput> | Prisma.ContentVersionCreateWithoutEntryInput[] | Prisma.ContentVersionUncheckedCreateWithoutEntryInput[]
-  connectOrCreate?: Prisma.ContentVersionCreateOrConnectWithoutEntryInput | Prisma.ContentVersionCreateOrConnectWithoutEntryInput[]
-  upsert?: Prisma.ContentVersionUpsertWithWhereUniqueWithoutEntryInput | Prisma.ContentVersionUpsertWithWhereUniqueWithoutEntryInput[]
-  createMany?: Prisma.ContentVersionCreateManyEntryInputEnvelope
-  set?: Prisma.ContentVersionWhereUniqueInput | Prisma.ContentVersionWhereUniqueInput[]
-  disconnect?: Prisma.ContentVersionWhereUniqueInput | Prisma.ContentVersionWhereUniqueInput[]
-  delete?: Prisma.ContentVersionWhereUniqueInput | Prisma.ContentVersionWhereUniqueInput[]
-  connect?: Prisma.ContentVersionWhereUniqueInput | Prisma.ContentVersionWhereUniqueInput[]
-  update?: Prisma.ContentVersionUpdateWithWhereUniqueWithoutEntryInput | Prisma.ContentVersionUpdateWithWhereUniqueWithoutEntryInput[]
-  updateMany?: Prisma.ContentVersionUpdateManyWithWhereWithoutEntryInput | Prisma.ContentVersionUpdateManyWithWhereWithoutEntryInput[]
-  deleteMany?: Prisma.ContentVersionScalarWhereInput | Prisma.ContentVersionScalarWhereInput[]
-}
-
-export type ContentVersionCreateWithoutEntryInput = {
-  id?: string
-  value: string
-  createdBy?: string | null
-  createdAt?: Date | string
-}
-
-export type ContentVersionUncheckedCreateWithoutEntryInput = {
-  id?: string
-  value: string
-  createdBy?: string | null
-  createdAt?: Date | string
-}
-
-export type ContentVersionCreateOrConnectWithoutEntryInput = {
-  where: Prisma.ContentVersionWhereUniqueInput
-  create: Prisma.XOR<Prisma.ContentVersionCreateWithoutEntryInput, Prisma.ContentVersionUncheckedCreateWithoutEntryInput>
-}
-
-export type ContentVersionCreateManyEntryInputEnvelope = {
-  data: Prisma.ContentVersionCreateManyEntryInput | Prisma.ContentVersionCreateManyEntryInput[]
-  skipDuplicates?: boolean
-}
-
-export type ContentVersionUpsertWithWhereUniqueWithoutEntryInput = {
-  where: Prisma.ContentVersionWhereUniqueInput
-  update: Prisma.XOR<Prisma.ContentVersionUpdateWithoutEntryInput, Prisma.ContentVersionUncheckedUpdateWithoutEntryInput>
-  create: Prisma.XOR<Prisma.ContentVersionCreateWithoutEntryInput, Prisma.ContentVersionUncheckedCreateWithoutEntryInput>
-}
-
-export type ContentVersionUpdateWithWhereUniqueWithoutEntryInput = {
-  where: Prisma.ContentVersionWhereUniqueInput
-  data: Prisma.XOR<Prisma.ContentVersionUpdateWithoutEntryInput, Prisma.ContentVersionUncheckedUpdateWithoutEntryInput>
-}
-
-export type ContentVersionUpdateManyWithWhereWithoutEntryInput = {
-  where: Prisma.ContentVersionScalarWhereInput
-  data: Prisma.XOR<Prisma.ContentVersionUpdateManyMutationInput, Prisma.ContentVersionUncheckedUpdateManyWithoutEntryInput>
-}
-
-export type ContentVersionScalarWhereInput = {
-  AND?: Prisma.ContentVersionScalarWhereInput | Prisma.ContentVersionScalarWhereInput[]
-  OR?: Prisma.ContentVersionScalarWhereInput[]
-  NOT?: Prisma.ContentVersionScalarWhereInput | Prisma.ContentVersionScalarWhereInput[]
-  id?: Prisma.StringFilter<"ContentVersion"> | string
-  key?: Prisma.StringFilter<"ContentVersion"> | string
-  value?: Prisma.StringFilter<"ContentVersion"> | string
-  createdBy?: Prisma.StringNullableFilter<"ContentVersion"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"ContentVersion"> | Date | string
-}
-
-export type ContentVersionCreateManyEntryInput = {
-  id?: string
-  value: string
-  createdBy?: string | null
-  createdAt?: Date | string
-}
-
-export type ContentVersionUpdateWithoutEntryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  value?: Prisma.StringFieldUpdateOperationsInput | string
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type ContentVersionUncheckedUpdateWithoutEntryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  value?: Prisma.StringFieldUpdateOperationsInput | string
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type ContentVersionUncheckedUpdateManyWithoutEntryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  value?: Prisma.StringFieldUpdateOperationsInput | string
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
 
 
 export type ContentVersionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -446,7 +313,6 @@ export type ContentVersionSelect<ExtArgs extends runtime.Types.Extensions.Intern
   value?: boolean
   createdBy?: boolean
   createdAt?: boolean
-  entry?: boolean | Prisma.ContentEntryDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["contentVersion"]>
 
 export type ContentVersionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -455,7 +321,6 @@ export type ContentVersionSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   value?: boolean
   createdBy?: boolean
   createdAt?: boolean
-  entry?: boolean | Prisma.ContentEntryDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["contentVersion"]>
 
 export type ContentVersionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -464,7 +329,6 @@ export type ContentVersionSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   value?: boolean
   createdBy?: boolean
   createdAt?: boolean
-  entry?: boolean | Prisma.ContentEntryDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["contentVersion"]>
 
 export type ContentVersionSelectScalar = {
@@ -476,21 +340,10 @@ export type ContentVersionSelectScalar = {
 }
 
 export type ContentVersionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "key" | "value" | "createdBy" | "createdAt", ExtArgs["result"]["contentVersion"]>
-export type ContentVersionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  entry?: boolean | Prisma.ContentEntryDefaultArgs<ExtArgs>
-}
-export type ContentVersionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  entry?: boolean | Prisma.ContentEntryDefaultArgs<ExtArgs>
-}
-export type ContentVersionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  entry?: boolean | Prisma.ContentEntryDefaultArgs<ExtArgs>
-}
 
 export type $ContentVersionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ContentVersion"
-  objects: {
-    entry: Prisma.$ContentEntryPayload<ExtArgs>
-  }
+  objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     key: string
@@ -891,7 +744,6 @@ readonly fields: ContentVersionFieldRefs;
  */
 export interface Prisma__ContentVersionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  entry<T extends Prisma.ContentEntryDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentEntryDefaultArgs<ExtArgs>>): Prisma.Prisma__ContentEntryClient<runtime.Types.Result.GetResult<Prisma.$ContentEntryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -943,10 +795,6 @@ export type ContentVersionFindUniqueArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.ContentVersionOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContentVersionInclude<ExtArgs> | null
-  /**
    * Filter, which ContentVersion to fetch.
    */
   where: Prisma.ContentVersionWhereUniqueInput
@@ -965,10 +813,6 @@ export type ContentVersionFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Ex
    */
   omit?: Prisma.ContentVersionOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContentVersionInclude<ExtArgs> | null
-  /**
    * Filter, which ContentVersion to fetch.
    */
   where: Prisma.ContentVersionWhereUniqueInput
@@ -986,10 +830,6 @@ export type ContentVersionFindFirstArgs<ExtArgs extends runtime.Types.Extensions
    * Omit specific fields from the ContentVersion
    */
   omit?: Prisma.ContentVersionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContentVersionInclude<ExtArgs> | null
   /**
    * Filter, which ContentVersion to fetch.
    */
@@ -1039,10 +879,6 @@ export type ContentVersionFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Ext
    */
   omit?: Prisma.ContentVersionOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContentVersionInclude<ExtArgs> | null
-  /**
    * Filter, which ContentVersion to fetch.
    */
   where?: Prisma.ContentVersionWhereInput
@@ -1090,10 +926,6 @@ export type ContentVersionFindManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Omit specific fields from the ContentVersion
    */
   omit?: Prisma.ContentVersionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContentVersionInclude<ExtArgs> | null
   /**
    * Filter, which ContentVersions to fetch.
    */
@@ -1143,10 +975,6 @@ export type ContentVersionCreateArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   omit?: Prisma.ContentVersionOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContentVersionInclude<ExtArgs> | null
-  /**
    * The data needed to create a ContentVersion.
    */
   data: Prisma.XOR<Prisma.ContentVersionCreateInput, Prisma.ContentVersionUncheckedCreateInput>
@@ -1180,10 +1008,6 @@ export type ContentVersionCreateManyAndReturnArgs<ExtArgs extends runtime.Types.
    */
   data: Prisma.ContentVersionCreateManyInput | Prisma.ContentVersionCreateManyInput[]
   skipDuplicates?: boolean
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContentVersionIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1198,10 +1022,6 @@ export type ContentVersionUpdateArgs<ExtArgs extends runtime.Types.Extensions.In
    * Omit specific fields from the ContentVersion
    */
   omit?: Prisma.ContentVersionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContentVersionInclude<ExtArgs> | null
   /**
    * The data needed to update a ContentVersion.
    */
@@ -1254,10 +1074,6 @@ export type ContentVersionUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.
    * Limit how many ContentVersions to update.
    */
   limit?: number
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContentVersionIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1272,10 +1088,6 @@ export type ContentVersionUpsertArgs<ExtArgs extends runtime.Types.Extensions.In
    * Omit specific fields from the ContentVersion
    */
   omit?: Prisma.ContentVersionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContentVersionInclude<ExtArgs> | null
   /**
    * The filter to search for the ContentVersion to update in case it exists.
    */
@@ -1302,10 +1114,6 @@ export type ContentVersionDeleteArgs<ExtArgs extends runtime.Types.Extensions.In
    * Omit specific fields from the ContentVersion
    */
   omit?: Prisma.ContentVersionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContentVersionInclude<ExtArgs> | null
   /**
    * Filter which ContentVersion to delete.
    */
@@ -1338,8 +1146,4 @@ export type ContentVersionDefaultArgs<ExtArgs extends runtime.Types.Extensions.I
    * Omit specific fields from the ContentVersion
    */
   omit?: Prisma.ContentVersionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContentVersionInclude<ExtArgs> | null
 }

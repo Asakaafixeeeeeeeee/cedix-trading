@@ -174,7 +174,6 @@ export type ContentEntryWhereInput = {
   value?: Prisma.StringFilter<"ContentEntry"> | string
   updatedBy?: Prisma.StringNullableFilter<"ContentEntry"> | string | null
   updatedAt?: Prisma.DateTimeFilter<"ContentEntry"> | Date | string
-  versions?: Prisma.ContentVersionListRelationFilter
 }
 
 export type ContentEntryOrderByWithRelationInput = {
@@ -182,7 +181,6 @@ export type ContentEntryOrderByWithRelationInput = {
   value?: Prisma.SortOrder
   updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  versions?: Prisma.ContentVersionOrderByRelationAggregateInput
 }
 
 export type ContentEntryWhereUniqueInput = Prisma.AtLeast<{
@@ -193,7 +191,6 @@ export type ContentEntryWhereUniqueInput = Prisma.AtLeast<{
   value?: Prisma.StringFilter<"ContentEntry"> | string
   updatedBy?: Prisma.StringNullableFilter<"ContentEntry"> | string | null
   updatedAt?: Prisma.DateTimeFilter<"ContentEntry"> | Date | string
-  versions?: Prisma.ContentVersionListRelationFilter
 }, "key">
 
 export type ContentEntryOrderByWithAggregationInput = {
@@ -221,7 +218,6 @@ export type ContentEntryCreateInput = {
   value: string
   updatedBy?: string | null
   updatedAt?: Date | string
-  versions?: Prisma.ContentVersionCreateNestedManyWithoutEntryInput
 }
 
 export type ContentEntryUncheckedCreateInput = {
@@ -229,7 +225,6 @@ export type ContentEntryUncheckedCreateInput = {
   value: string
   updatedBy?: string | null
   updatedAt?: Date | string
-  versions?: Prisma.ContentVersionUncheckedCreateNestedManyWithoutEntryInput
 }
 
 export type ContentEntryUpdateInput = {
@@ -237,7 +232,6 @@ export type ContentEntryUpdateInput = {
   value?: Prisma.StringFieldUpdateOperationsInput | string
   updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  versions?: Prisma.ContentVersionUpdateManyWithoutEntryNestedInput
 }
 
 export type ContentEntryUncheckedUpdateInput = {
@@ -245,7 +239,6 @@ export type ContentEntryUncheckedUpdateInput = {
   value?: Prisma.StringFieldUpdateOperationsInput | string
   updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  versions?: Prisma.ContentVersionUncheckedUpdateManyWithoutEntryNestedInput
 }
 
 export type ContentEntryCreateManyInput = {
@@ -290,98 +283,6 @@ export type ContentEntryMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
-export type ContentEntryScalarRelationFilter = {
-  is?: Prisma.ContentEntryWhereInput
-  isNot?: Prisma.ContentEntryWhereInput
-}
-
-export type ContentEntryCreateNestedOneWithoutVersionsInput = {
-  create?: Prisma.XOR<Prisma.ContentEntryCreateWithoutVersionsInput, Prisma.ContentEntryUncheckedCreateWithoutVersionsInput>
-  connectOrCreate?: Prisma.ContentEntryCreateOrConnectWithoutVersionsInput
-  connect?: Prisma.ContentEntryWhereUniqueInput
-}
-
-export type ContentEntryUpdateOneRequiredWithoutVersionsNestedInput = {
-  create?: Prisma.XOR<Prisma.ContentEntryCreateWithoutVersionsInput, Prisma.ContentEntryUncheckedCreateWithoutVersionsInput>
-  connectOrCreate?: Prisma.ContentEntryCreateOrConnectWithoutVersionsInput
-  upsert?: Prisma.ContentEntryUpsertWithoutVersionsInput
-  connect?: Prisma.ContentEntryWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ContentEntryUpdateToOneWithWhereWithoutVersionsInput, Prisma.ContentEntryUpdateWithoutVersionsInput>, Prisma.ContentEntryUncheckedUpdateWithoutVersionsInput>
-}
-
-export type ContentEntryCreateWithoutVersionsInput = {
-  key: string
-  value: string
-  updatedBy?: string | null
-  updatedAt?: Date | string
-}
-
-export type ContentEntryUncheckedCreateWithoutVersionsInput = {
-  key: string
-  value: string
-  updatedBy?: string | null
-  updatedAt?: Date | string
-}
-
-export type ContentEntryCreateOrConnectWithoutVersionsInput = {
-  where: Prisma.ContentEntryWhereUniqueInput
-  create: Prisma.XOR<Prisma.ContentEntryCreateWithoutVersionsInput, Prisma.ContentEntryUncheckedCreateWithoutVersionsInput>
-}
-
-export type ContentEntryUpsertWithoutVersionsInput = {
-  update: Prisma.XOR<Prisma.ContentEntryUpdateWithoutVersionsInput, Prisma.ContentEntryUncheckedUpdateWithoutVersionsInput>
-  create: Prisma.XOR<Prisma.ContentEntryCreateWithoutVersionsInput, Prisma.ContentEntryUncheckedCreateWithoutVersionsInput>
-  where?: Prisma.ContentEntryWhereInput
-}
-
-export type ContentEntryUpdateToOneWithWhereWithoutVersionsInput = {
-  where?: Prisma.ContentEntryWhereInput
-  data: Prisma.XOR<Prisma.ContentEntryUpdateWithoutVersionsInput, Prisma.ContentEntryUncheckedUpdateWithoutVersionsInput>
-}
-
-export type ContentEntryUpdateWithoutVersionsInput = {
-  key?: Prisma.StringFieldUpdateOperationsInput | string
-  value?: Prisma.StringFieldUpdateOperationsInput | string
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type ContentEntryUncheckedUpdateWithoutVersionsInput = {
-  key?: Prisma.StringFieldUpdateOperationsInput | string
-  value?: Prisma.StringFieldUpdateOperationsInput | string
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-
-/**
- * Count Type ContentEntryCountOutputType
- */
-
-export type ContentEntryCountOutputType = {
-  versions: number
-}
-
-export type ContentEntryCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  versions?: boolean | ContentEntryCountOutputTypeCountVersionsArgs
-}
-
-/**
- * ContentEntryCountOutputType without action
- */
-export type ContentEntryCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ContentEntryCountOutputType
-   */
-  select?: Prisma.ContentEntryCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * ContentEntryCountOutputType without action
- */
-export type ContentEntryCountOutputTypeCountVersionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ContentVersionWhereInput
-}
 
 
 export type ContentEntrySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -389,8 +290,6 @@ export type ContentEntrySelect<ExtArgs extends runtime.Types.Extensions.Internal
   value?: boolean
   updatedBy?: boolean
   updatedAt?: boolean
-  versions?: boolean | Prisma.ContentEntry$versionsArgs<ExtArgs>
-  _count?: boolean | Prisma.ContentEntryCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["contentEntry"]>
 
 export type ContentEntrySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -415,18 +314,10 @@ export type ContentEntrySelectScalar = {
 }
 
 export type ContentEntryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"key" | "value" | "updatedBy" | "updatedAt", ExtArgs["result"]["contentEntry"]>
-export type ContentEntryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  versions?: boolean | Prisma.ContentEntry$versionsArgs<ExtArgs>
-  _count?: boolean | Prisma.ContentEntryCountOutputTypeDefaultArgs<ExtArgs>
-}
-export type ContentEntryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type ContentEntryIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $ContentEntryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ContentEntry"
-  objects: {
-    versions: Prisma.$ContentVersionPayload<ExtArgs>[]
-  }
+  objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     key: string
     value: string
@@ -826,7 +717,6 @@ readonly fields: ContentEntryFieldRefs;
  */
 export interface Prisma__ContentEntryClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  versions<T extends Prisma.ContentEntry$versionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentEntry$versionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContentVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -877,10 +767,6 @@ export type ContentEntryFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.
    */
   omit?: Prisma.ContentEntryOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContentEntryInclude<ExtArgs> | null
-  /**
    * Filter, which ContentEntry to fetch.
    */
   where: Prisma.ContentEntryWhereUniqueInput
@@ -899,10 +785,6 @@ export type ContentEntryFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Exte
    */
   omit?: Prisma.ContentEntryOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContentEntryInclude<ExtArgs> | null
-  /**
    * Filter, which ContentEntry to fetch.
    */
   where: Prisma.ContentEntryWhereUniqueInput
@@ -920,10 +802,6 @@ export type ContentEntryFindFirstArgs<ExtArgs extends runtime.Types.Extensions.I
    * Omit specific fields from the ContentEntry
    */
   omit?: Prisma.ContentEntryOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContentEntryInclude<ExtArgs> | null
   /**
    * Filter, which ContentEntry to fetch.
    */
@@ -973,10 +851,6 @@ export type ContentEntryFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Exten
    */
   omit?: Prisma.ContentEntryOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContentEntryInclude<ExtArgs> | null
-  /**
    * Filter, which ContentEntry to fetch.
    */
   where?: Prisma.ContentEntryWhereInput
@@ -1024,10 +898,6 @@ export type ContentEntryFindManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Omit specific fields from the ContentEntry
    */
   omit?: Prisma.ContentEntryOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContentEntryInclude<ExtArgs> | null
   /**
    * Filter, which ContentEntries to fetch.
    */
@@ -1077,10 +947,6 @@ export type ContentEntryCreateArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   omit?: Prisma.ContentEntryOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContentEntryInclude<ExtArgs> | null
-  /**
    * The data needed to create a ContentEntry.
    */
   data: Prisma.XOR<Prisma.ContentEntryCreateInput, Prisma.ContentEntryUncheckedCreateInput>
@@ -1128,10 +994,6 @@ export type ContentEntryUpdateArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Omit specific fields from the ContentEntry
    */
   omit?: Prisma.ContentEntryOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContentEntryInclude<ExtArgs> | null
   /**
    * The data needed to update a ContentEntry.
    */
@@ -1199,10 +1061,6 @@ export type ContentEntryUpsertArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   omit?: Prisma.ContentEntryOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContentEntryInclude<ExtArgs> | null
-  /**
    * The filter to search for the ContentEntry to update in case it exists.
    */
   where: Prisma.ContentEntryWhereUniqueInput
@@ -1229,10 +1087,6 @@ export type ContentEntryDeleteArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   omit?: Prisma.ContentEntryOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContentEntryInclude<ExtArgs> | null
-  /**
    * Filter which ContentEntry to delete.
    */
   where: Prisma.ContentEntryWhereUniqueInput
@@ -1253,30 +1107,6 @@ export type ContentEntryDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.
 }
 
 /**
- * ContentEntry.versions
- */
-export type ContentEntry$versionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ContentVersion
-   */
-  select?: Prisma.ContentVersionSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ContentVersion
-   */
-  omit?: Prisma.ContentVersionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContentVersionInclude<ExtArgs> | null
-  where?: Prisma.ContentVersionWhereInput
-  orderBy?: Prisma.ContentVersionOrderByWithRelationInput | Prisma.ContentVersionOrderByWithRelationInput[]
-  cursor?: Prisma.ContentVersionWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ContentVersionScalarFieldEnum | Prisma.ContentVersionScalarFieldEnum[]
-}
-
-/**
  * ContentEntry without action
  */
 export type ContentEntryDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1288,8 +1118,4 @@ export type ContentEntryDefaultArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Omit specific fields from the ContentEntry
    */
   omit?: Prisma.ContentEntryOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContentEntryInclude<ExtArgs> | null
 }
