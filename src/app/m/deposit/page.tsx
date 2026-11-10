@@ -66,18 +66,24 @@ export default function MobileDeposit() {
   if (!loading && !user) {
     return (
       <div className="px-4 pt-24 text-center">
-        <p className="text-sm text-muted">Log in to deposit.</p>
-        <Link href="/m/login" className="mt-3 inline-block rounded-xl bg-white px-8 py-3 font-semibold text-black">Log in</Link>
+        <p className="text-sm text-muted">{t('deposit.login')}</p>
+        <Link href="/m/login" className="mt-3 inline-block rounded-xl bg-white px-8 py-3 font-semibold text-black">{t('deposit.loginButton')}</Link>
       </div>
     );
   }
+
+  const methodLabel: Record<string, string> = {
+    MOMO: t('deposit.method.momo'),
+    CARD: t('deposit.method.card'),
+    BANK: t('deposit.method.bank'),
+  };
 
   return (
     <div className="px-4 pt-4">
       <h1 className="text-[17px] font-bold">{t('deposit.title')}</h1>
       <p className="mt-1 text-xs text-muted">
         {t('deposit.instructions')}
-        {limits && <> Minimum deposit: <b className="text-white/80">${fmtNum(limits.minDepositUSD)}</b>.</>}
+        {limits && <> {t('deposit.minPrefix')} <b className="text-white/80">${fmtNum(limits.minDepositUSD)}</b>.</>}
       </p>
 
       <div className="-mx-1 mt-4 flex gap-1.5 overflow-x-auto px-1 [scrollbar-width:none]">
@@ -93,7 +99,7 @@ export default function MobileDeposit() {
       </div>
 
       <div className="mt-4 rounded-2xl bg-panel p-4">
-        <span className="text-xs text-muted">Deposit amount (USD)</span>
+        <span className="text-xs text-muted">{t('deposit.amountLabel')}</span>
         <div className="flex items-center gap-1">
           <span className="text-[26px] font-bold text-muted">$</span>
           <input
@@ -122,7 +128,7 @@ export default function MobileDeposit() {
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={badge} alt="" className="h-7 w-7 rounded-lg" />
-            {label}
+            {methodLabel[id] ?? label}
           </button>
         ))}
       </div>
@@ -130,7 +136,7 @@ export default function MobileDeposit() {
       {method === 'MOMO' && (
         <>
           <div className="mt-3 flex items-center gap-2 px-1">
-            <span className="text-[11px] font-medium text-muted">Supported networks:</span>
+            <span className="text-[11px] font-medium text-muted">{t('deposit.supportedNetworks')}</span>
             {['/pay/mtn.svg', '/pay/telecel.svg', '/pay/at.svg'].map((s) => (
               // eslint-disable-next-line @next/next/no-img-element
               <img key={s} src={s} alt="" className="h-5 w-5 rounded" />
@@ -139,7 +145,7 @@ export default function MobileDeposit() {
           <input
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            placeholder="MoMo number — 024 123 4567"
+            placeholder={t('deposit.phonePlaceholder')}
             className="mt-2 w-full rounded-xl border border-line bg-panel px-4 py-3 text-sm outline-none focus:border-accent"
           />
         </>
@@ -148,27 +154,27 @@ export default function MobileDeposit() {
       {usd > 0 && rate > 0 && (
         <div className="num mt-4 rounded-xl border border-line bg-panel p-4 text-sm">
           <div className="flex justify-between text-muted">
-            <span>Deposit amount</span>
+            <span>{t('deposit.row.amount')}</span>
             <span>${fmtNum(usd)}</span>
           </div>
           <div className="mt-1 flex justify-between text-muted">
-            <span>Exchange rate</span>
+            <span>{t('deposit.row.rate')}</span>
             <span>GH₵{rate.toFixed(4)} per $1</span>
           </div>
           <div className="mt-1 flex justify-between font-bold">
-            <span>Amount payable</span>
+            <span>{t('deposit.row.payable')}</span>
             <span>{fmtGHS(ghs)}</span>
           </div>
           {quote && (
             <div className="mt-1 flex justify-between font-bold">
-              <span>You receive</span>
+              <span>{t('deposit.row.receive')}</span>
               <span className="text-up">{asset === 'GHS' ? fmtGHS(ghs) : `${fmtNum(quote.amountAsset)} ${asset}`}</span>
             </div>
           )}
         </div>
       )}
       {usd > 0 && !valid && (
-        <p className="mt-2 text-xs text-gold">Minimum deposit is ${fmtNum(minUSD)}{limits ? ` (≈ ${fmtGHS(limits.minDepositGHS)})` : ''}.</p>
+        <p className="mt-2 text-xs text-gold">{t('deposit.minPrefix')} ${fmtNum(minUSD)}{limits ? ` (≈ ${fmtGHS(limits.minDepositGHS)})` : ''}.</p>
       )}
 
       {error && <p className="mt-2 text-sm text-down">{error}</p>}
@@ -177,7 +183,7 @@ export default function MobileDeposit() {
         disabled={busy || !valid || !(rate > 0) || (method === 'MOMO' && phone.replace(/\D/g, '').length < 9)}
         className="mt-4 w-full rounded-full bg-up py-3 text-[14px] font-bold text-white disabled:opacity-40"
       >
-        {busy ? 'Connecting…' : valid ? `Pay ${fmtGHS(ghs)} with Payteller` : 'Pay with Payteller'}
+        {busy ? t('deposit.connecting') : valid ? `${t('deposit.payButton')} ${fmtGHS(ghs)}` : t('deposit.payButton')}
       </button>
     </div>
   );

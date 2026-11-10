@@ -65,8 +65,8 @@ export default function MobileWithdraw() {
   if (!loading && !user) {
     return (
       <div className="px-4 pt-24 text-center">
-        <p className="text-sm text-muted">Log in to withdraw.</p>
-        <Link href="/m/login" className="mt-3 inline-block rounded-xl bg-white px-8 py-3 font-semibold text-black">Log in</Link>
+        <p className="text-sm text-muted">{t('withdraw.login')}</p>
+        <Link href="/m/login" className="mt-3 inline-block rounded-xl bg-white px-8 py-3 font-semibold text-black">{t('withdraw.loginButton')}</Link>
       </div>
     );
   }
@@ -76,8 +76,8 @@ export default function MobileWithdraw() {
     return (
       <div className="flex min-h-[80vh] flex-col items-center justify-center px-6 text-center">
         <div className="h-12 w-12 animate-spin rounded-full border-[3px] border-gray-200 border-t-transparent" />
-        <h2 className="mt-6 text-[15px] font-semibold">Processing Your Withdrawal Request</h2>
-        <p className="mt-1 text-xs text-muted">Please wait…</p>
+        <h2 className="mt-6 text-[15px] font-semibold">{t('withdraw.processing.title')}</h2>
+        <p className="mt-1 text-xs text-muted">{t('withdraw.processing.sub')}</p>
       </div>
     );
   }
@@ -87,18 +87,17 @@ export default function MobileWithdraw() {
     return (
       <div className="flex min-h-[80vh] flex-col items-center justify-center px-6 pb-20 text-center">
         <IconCheckCircle size={56} className="text-emerald-500" />
-        <h2 className="mt-4 text-[17px] font-bold">Withdrawal Request Submitted</h2>
+        <h2 className="mt-4 text-[17px] font-bold">{t('withdraw.submitted.title')}</h2>
         <p className="mt-2 max-w-xs text-xs leading-relaxed text-muted">
-          Your withdrawal request for {fmtGHS(submittedGHS)} has been received. Our team will review your account and
-          notify you when a decision has been made.
+          {t('withdraw.submitted').replace('{amount}', fmtGHS(submittedGHS))}
         </p>
-        <p className="mt-3 rounded-full bg-panel px-4 py-1.5 text-xs font-medium text-gold">Status: Pending Review</p>
+        <p className="mt-3 rounded-full bg-panel px-4 py-1.5 text-xs font-medium text-gold">{t('withdraw.submitted.status')}</p>
         <div className="mt-6 w-full max-w-xs space-y-2">
           <Link href="/m/withdrawals" className="block rounded-xl bg-white py-3 text-[13px] font-semibold text-black">
-            View Withdrawal Status
+            {t('withdraw.submitted.viewStatus')}
           </Link>
           <button onClick={() => setPhase('form')} className="block w-full rounded-xl bg-panel py-3 text-[13px] font-semibold">
-            New withdrawal
+            {t('withdraw.submitted.new')}
           </button>
         </div>
       </div>
@@ -110,11 +109,11 @@ export default function MobileWithdraw() {
     <div className="px-4 pt-4">
       <div className="flex items-baseline justify-between">
         <h1 className="text-[17px] font-bold">{t('withdraw.title')}</h1>
-        <Link href="/m/withdrawals" className="text-xs text-accent">History</Link>
+        <Link href="/m/withdrawals" className="text-xs text-accent">{t('withdraw.history')}</Link>
       </div>
       <p className="mt-1 text-xs text-muted">
         {t('withdraw.instructions')}
-        {limits && <> Minimum withdrawal: <b className="text-white/80">${fmtNum(limits.minWithdrawalUSD)}</b>.</>}
+        {limits && <> {t('withdraw.minPrefix')} <b className="text-white/80">${fmtNum(limits.minWithdrawalUSD)}</b>.</>}
       </p>
       {limits && (limits.withdrawMinPurchases ?? 0) > 0 && (
         <p className="mt-2 rounded-lg bg-panel px-3 py-2 text-[11px] text-muted">
@@ -138,10 +137,10 @@ export default function MobileWithdraw() {
 
       <div className="mt-4 rounded-2xl bg-panel p-4">
         <div className="flex justify-between text-xs text-muted">
-          <span>Available balance</span>
+          <span>{t('withdraw.availableBalance')}</span>
           {selected && (
             <button onClick={() => setAmount(String(selected.available))} className="text-accent">
-              Max {fmtNum(selected.available)} {asset}
+              {t('withdraw.max')} {fmtNum(selected.available)} {asset}
             </button>
           )}
         </div>
@@ -159,44 +158,44 @@ export default function MobileWithdraw() {
         <button onClick={() => setMethod('MOMO')} className={`flex items-center justify-center gap-2 rounded-xl border py-3 text-xs font-bold ${method === 'MOMO' ? 'border-accent bg-panel2' : 'border-line bg-panel text-muted'}`}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/pay/mtn.svg" alt="" className="h-5 w-5 rounded" />
-          MobileMoney
+          {t('withdraw.method.momo')}
         </button>
         <button onClick={() => setMethod('BANK')} className={`flex items-center justify-center gap-2 rounded-xl border py-3 text-xs font-bold ${method === 'BANK' ? 'border-accent bg-panel2' : 'border-line bg-panel text-muted'}`}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/pay/bank.svg" alt="" className="h-5 w-5 rounded" />
-          Bank
+          {t('withdraw.method.bank')}
         </button>
       </div>
 
       <input
         value={destination}
         onChange={(e) => setDestination(e.target.value)}
-        placeholder={method === 'MOMO' ? 'MoMo number' : 'Bank account number'}
+        placeholder={method === 'MOMO' ? t('withdraw.dest.momo') : t('withdraw.dest.bank')}
         className="mt-3 w-full rounded-xl border border-line bg-panel px-4 py-3 text-sm outline-none focus:border-accent"
       />
       <input
         value={destName}
         onChange={(e) => setDestName(e.target.value)}
-        placeholder="Recipient name (as registered)"
+        placeholder={t('withdraw.recipientName')}
         className="mt-2 w-full rounded-xl border border-line bg-panel px-4 py-3 text-sm outline-none focus:border-accent"
       />
 
       {quote && amt > 0 && (
         <div className="num mt-4 space-y-1 rounded-xl border border-line bg-panel p-4 text-[13px]">
           <div className="flex justify-between text-muted">
-            <span>Estimated GHS amount</span>
+            <span>{t('withdraw.row.estGHS')}</span>
             <span>{fmtGHS(quote.netGHS + quote.feeGHS)}</span>
           </div>
           <div className="flex justify-between text-muted">
-            <span>Exchange rate</span>
+            <span>{t('withdraw.row.rate')}</span>
             <span>1 USD = {quote.rateGHSUSD.toFixed(4)} GHS</span>
           </div>
           <div className="flex justify-between text-muted">
-            <span>Fee ({quote.feePct}%)</span>
+            <span>{t('withdraw.row.fee')} ({quote.feePct}%)</span>
             <span>-{fmtGHS(quote.feeGHS)}</span>
           </div>
           <div className="flex justify-between border-t border-line pt-1.5 font-bold">
-            <span>Final amount to receive</span>
+            <span>{t('withdraw.row.final')}</span>
             <span className="text-up">{fmtGHS(quote.netGHS)}</span>
           </div>
         </div>
@@ -204,17 +203,17 @@ export default function MobileWithdraw() {
 
       {error && <p className="mt-3 text-sm text-down">{error}</p>}
       {limits && amountUSD > 0 && amountUSD < limits.minWithdrawalUSD && (
-        <p className="mt-2 text-xs text-gold">Minimum withdrawal is ${fmtNum(limits.minWithdrawalUSD)} (≈ {fmtGHS(limits.minWithdrawalGHS)}).</p>
+        <p className="mt-2 text-xs text-gold">{t('withdraw.minPrefix')} ${fmtNum(limits.minWithdrawalUSD)} (≈ {fmtGHS(limits.minWithdrawalGHS)}).</p>
       )}
       <button
         onClick={submit}
         disabled={!(amt > 0) || destination.replace(/\D/g, '').length < 8 || (limits ? amountUSD < limits.minWithdrawalUSD : false)}
         className="mt-4 w-full rounded-full bg-white py-3 text-[14px] font-bold text-black disabled:opacity-40"
       >
-        Confirm withdrawal request
+        {t('withdraw.confirm')}
       </button>
       <p className="mb-4 mt-2 text-center text-[11px] text-muted">
-        Requests are reviewed by our team. You will be notified when a decision is made.
+        {t('withdraw.reviewNote')}
       </p>
     </div>
   );
