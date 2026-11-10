@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { usePoll, useUser } from '@/lib/hooks';
 import { useDisplayPrefs } from '@/lib/prefs';
+import { useContent } from '@/lib/useContent';
 import { fmtCompact, fmtPct, fmtPrice } from '@/lib/format';
 import type { Portfolio } from '@/lib/wallet';
 import type { MarketRow } from '@/components/MarketTable';
@@ -28,6 +29,7 @@ const TABS = [
 export default function MobileHome() {
   const { user, loading } = useUser();
   const { currency, rate, money } = useDisplayPrefs();
+  const { t } = useContent();
   const { data: portfolio } = usePoll<Portfolio>(user ? '/api/portfolio' : null, 10000);
   const [mode, setMode] = useState<'spot' | 'futures'>('spot');
   const { data: markets } = usePoll<{ markets: MarketRow[] }>(`/api/markets?type=${mode}`, 6000);
@@ -105,7 +107,7 @@ export default function MobileHome() {
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search coins and pairs"
+            placeholder={t('home.search')}
             className="w-full bg-transparent text-sm outline-none placeholder:text-muted"
           />
           {search && (
@@ -121,7 +123,7 @@ export default function MobileHome() {
       {user && (
         <div className="mt-4">
           <div className="flex items-center gap-1.5 text-[12px] text-muted">
-            Est total value
+            {t('home.estTotal')}
             <button onClick={() => setHidden((v) => !v)} className="p-0.5" aria-label="Toggle balance">
               {hidden ? <IconEyeOff size={15} /> : <IconEye size={15} />}
             </button>
@@ -135,7 +137,7 @@ export default function MobileHome() {
             </span>
           </Link>
           <Link href="/m/assets/history" className="mt-1 flex items-center gap-1 text-[12px]">
-            <span className="border-b border-dashed border-line text-muted">Today&apos;s PnL</span>
+            <span className="border-b border-dashed border-line text-muted">{t('home.todayPnl')}</span>
             <span className={`num font-semibold ${pnlUp ? 'text-up' : 'text-down'}`}>
               {hidden ? '****' : `${pnlUp ? '+' : '-'}${money(Math.abs(pnl))} (${pnlUp ? '+' : ''}${(portfolio?.pnl24hPct ?? 0).toFixed(2)}%)`}
             </span>
@@ -145,9 +147,9 @@ export default function MobileHome() {
       )}
       {!loading && !user && (
         <div className="mt-4">
-          <h1 className="text-[21px] font-bold leading-tight">Trade Crypto with Confidence</h1>
+          <h1 className="text-[21px] font-bold leading-tight">{t('home.hero.title')}</h1>
           <p className="mt-1 text-[13px] text-muted">
-            Live markets, powerful tools and secure asset management in one platform.
+            {t('home.hero.subtitle')}
           </p>
         </div>
       )}
@@ -158,13 +160,13 @@ export default function MobileHome() {
           href={user ? '/m/deposit' : '/m/login'}
           className="rounded-full bg-[#0B4F3F] py-2.5 text-center text-[13.5px] font-bold text-[#ffffff] transition active:scale-[0.98] dark:bg-up"
         >
-          Deposit crypto
+          {t('home.deposit')}
         </Link>
         <Link
           href="/m/p2p"
           className="rounded-full bg-[#0B4F3F] py-2.5 text-center text-[13.5px] font-bold text-[#ffffff] transition active:scale-[0.98] dark:bg-up"
         >
-          P2P trading
+          {t('home.p2p')}
         </Link>
       </div>
 
@@ -200,15 +202,15 @@ export default function MobileHome() {
 
       {/* Market categories */}
       <div className="no-scrollbar -mx-4 mt-5 flex gap-1 overflow-x-auto px-4">
-        {TABS.map((t) => (
+        {TABS.map((tb) => (
           <button
-            key={t.id}
-            onClick={() => { setTab(t.id); setSearch(''); }}
+            key={tb.id}
+            onClick={() => { setTab(tb.id); setSearch(''); }}
             className={`shrink-0 rounded-full px-3.5 py-1.5 text-[13px] font-semibold ${
-              tab === t.id && !search ? 'bg-panel text-foreground' : 'text-muted'
+              tab === tb.id && !search ? 'bg-panel text-foreground' : 'text-muted'
             }`}
           >
-            {t.label}
+            {t(`home.tab.${tb.id}` as 'home.tab.crypto', tb.label)}
           </button>
         ))}
       </div>
@@ -278,10 +280,11 @@ export default function MobileHome() {
 
 function MenuSheet({ isAdmin, loggedIn, onClose }: { isAdmin: boolean; loggedIn: boolean; onClose: () => void }) {
   void isAdmin; // admin access is intentionally not linked from the user app
+  const { t } = useContent();
   const items = [
-    { href: '/m/settings', label: 'Settings', icon: <IconGear size={18} /> },
-    { href: '/m/assets/history', label: 'Transaction history', icon: <IconClock size={18} /> },
-    ...(loggedIn ? [] : [{ href: '/m/login', label: 'Log in / Sign up', icon: <IconChevronRight size={18} /> }]),
+    { href: '/m/settings', label: t('home.menu.settings'), icon: <IconGear size={18} /> },
+    { href: '/m/assets/history', label: t('home.menu.history'), icon: <IconClock size={18} /> },
+    ...(loggedIn ? [] : [{ href: '/m/login', label: t('home.menu.login'), icon: <IconChevronRight size={18} /> }]),
   ];
   return (
     <div className="fixed inset-0 z-50 bg-black/60" onClick={onClose}>
