@@ -415,6 +415,8 @@ export const ModelName = {
   Position: 'Position',
   Favorite: 'Favorite',
   Setting: 'Setting',
+  ContentEntry: 'ContentEntry',
+  ContentVersion: 'ContentVersion',
   WebhookEvent: 'WebhookEvent',
   MessagesAccount: 'MessagesAccount',
   MessagesInvite: 'MessagesInvite',
@@ -443,7 +445,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "wallet" | "transaction" | "order" | "trade" | "depositIntent" | "withdrawal" | "p2POffer" | "p2POrder" | "p2PChatMessage" | "orbitPost" | "orbitComment" | "orbitLike" | "moderationEvent" | "product" | "position" | "favorite" | "setting" | "webhookEvent" | "messagesAccount" | "messagesInvite" | "messageSender" | "conversation" | "message" | "pushSubscription" | "emailLog" | "auditLog" | "kycApplication" | "banner" | "announcement" | "verificationCode"
+    modelProps: "user" | "wallet" | "transaction" | "order" | "trade" | "depositIntent" | "withdrawal" | "p2POffer" | "p2POrder" | "p2PChatMessage" | "orbitPost" | "orbitComment" | "orbitLike" | "moderationEvent" | "product" | "position" | "favorite" | "setting" | "contentEntry" | "contentVersion" | "webhookEvent" | "messagesAccount" | "messagesInvite" | "messageSender" | "conversation" | "message" | "pushSubscription" | "emailLog" | "auditLog" | "kycApplication" | "banner" | "announcement" | "verificationCode"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1779,6 +1781,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ContentEntry: {
+      payload: Prisma.$ContentEntryPayload<ExtArgs>
+      fields: Prisma.ContentEntryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ContentEntryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentEntryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ContentEntryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentEntryPayload>
+        }
+        findFirst: {
+          args: Prisma.ContentEntryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentEntryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ContentEntryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentEntryPayload>
+        }
+        findMany: {
+          args: Prisma.ContentEntryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentEntryPayload>[]
+        }
+        create: {
+          args: Prisma.ContentEntryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentEntryPayload>
+        }
+        createMany: {
+          args: Prisma.ContentEntryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ContentEntryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentEntryPayload>[]
+        }
+        delete: {
+          args: Prisma.ContentEntryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentEntryPayload>
+        }
+        update: {
+          args: Prisma.ContentEntryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentEntryPayload>
+        }
+        deleteMany: {
+          args: Prisma.ContentEntryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ContentEntryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ContentEntryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentEntryPayload>[]
+        }
+        upsert: {
+          args: Prisma.ContentEntryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentEntryPayload>
+        }
+        aggregate: {
+          args: Prisma.ContentEntryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateContentEntry>
+        }
+        groupBy: {
+          args: Prisma.ContentEntryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ContentEntryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ContentEntryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ContentEntryCountAggregateOutputType> | number
+        }
+      }
+    }
+    ContentVersion: {
+      payload: Prisma.$ContentVersionPayload<ExtArgs>
+      fields: Prisma.ContentVersionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ContentVersionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentVersionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ContentVersionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentVersionPayload>
+        }
+        findFirst: {
+          args: Prisma.ContentVersionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentVersionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ContentVersionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentVersionPayload>
+        }
+        findMany: {
+          args: Prisma.ContentVersionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentVersionPayload>[]
+        }
+        create: {
+          args: Prisma.ContentVersionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentVersionPayload>
+        }
+        createMany: {
+          args: Prisma.ContentVersionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ContentVersionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentVersionPayload>[]
+        }
+        delete: {
+          args: Prisma.ContentVersionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentVersionPayload>
+        }
+        update: {
+          args: Prisma.ContentVersionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentVersionPayload>
+        }
+        deleteMany: {
+          args: Prisma.ContentVersionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ContentVersionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ContentVersionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentVersionPayload>[]
+        }
+        upsert: {
+          args: Prisma.ContentVersionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentVersionPayload>
+        }
+        aggregate: {
+          args: Prisma.ContentVersionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateContentVersion>
+        }
+        groupBy: {
+          args: Prisma.ContentVersionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ContentVersionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ContentVersionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ContentVersionCountAggregateOutputType> | number
+        }
+      }
+    }
     WebhookEvent: {
       payload: Prisma.$WebhookEventPayload<ExtArgs>
       fields: Prisma.WebhookEventFieldRefs
@@ -3067,6 +3217,27 @@ export const SettingScalarFieldEnum = {
 export type SettingScalarFieldEnum = (typeof SettingScalarFieldEnum)[keyof typeof SettingScalarFieldEnum]
 
 
+export const ContentEntryScalarFieldEnum = {
+  key: 'key',
+  value: 'value',
+  updatedBy: 'updatedBy',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ContentEntryScalarFieldEnum = (typeof ContentEntryScalarFieldEnum)[keyof typeof ContentEntryScalarFieldEnum]
+
+
+export const ContentVersionScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  value: 'value',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt'
+} as const
+
+export type ContentVersionScalarFieldEnum = (typeof ContentVersionScalarFieldEnum)[keyof typeof ContentVersionScalarFieldEnum]
+
+
 export const WebhookEventScalarFieldEnum = {
   id: 'id',
   gateway: 'gateway',
@@ -3795,6 +3966,8 @@ export type GlobalOmitConfig = {
   position?: Prisma.PositionOmit
   favorite?: Prisma.FavoriteOmit
   setting?: Prisma.SettingOmit
+  contentEntry?: Prisma.ContentEntryOmit
+  contentVersion?: Prisma.ContentVersionOmit
   webhookEvent?: Prisma.WebhookEventOmit
   messagesAccount?: Prisma.MessagesAccountOmit
   messagesInvite?: Prisma.MessagesInviteOmit

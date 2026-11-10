@@ -108,6 +108,16 @@ export type Favorite = Prisma.FavoriteModel
  */
 export type Setting = Prisma.SettingModel
 /**
+ * Model ContentEntry
+ * 
+ */
+export type ContentEntry = Prisma.ContentEntryModel
+/**
+ * Model ContentVersion
+ * 
+ */
+export type ContentVersion = Prisma.ContentVersionModel
+/**
  * Model WebhookEvent
  * 
  */

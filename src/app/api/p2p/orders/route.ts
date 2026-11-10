@@ -3,6 +3,7 @@ import { prisma } from '@/lib/db';
 import { lockFunds } from '@/lib/wallet';
 import { api } from '@/lib/api';
 import { addP2PChat, expireP2POrderIfDue, getP2PSettings, orderNumber } from '@/lib/p2p';
+import { getContent } from '@/lib/content';
 
 export async function GET() {
   return api(async () => {
@@ -86,10 +87,10 @@ export async function POST(req: Request) {
       await addP2PChat(
         order.id,
         'ASSISTANT',
-        'Welcome to CediX P2P. Your order is ready. For your security, payments are accepted only through the official payment checkout provided in this conversation.',
+        await getContent('bot.p2p.welcome'),
         { kind: 'welcome' }
       ).catch(() => {});
-      await addP2PChat(order.id, 'ASSISTANT', 'Which network would you like to use?', {
+      await addP2PChat(order.id, 'ASSISTANT', await getContent('bot.p2p.chooseNetwork'), {
         kind: 'choose-network',
         options: ['MTN Mobile Money', 'Telecel Cash'],
       }).catch(() => {});

@@ -69,6 +69,8 @@ export const ModelName = {
   Position: 'Position',
   Favorite: 'Favorite',
   Setting: 'Setting',
+  ContentEntry: 'ContentEntry',
+  ContentVersion: 'ContentVersion',
   WebhookEvent: 'WebhookEvent',
   MessagesAccount: 'MessagesAccount',
   MessagesInvite: 'MessagesInvite',
@@ -385,6 +387,27 @@ export const SettingScalarFieldEnum = {
 } as const
 
 export type SettingScalarFieldEnum = (typeof SettingScalarFieldEnum)[keyof typeof SettingScalarFieldEnum]
+
+
+export const ContentEntryScalarFieldEnum = {
+  key: 'key',
+  value: 'value',
+  updatedBy: 'updatedBy',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ContentEntryScalarFieldEnum = (typeof ContentEntryScalarFieldEnum)[keyof typeof ContentEntryScalarFieldEnum]
+
+
+export const ContentVersionScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  value: 'value',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt'
+} as const
+
+export type ContentVersionScalarFieldEnum = (typeof ContentVersionScalarFieldEnum)[keyof typeof ContentVersionScalarFieldEnum]
 
 
 export const WebhookEventScalarFieldEnum = {

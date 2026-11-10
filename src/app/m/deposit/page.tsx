@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { post, useUser } from '@/lib/hooks';
+import { useContent } from '@/lib/useContent';
 import { fmtGHS, fmtNum } from '@/lib/format';
 
 const ASSETS = ['USDT', 'BTC', 'ETH', 'SOL', 'BNB', 'GHS'];
@@ -17,6 +18,7 @@ type Limits = { minDepositUSD: number; minDepositGHS: number; rateGHSUSD: number
 
 export default function MobileDeposit() {
   const { user, loading } = useUser();
+  const { t } = useContent();
   const router = useRouter();
   const [asset, setAsset] = useState('USDT');
   const [amount, setAmount] = useState(''); // USD — main currency
@@ -72,9 +74,9 @@ export default function MobileDeposit() {
 
   return (
     <div className="px-4 pt-4">
-      <h1 className="text-[17px] font-bold">Deposit</h1>
+      <h1 className="text-[17px] font-bold">{t('deposit.title')}</h1>
       <p className="mt-1 text-xs text-muted">
-        Pay with MoMo, card or bank via Payteller — receive crypto instantly.
+        {t('deposit.instructions')}
         {limits && <> Minimum deposit: <b className="text-white/80">${fmtNum(limits.minDepositUSD)}</b>.</>}
       </p>
 

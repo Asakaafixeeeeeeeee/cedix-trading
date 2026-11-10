@@ -465,6 +465,28 @@ model Setting {
   updatedAt DateTime @updatedAt
 }
 
+// Admin-editable user-facing text (Content Management System). The source code
+// ships a default for every key; a row here overrides it. Financial maths,
+// credentials and security logic are NEVER driven by these strings.
+model ContentEntry {
+  key       String   @id
+  value     String
+  updatedBy String?
+  updatedAt DateTime @updatedAt
+}
+
+// Previous values of a content key, newest first, for Restore Previous Version.
+// Independent of ContentEntry so history survives a reset-to-default.
+model ContentVersion {
+  id        String   @id @default(cuid())
+  key       String
+  value     String
+  createdBy String?
+  createdAt DateTime @default(now())
+
+  @@index([key, createdAt])
+}
+
 // Payment-gateway webhook events, stored for idempotency (at-least-once
 // delivery) and auditing. The primary key is the gateway's own event id, so a
 // retried delivery can never be fulfilled twice.

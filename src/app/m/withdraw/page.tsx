@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { post, usePoll, useUser } from '@/lib/hooks';
+import { useContent } from '@/lib/useContent';
 import { fmtGHS, fmtNum } from '@/lib/format';
 import { IconCheckCircle } from '@/components/icons';
 import type { Portfolio } from '@/lib/wallet';
@@ -10,6 +11,7 @@ type Quote = { netGHS: number; feeGHS: number; feePct: number; rateGHSUSD: numbe
 
 export default function MobileWithdraw() {
   const { user, loading } = useUser();
+  const { t } = useContent();
   const { data: portfolio, refresh } = usePoll<Portfolio>(user ? '/api/portfolio' : null, 10000);
   const [asset, setAsset] = useState('USDT');
   const [amount, setAmount] = useState('');
@@ -107,11 +109,11 @@ export default function MobileWithdraw() {
   return (
     <div className="px-4 pt-4">
       <div className="flex items-baseline justify-between">
-        <h1 className="text-[17px] font-bold">Withdraw to GH₵</h1>
+        <h1 className="text-[17px] font-bold">{t('withdraw.title')}</h1>
         <Link href="/m/withdrawals" className="text-xs text-accent">History</Link>
       </div>
       <p className="mt-1 text-xs text-muted">
-        Cash out any crypto straight to MoMo or bank — requests are reviewed before payment.
+        {t('withdraw.instructions')}
         {limits && <> Minimum withdrawal: <b className="text-white/80">${fmtNum(limits.minWithdrawalUSD)}</b>.</>}
       </p>
       {limits && (limits.withdrawMinPurchases ?? 0) > 0 && (
