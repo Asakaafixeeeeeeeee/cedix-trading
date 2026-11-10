@@ -22,13 +22,18 @@ self.addEventListener('push', (event) => {
     /* keep defaults */
   }
   const tasks = [
-    self.registration.showNotification(data.title, {
-      body: data.body,
-      icon: '/messages/icon-192.png',
-      badge: '/messages/icon-192.png',
-      tag: 'cedix-messages',
-      silent: data.silent === true,
-      data: { url: data.url },
+    // When the app is open the custom in-app banner is shown instead of the
+    // system notification; only show the system one when no window is open.
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
+      if (list.some((c) => c.visibilityState === 'visible')) return;
+      return self.registration.showNotification(data.title, {
+        body: data.body,
+        icon: '/messages/icon-192.png',
+        badge: '/messages/icon-192.png',
+        tag: 'cedix-messages',
+        silent: data.silent === true,
+        data: { url: data.url },
+      });
     }),
   ];
   if (typeof data.badge === 'number' && self.navigator.setAppBadge) {
