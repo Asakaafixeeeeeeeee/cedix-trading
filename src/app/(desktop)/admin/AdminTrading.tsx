@@ -6,12 +6,12 @@ import { fmtNum } from '@/lib/format';
 type MarketRow = { symbol: string; base: string; price: number; changePct: number };
 
 /**
- * DEMO / PRACTICE MODE — a virtual trading simulator for admins.
+ * TEACHING MODE — a virtual trading tool for admins.
  *
  * This panel NEVER touches real market prices, real customer balances or
  * real-money trading results. It computes the outcome of a hypothetical
- * investment using virtual funds only, so you can demonstrate how a trade
- * gains or loses value. Nothing here is written to the database.
+ * investment using virtual funds only, so you can teach how a trade gains or
+ * loses value. Nothing here is written to the database.
  */
 export default function AdminTrading() {
   const { data } = usePoll<{ markets: MarketRow[] }>('/api/markets?type=spot', 8000);
@@ -40,12 +40,12 @@ export default function AdminTrading() {
     <div className="space-y-5">
       <div className="rounded-xl border border-amber-500/40 bg-amber-500/5 px-4 py-3">
         <div className="flex items-center gap-2">
-          <span className="rounded-md bg-amber-500/20 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-amber-500">Demo / Practice</span>
-          <h3 className="font-bold">Virtual trading simulator</h3>
+          <span className="rounded-md bg-amber-500/20 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-amber-500">Teaching</span>
+          <h3 className="font-bold">Virtual trading — Teaching Mode</h3>
         </div>
         <p className="mt-1.5 text-xs leading-relaxed text-muted">
-          Virtual funds only. This simulator never affects real market prices, real customer balances, or real-money
-          trades. Use it to demonstrate how an investment can gain or lose value. Nothing here is saved.
+          Virtual training funds only. This never affects real market prices, real customer balances, or real-money
+          trades. Use it to teach how an investment can gain or lose value. Nothing here is saved.
         </p>
       </div>
 
@@ -71,8 +71,8 @@ export default function AdminTrading() {
             <div className="mt-1 grid grid-cols-2 gap-2">
               {([
                 ['normal', 'Normal market'],
-                ['win', 'Winning demo'],
-                ['lose', 'Losing demo'],
+                ['win', 'Winning scenario'],
+                ['lose', 'Losing scenario'],
                 ['custom', 'Custom move'],
               ] as const).map(([id, label]) => (
                 <button

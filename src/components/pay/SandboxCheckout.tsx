@@ -79,7 +79,7 @@ export default function SandboxCheckout({ refId }: { refId: string }) {
               </div>
             </div>
             <p className="mt-4 text-center text-xs text-muted">
-              This is a simulated gateway. In production, the customer would approve a MoMo prompt or enter card details here.
+              This is a test gateway — no real money moves here. In production, the customer would approve a MoMo prompt or enter card details here.
             </p>
             <div className="mt-5 space-y-2">
               <button

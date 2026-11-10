@@ -82,7 +82,7 @@ const NAV: { group: string; items: { id: SectionId; label: string; icon: string 
       { id: 'orbit', label: 'Orbit Management', icon: 'M12 21a9 9 0 100-18 9 9 0 000 18zm-9-9h18' },
       { id: 'moderation', label: 'Orbit Moderation', icon: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z' },
       { id: 'content', label: 'Content Management', icon: 'M4 5h16a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V6a1 1 0 011-1zm4 9l2.5-3 2 2.5L16 10l4 6H5l3-2z' },
-      { id: 'trading', label: 'Trading & Demo Mode', icon: 'M3 3v18h18M7 14l4-4 3 3 5-6' },
+      { id: 'trading', label: 'Trading & Teaching', icon: 'M3 3v18h18M7 14l4-4 3 3 5-6' },
     ],
   },
   {
