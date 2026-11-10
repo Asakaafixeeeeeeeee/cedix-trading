@@ -36,6 +36,7 @@ export async function finalizeWithdrawal(withdrawalId: string, actorId: string |
     destination: wd.destination,
     providerRef: wd.providerRef,
     feeGHS: 0,
+    userId: wd.userId,
   });
   const momo = await sendMomoSms(wd.userId, receipt).catch((e) => ({ delivered: false, reason: String(e) }));
   if (!momo.delivered) console.error('momo receipt not delivered', momo.reason);

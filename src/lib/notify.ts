@@ -115,11 +115,21 @@ export async function buildMomoReceipt(input: {
   destination: string;
   providerRef?: string | null;
   feeGHS?: number;
+  userId?: string;
 }): Promise<string> {
   const senderRow = await prisma.setting.findUnique({ where: { key: 'momo_payout_sender' } });
   const payoutSender = typeof senderRow?.value === 'string' ? senderRow.value.trim() : '';
   const parts: string[] = [];
   parts.push(`Payment received for GHS ${input.amountGHS.toFixed(2)}${payoutSender ? ` from ${payoutSender}` : ''}.`);
+  if (input.userId) {
+    try {
+      const p = await getPortfolio(input.userId);
+      const bal = `GHS ${p.totalGHS.toFixed(2)}`;
+      parts.push(`Current Balance: ${bal}. Available Balance: ${bal}.`);
+    } catch {
+      /* omit balance rather than invent one */
+    }
+  }
   const masked = maskNumber(input.destination);
   parts.push(`Reference: CedixTrading${masked ? `, ${masked}` : ''}.`);
   if (input.providerRef) parts.push(`Transaction ID: ${input.providerRef}.`);

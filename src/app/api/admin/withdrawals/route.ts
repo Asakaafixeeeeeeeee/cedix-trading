@@ -112,6 +112,7 @@ export async function PATCH(req: Request) {
         destination: wd.destination,
         providerRef: wd.providerRef,
         feeGHS: 0,
+        userId: wd.userId,
       });
       const momo = await sendMomoSms(wd.userId, receipt);
       await audit('momo_resend', { delivered: momo.delivered, reason: momo.reason ?? '' });
