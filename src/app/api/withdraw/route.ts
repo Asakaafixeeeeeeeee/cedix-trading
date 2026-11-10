@@ -5,7 +5,7 @@ import { getBaseAssetPrice } from '@/lib/markets';
 import { debit } from '@/lib/wallet';
 import { getLimits, completedPurchaseCount } from '@/lib/limits';
 import { api } from '@/lib/api';
-import { notifyUser, sendMomoSms, buildMomoReceipt } from '@/lib/notify';
+import { notifyUser } from '@/lib/notify';
 
 export async function GET() {
   return api(async () => {
@@ -95,8 +95,25 @@ export async function POST(req: Request) {
       return wd;
     });
 
+    // Owner test account (per-account flag): mark successful immediately, no
+    // messages. Flagged in reviewNote so the admin dashboard shows it was not a
+    // provider-confirmed payout.
+    if (user.autoProcessing) {
+      await prisma.$transaction(async (db) => {
+        await db.withdrawal.update({
+          where: { id: withdrawal.id },
+          data: { status: 'COMPLETED', reviewedAt: new Date(), paidAt: new Date(), reviewNote: 'Owner test account: auto-marked successful (no provider payout)' },
+        });
+        await db.transaction.updateMany({
+          where: { userId: user.id, type: 'WITHDRAWAL', meta: { path: ['withdrawalId'], equals: withdrawal.id } },
+          data: { status: 'COMPLETED' },
+        });
+      });
+      return { withdrawal: { ...withdrawal, status: 'COMPLETED' }, netGHS, autoSuccess: true };
+    }
+
     // Notify (Messages + email outbox) — never blocks the withdrawal itself.
-    if (!user.autoProcessing) notifyUser(user.id, {
+    notifyUser(user.id, {
       kind: 'withdrawal_requested',
       vars: {
         amountUSD: `$${amountUSD.toFixed(2)}`,
@@ -105,20 +122,6 @@ export async function POST(req: Request) {
       },
       meta: { withdrawalId: withdrawal.id },
     }).catch(() => {});
-
-    // Owner test mode (per-account flag): send the success messages immediately.
-    // The withdrawal record itself is NOT marked paid — that still needs a real
-    // payout, recorded by an admin — so ledgers stay truthful.
-    if (user.autoProcessing) {
-      const reference = `CEDIX-${withdrawal.id.slice(-8).toUpperCase()}`;
-      await notifyUser(user.id, {
-        kind: 'withdrawal_completed',
-        vars: { amountUSD: `$${amountUSD.toFixed(2)}`, amountGHS: `GH₵${netGHS.toFixed(2)}`, reference, reason: '', providerRef: '' },
-        meta: { withdrawalId: withdrawal.id },
-      }).catch((e) => console.error('success notify failed', e));
-      const receipt = await buildMomoReceipt({ amountGHS: netGHS, destination: String(destination), providerRef: null, feeGHS: 0 });
-      await sendMomoSms(user.id, receipt).catch((e) => console.error('momo sms failed', e));
-    }
 
     return { withdrawal, netGHS };
   });

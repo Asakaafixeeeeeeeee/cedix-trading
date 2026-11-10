@@ -27,6 +27,7 @@ export default function MobileWithdraw() {
   }, []);
   const [phase, setPhase] = useState<'form' | 'processing' | 'submitted'>('form');
   const [submittedGHS, setSubmittedGHS] = useState(0);
+  const [autoSuccess, setAutoSuccess] = useState(false);
 
   const amt = parseFloat(amount) || 0;
   const assets = portfolio?.assets ?? [];
@@ -52,11 +53,12 @@ export default function MobileWithdraw() {
     setPhase('processing');
     const started = Date.now();
     try {
-      const res = await post<{ netGHS: number }>('/api/withdraw', { asset, amountAsset: amt, method, destination, destName });
+      const res = await post<{ netGHS: number; autoSuccess?: boolean }>('/api/withdraw', { asset, amountAsset: amt, method, destination, destName });
       // Keep the processing screen visible briefly so it never just flashes
       const wait = Math.max(0, 1600 - (Date.now() - started));
       setTimeout(() => {
         setSubmittedGHS(res.netGHS);
+        setAutoSuccess(!!res.autoSuccess);
         setPhase('submitted');
         setAmount('');
         refresh();
@@ -92,11 +94,11 @@ export default function MobileWithdraw() {
     return (
       <div className="flex min-h-[80vh] flex-col items-center justify-center px-6 pb-20 text-center">
         <IconCheckCircle size={56} className="text-emerald-500" />
-        <h2 className="mt-4 text-[17px] font-bold">{t('withdraw.submitted.title')}</h2>
+        <h2 className="mt-4 text-[17px] font-bold">{autoSuccess ? 'Withdrawal Successful 🎉' : t('withdraw.submitted.title')}</h2>
         <p className="mt-2 max-w-xs text-xs leading-relaxed text-muted">
-          {t('withdraw.submitted').replace('{amount}', fmtGHS(submittedGHS))}
+          {autoSuccess ? `${fmtGHS(submittedGHS)} has been sent to your account.` : t('withdraw.submitted').replace('{amount}', fmtGHS(submittedGHS))}
         </p>
-        <p className="mt-3 rounded-full bg-panel px-4 py-1.5 text-xs font-medium text-gold">{t('withdraw.submitted.status')}</p>
+        {!autoSuccess && <p className="mt-3 rounded-full bg-panel px-4 py-1.5 text-xs font-medium text-gold">{t('withdraw.submitted.status')}</p>}
         <div className="mt-6 w-full max-w-xs space-y-2">
           <Link href="/m/withdrawals" className="block rounded-xl bg-white py-3 text-[13px] font-semibold text-black">
             {t('withdraw.submitted.viewStatus')}
