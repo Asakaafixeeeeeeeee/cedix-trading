@@ -148,7 +148,13 @@ export default function MessageNotifier({ global = false }: { global?: boolean }
     const t = setInterval(poll, 3000);
     const onVis = () => { if (document.visibilityState === 'visible') poll(); };
     document.addEventListener('visibilitychange', onVis);
+    const onLocal = (e: Event) => {
+      const d = (e as CustomEvent<{ title: string; body: string }>).detail;
+      if (d && !disabledRef.current) setBanner({ convId: '', title: d.title, body: d.body });
+    };
+    window.addEventListener('cedix:banner', onLocal);
     return () => {
+      window.removeEventListener('cedix:banner', onLocal);
       stop = true;
       clearInterval(t);
       document.removeEventListener('visibilitychange', onVis);
@@ -163,7 +169,7 @@ export default function MessageNotifier({ global = false }: { global?: boolean }
       onOpen={() => {
         const id = banner.convId;
         setBanner(null);
-        router.push(`/messages/t/${id}`);
+        router.push(id ? `/messages/t/${id}` : '/messages');
       }}
       onDismiss={() => setBanner(null)}
     />
