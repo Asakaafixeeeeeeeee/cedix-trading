@@ -66,8 +66,9 @@ export const CONTENT = {
   // ── Withdraw ──
   'withdraw.title': { category: 'Withdraw', label: 'Withdraw page title', default: 'Withdraw to GH₵' },
   'withdraw.history': { category: 'Withdraw', label: 'History link', default: 'History' },
-  'withdraw.instructions': { category: 'Withdraw', label: 'Withdraw instructions', default: 'Cash out any crypto straight to MoMo or bank — requests are reviewed before payment.', multiline: true },
+  'withdraw.instructions': { category: 'Withdraw', label: 'Withdraw instructions', default: 'Withdraw your crypto funds securely to Mobile Money or your bank account. All withdrawal requests are reviewed before processing.', multiline: true },
   'withdraw.minPrefix': { category: 'Withdraw', label: 'Minimum withdrawal prefix', default: 'Minimum withdrawal:' },
+  'withdraw.minWarning': { category: 'Withdraw', label: 'Below-minimum warning', default: 'Withdrawal unsuccessful. The minimum withdrawal amount is ${min}. Please enter an eligible amount to continue.', multiline: true },
   'withdraw.availableBalance': { category: 'Withdraw', label: 'Available balance label', default: 'Available balance' },
   'withdraw.max': { category: 'Withdraw', label: 'Max button prefix', default: 'Max' },
   'withdraw.method.momo': { category: 'Withdraw', label: 'Method: Mobile Money', default: 'MobileMoney' },

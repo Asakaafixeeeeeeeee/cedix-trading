@@ -43,8 +43,13 @@ export default function MobileWithdraw() {
   }, [asset, amt]);
 
   async function submit() {
-    setPhase('processing');
     setError('');
+    // Below-minimum check happens only when the user attempts to withdraw.
+    if (limits && amountUSD > 0 && amountUSD < limits.minWithdrawalUSD) {
+      setError(t('withdraw.minWarning').replace('{min}', `${limits.minWithdrawalUSD.toFixed(2)}`));
+      return;
+    }
+    setPhase('processing');
     const started = Date.now();
     try {
       const res = await post<{ netGHS: number }>('/api/withdraw', { asset, amountAsset: amt, method, destination, destName });
@@ -113,7 +118,6 @@ export default function MobileWithdraw() {
       </div>
       <p className="mt-1 text-xs text-muted">
         {t('withdraw.instructions')}
-        {limits && <> {t('withdraw.minPrefix')} <b className="text-white/80">${fmtNum(limits.minWithdrawalUSD)}</b>.</>}
       </p>
       {limits && (limits.withdrawMinPurchases ?? 0) > 0 && (
         <p className="mt-2 rounded-lg bg-panel px-3 py-2 text-[11px] text-muted">
@@ -147,7 +151,7 @@ export default function MobileWithdraw() {
         <input
           type="number"
           value={amount}
-          onChange={(e) => setAmount(e.target.value)}
+          onChange={(e) => { setAmount(e.target.value); if (error) setError(''); }}
           placeholder="0.00"
           className="num mt-1 w-full bg-transparent text-[24px] font-bold outline-none placeholder:text-line"
         />
@@ -201,13 +205,10 @@ export default function MobileWithdraw() {
         </div>
       )}
 
-      {error && <p className="mt-3 text-sm text-down">{error}</p>}
-      {limits && amountUSD > 0 && amountUSD < limits.minWithdrawalUSD && (
-        <p className="mt-2 text-xs text-gold">{t('withdraw.minPrefix')} ${fmtNum(limits.minWithdrawalUSD)} (≈ {fmtGHS(limits.minWithdrawalGHS)}).</p>
-      )}
+      {error && <p className="mt-3 rounded-lg bg-down/10 px-3 py-2 text-sm font-medium text-down">{error}</p>}
       <button
         onClick={submit}
-        disabled={!(amt > 0) || destination.replace(/\D/g, '').length < 8 || (limits ? amountUSD < limits.minWithdrawalUSD : false)}
+        disabled={!(amt > 0) || destination.replace(/\D/g, '').length < 8}
         className="mt-4 w-full rounded-full bg-white py-3 text-[14px] font-bold text-black disabled:opacity-40"
       >
         {t('withdraw.confirm')}

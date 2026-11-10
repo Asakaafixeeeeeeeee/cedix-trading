@@ -1,6 +1,7 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { parseResponse } from '@/lib/hooks';
 
 export function iosTime(d: string | Date) {
   const date = new Date(d);
@@ -24,14 +25,17 @@ export function iosFullTime(d: string | Date) {
 }
 
 export async function jfetch<T>(url: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(url, {
-    ...init,
-    headers: { 'Content-Type': 'application/json', ...(init?.headers ?? {}) },
-    cache: 'no-store',
-  });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error((data as { error?: string }).error ?? `Request failed (${res.status})`);
-  return data as T;
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      ...init,
+      headers: { 'Content-Type': 'application/json', ...(init?.headers ?? {}) },
+      cache: 'no-store',
+    });
+  } catch {
+    throw new Error('Network error. Please check your connection and try again.');
+  }
+  return parseResponse<T>(res);
 }
 
 /** Green CediX system avatar (matches the app icon). */
