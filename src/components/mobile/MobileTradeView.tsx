@@ -9,17 +9,18 @@ import { useDisplayPrefs } from '@/lib/prefs';
 import { fmtNum, fmtPct, fmtPrice, timeAgo } from '@/lib/format';
 import type { MarketRow } from '@/components/MarketTable';
 import type { Portfolio } from '@/lib/wallet';
+import type { Position } from '@/lib/positions';
 import {
   IconChevronDown, IconSearch, IconClose, IconAlertCircle, IconCandles,
 } from '@/components/icons';
 
 const CATEGORIES = [
-  { id: 'quick', label: 'Quick', enabled: false },
-  { id: 'spot', label: 'Spot', enabled: true },
-  { id: 'futures', label: 'Futures', enabled: false },
-  { id: 'tradfi', label: 'TradFi', enabled: false },
-  { id: 'options', label: 'Options', enabled: false },
-  { id: 'bots', label: 'Bots', enabled: false },
+  { id: 'quick', label: 'Quick', enabled: false, reason: 'Quick trade opens soon — for now use Spot to buy and sell at live prices.' },
+  { id: 'spot', label: 'Spot', enabled: true, reason: '' },
+  { id: 'futures', label: 'Futures', enabled: false, reason: 'Futures requires a licensed derivatives/custody partner and is not enabled.' },
+  { id: 'tradfi', label: 'TradFi', enabled: false, reason: 'Tokenized stocks/ETFs require a regulated brokerage partner and are not enabled.' },
+  { id: 'options', label: 'Options', enabled: false, reason: 'Options requires a licensed clearing partner and is not enabled.' },
+  { id: 'bots', label: 'Bots', enabled: false, reason: 'Automated trading bots are not enabled yet.' },
 ];
 
 type Depth = { bids: [number, number][]; asks: [number, number][] };
@@ -120,7 +121,7 @@ export default function MobileTradeView({ symbol }: { symbol: string }) {
         {CATEGORIES.map((c) => (
           <button
             key={c.id}
-            onClick={() => { if (!c.enabled) setNotice(`${c.label} trading is coming soon`); }}
+            onClick={() => { if (!c.enabled) setNotice(c.reason || `${c.label} is not available yet`); }}
             className={`shrink-0 pb-1 text-[14px] ${
               c.id === 'spot'
                 ? 'border-b-[3px] border-foreground font-bold text-foreground'
@@ -280,10 +281,10 @@ export default function MobileTradeView({ symbol }: { symbol: string }) {
             </div>
           </div>
 
-          {/* TP/SL — honest: not yet supported by the order engine */}
+          {/* TP/SL — honest: a Limit sell acts as a take-profit today */}
           <label className="mt-2.5 flex items-center gap-2 text-[12px] text-muted">
             <input type="checkbox" disabled className="h-3.5 w-3.5 opacity-50" />
-            TP/SL <span className="rounded bg-panel2 px-1 py-0.5 text-[9px] font-bold uppercase">Soon</span>
+            TP/SL <span className="text-[10px]">— use a Limit sell to set a take-profit price</span>
           </label>
 
           {/* Big confirm button */}
@@ -464,9 +465,10 @@ function OrdersSection({ symbol, orders, loggedIn, portfolio, money, onChanged }
   money: (usd: number, d?: number) => string;
   onChanged: () => void;
 }) {
-  const [tab, setTab] = useState<'orders' | 'assets' | 'bots'>('orders');
+  const [tab, setTab] = useState<'orders' | 'positions' | 'assets'>('orders');
   const [currentOnly, setCurrentOnly] = useState(false);
   const [busy, setBusy] = useState(false);
+  const { data: posData } = usePoll<{ positions: Position[]; summary: { totalPnl: number; totalValue: number } }>(loggedIn ? '/api/positions' : null, 6000);
 
   const open = orders.filter((o) => o.status === 'OPEN');
   const shown = (currentOnly ? orders.filter((o) => o.symbol === symbol) : orders).slice(0, 25);
@@ -503,8 +505,8 @@ function OrdersSection({ symbol, orders, loggedIn, portfolio, money, onChanged }
         {(
           [
             ['orders', `Orders (${open.length})`],
+            ['positions', `Positions (${posData?.positions.length ?? 0})`],
             ['assets', 'Assets'],
-            ['bots', 'Bots (0)'],
           ] as const
         ).map(([id, label]) => (
           <button
@@ -596,9 +598,44 @@ function OrdersSection({ symbol, orders, loggedIn, portfolio, money, onChanged }
         </div>
       )}
 
-      {tab === 'bots' && (
+      {tab === 'positions' && (
         <div className="mt-2 pb-4">
-          <EmptyState text="Trading bots coming soon" sub="Automated strategies are not yet available on CediX." />
+          {!loggedIn ? (
+            <EmptyState text="Log in to see positions" sub="Your open positions and live P/L appear here." action={{ href: '/m/login', label: 'Log in' }} />
+          ) : !posData || posData.positions.length === 0 ? (
+            <EmptyState text="No open positions" sub="Buy an asset to open a position and track its live profit/loss." action={{ href: `/m/trade/${symbol}`, label: 'Trade now' }} />
+          ) : (
+            <>
+              <div className="num mb-1 flex items-center justify-between rounded-xl bg-panel px-3 py-2 text-[12px]">
+                <span className="text-muted">Unrealised P/L</span>
+                <span className={`text-[14px] font-bold ${posData.summary.totalPnl >= 0 ? 'text-up' : 'text-down'}`}>
+                  {posData.summary.totalPnl >= 0 ? '+' : ''}{money(posData.summary.totalPnl)}
+                </span>
+              </div>
+              {posData.positions.map((p) => (
+                <div key={p.asset} className="border-b border-line/60 py-3 last:border-0">
+                  <div className="flex items-center gap-2">
+                    <CoinIcon asset={p.asset} size={28} />
+                    <span className="text-[13.5px] font-bold">{p.asset}<span className="text-muted">/USD</span></span>
+                    <span className="rounded bg-up/10 px-1.5 py-0.5 text-[10px] font-bold text-up">BUY</span>
+                    <span className={`ml-auto text-[13px] font-bold ${p.pnl >= 0 ? 'text-up' : 'text-down'}`}>
+                      {p.pnl >= 0 ? '+' : ''}{money(p.pnl)} ({p.pnlPct >= 0 ? '+' : ''}{fmtNum(p.pnlPct, 2)}%)
+                    </span>
+                  </div>
+                  <div className="num mt-1.5 grid grid-cols-2 gap-x-5 gap-y-0.5 text-[12px] text-muted">
+                    <span>Qty: <span className="text-foreground">{fmtNum(p.quantity)}</span></span>
+                    <span>Value: <span className="text-foreground">{money(p.currentValue)}</span></span>
+                    <span>Entry: <span className="text-foreground">{fmtNum(p.entryPrice, 4)}</span></span>
+                    <span>Price: <span className="text-foreground">{fmtNum(p.currentPrice, 4)}</span></span>
+                    <span>Invested: <span className="text-foreground">{money(p.invested)}</span></span>
+                    {p.realisedPnl !== 0 && (
+                      <span>Realised: <span className={p.realisedPnl >= 0 ? 'text-up' : 'text-down'}>{p.realisedPnl >= 0 ? '+' : ''}{money(p.realisedPnl)}</span></span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
         </div>
       )}
     </div>

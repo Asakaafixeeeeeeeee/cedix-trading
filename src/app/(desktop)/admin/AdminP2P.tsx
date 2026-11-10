@@ -12,7 +12,7 @@ type Order = {
   buyer: { username: string }; seller: { username: string };
 };
 type Settings = { enabled: boolean; expressEnabled: boolean; assistantEnabled: boolean; expiryMinutes: number; feePct: number };
-type Limits = { minDepositUSD: number; minWithdrawalUSD: number };
+type Limits = { minDepositUSD: number; minWithdrawalUSD: number; withdrawMinPurchases?: number };
 
 export default function AdminP2P() {
   const { data, refresh } = usePoll<{ offers: Offer[]; orders: Order[]; disputes: Order[]; settings?: Settings; limits?: Limits }>('/api/admin/p2p', 15000);
@@ -83,6 +83,7 @@ export default function AdminP2P() {
           {lim && ([
             ['Min deposit (USD)', 'minDepositUSD', lim.minDepositUSD],
             ['Min withdrawal (USD)', 'minWithdrawalUSD', lim.minWithdrawalUSD],
+            ['Purchases before withdrawal', 'withdrawMinPurchases', lim.withdrawMinPurchases ?? 0],
           ] as const).map(([label, key, value]) => (
             <NumberSetting key={key} label={label} value={value} draft={draft[key]} setDraft={(v) => setDraft((d) => ({ ...d, [key]: v }))} onSave={(n) => saveSettings({ [key]: n })} busy={busy === 'settings'} />
           ))}

@@ -17,7 +17,7 @@ export default function MobileWithdraw() {
   const [destination, setDestination] = useState('');
   const [destName, setDestName] = useState('');
   const [quote, setQuote] = useState<Quote | null>(null);
-  const [limits, setLimits] = useState<{ minWithdrawalUSD: number; minWithdrawalGHS: number } | null>(null);
+  const [limits, setLimits] = useState<{ minWithdrawalUSD: number; minWithdrawalGHS: number; withdrawMinPurchases?: number; completedPurchases?: number } | null>(null);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -114,6 +114,13 @@ export default function MobileWithdraw() {
         Cash out any crypto straight to MoMo or bank — requests are reviewed before payment.
         {limits && <> Minimum withdrawal: <b className="text-white/80">${fmtNum(limits.minWithdrawalUSD)}</b>.</>}
       </p>
+      {limits && (limits.withdrawMinPurchases ?? 0) > 0 && (
+        <p className="mt-2 rounded-lg bg-panel px-3 py-2 text-[11px] text-muted">
+          Withdrawal eligibility: {limits.withdrawMinPurchases} completed purchase{(limits.withdrawMinPurchases ?? 0) > 1 ? 's' : ''} required
+          {' '}(<b className={`${(limits.completedPurchases ?? 0) >= (limits.withdrawMinPurchases ?? 0) ? 'text-up' : 'text-gold'}`}>{limits.completedPurchases ?? 0}/{limits.withdrawMinPurchases}</b> done).
+          Only genuinely completed buy orders count.
+        </p>
+      )}
 
       <div className="-mx-1 mt-4 flex gap-1.5 overflow-x-auto px-1 [scrollbar-width:none]">
         {(assets.length ? assets.map((a) => a.asset) : ['USDT']).map((a) => (

@@ -53,6 +53,7 @@ export async function PATCH(req: Request) {
       if (typeof body?.feePct === 'number' && body.feePct >= 0 && body.feePct <= 10) updates.push(['p2p_fee_pct', body.feePct]);
       if (typeof body?.minDepositUSD === 'number' && body.minDepositUSD >= 0) updates.push(['min_deposit_usd', body.minDepositUSD]);
       if (typeof body?.minWithdrawalUSD === 'number' && body.minWithdrawalUSD >= 0) updates.push(['min_withdrawal_usd', body.minWithdrawalUSD]);
+      if (typeof body?.withdrawMinPurchases === 'number' && body.withdrawMinPurchases >= 0 && body.withdrawMinPurchases <= 100) updates.push(['withdraw_min_purchases', Math.floor(body.withdrawMinPurchases)]);
       if (updates.length === 0) throw new Error('No valid settings supplied');
       for (const [key, value] of updates) {
         await prisma.setting.upsert({ where: { key }, update: { value }, create: { key, value } });

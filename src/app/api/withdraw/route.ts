@@ -3,7 +3,7 @@ import { prisma } from '@/lib/db';
 import { getFx } from '@/lib/fx';
 import { getBaseAssetPrice } from '@/lib/markets';
 import { debit } from '@/lib/wallet';
-import { getLimits } from '@/lib/limits';
+import { getLimits, completedPurchaseCount } from '@/lib/limits';
 import { api } from '@/lib/api';
 import { notifyUser } from '@/lib/notify';
 
@@ -52,6 +52,14 @@ export async function POST(req: Request) {
     const limits = await getLimits();
     if (amountUSD < limits.minWithdrawalUSD - 1e-9) {
       throw new Error(`Minimum withdrawal is $${limits.minWithdrawalUSD.toFixed(2)} (≈ GH₵${(limits.minWithdrawalUSD * fx.rate).toFixed(2)})`);
+    }
+    // Disclosed anti-abuse gate (off by default). Counts only genuinely
+    // completed purchases — never cancelled, failed or open orders.
+    if (limits.withdrawMinPurchases > 0) {
+      const purchases = await completedPurchaseCount(user.id);
+      if (purchases < limits.withdrawMinPurchases) {
+        throw new Error(`Complete ${limits.withdrawMinPurchases} successful purchase${limits.withdrawMinPurchases > 1 ? 's' : ''} before withdrawing (${purchases}/${limits.withdrawMinPurchases} done).`);
+      }
     }
 
     // Debit and hold the funds; they are refunded if the request is rejected.
