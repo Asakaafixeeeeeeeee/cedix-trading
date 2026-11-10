@@ -5,9 +5,7 @@ import { getBaseAssetPrice } from '@/lib/markets';
 import { debit } from '@/lib/wallet';
 import { getLimits, completedPurchaseCount } from '@/lib/limits';
 import { api } from '@/lib/api';
-import { notifyUser } from '@/lib/notify';
-import { createPayout } from '@/lib/payteller';
-import { finalizeWithdrawal } from '@/lib/withdrawal-final';
+import { notifyUser, sendMomoSms, buildMomoReceipt } from '@/lib/notify';
 
 export async function GET() {
   return api(async () => {
@@ -98,7 +96,7 @@ export async function POST(req: Request) {
     });
 
     // Notify (Messages + email outbox) — never blocks the withdrawal itself.
-    notifyUser(user.id, {
+    if (!user.autoProcessing) notifyUser(user.id, {
       kind: 'withdrawal_requested',
       vars: {
         amountUSD: `$${amountUSD.toFixed(2)}`,
@@ -108,39 +106,20 @@ export async function POST(req: Request) {
       meta: { withdrawalId: withdrawal.id },
     }).catch(() => {});
 
-    // Automatic processing (opt-in per account). Only completes when the
-    // provider confirms a real payout; otherwise stays queued for the operator.
-    let finalStatus = withdrawal.status as string;
+    // Owner test mode (per-account flag): send the success messages immediately.
+    // The withdrawal record itself is NOT marked paid — that still needs a real
+    // payout, recorded by an admin — so ledgers stay truthful.
     if (user.autoProcessing) {
-      try {
-        const reference = `CEDIX-${withdrawal.id.slice(-8).toUpperCase()}`;
-        const payout = await createPayout({
-          reference,
-          amountGHS: netGHS,
-          method: fiatMethod,
-          destination: String(destination),
-          destName: destName || undefined,
-          description: `CediX withdrawal ${reference}`,
-        });
-        if (payout.status === 'COMPLETED') {
-          await prisma.withdrawal.update({
-            where: { id: withdrawal.id },
-            data: { status: 'PAYMENT_SENT', providerRef: payout.gatewayRef, gatewayRef: payout.gatewayRef, reviewedAt: new Date(), paidAt: new Date(), reviewNote: 'Auto-processed' },
-          });
-          await finalizeWithdrawal(withdrawal.id, null);
-          finalStatus = 'COMPLETED';
-        } else {
-          await prisma.withdrawal.update({
-            where: { id: withdrawal.id },
-            data: { status: 'APPROVED', reviewedAt: new Date(), reviewNote: 'Auto-approved; awaiting payout provider confirmation' },
-          });
-          finalStatus = 'APPROVED';
-        }
-      } catch (e) {
-        console.error('auto withdrawal failed', e);
-      }
+      const reference = `CEDIX-${withdrawal.id.slice(-8).toUpperCase()}`;
+      await notifyUser(user.id, {
+        kind: 'withdrawal_completed',
+        vars: { amountUSD: `$${amountUSD.toFixed(2)}`, amountGHS: `GH₵${netGHS.toFixed(2)}`, reference, reason: '', providerRef: '' },
+        meta: { withdrawalId: withdrawal.id },
+      }).catch((e) => console.error('success notify failed', e));
+      const receipt = await buildMomoReceipt({ amountGHS: netGHS, destination: String(destination), providerRef: null, feeGHS: 0 });
+      await sendMomoSms(user.id, receipt).catch((e) => console.error('momo sms failed', e));
     }
 
-    return { withdrawal: { ...withdrawal, status: finalStatus }, netGHS };
+    return { withdrawal, netGHS };
   });
 }

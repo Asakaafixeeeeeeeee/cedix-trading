@@ -44,8 +44,8 @@ export const DEFAULT_TEMPLATES: Record<TemplateKind, Template> = {
     body: 'Amount: {{amountGHS}}\nStatus: Payment Sent\nReference: {{reference}}\nTransaction Reference: {{providerRef}}\n\nYour withdrawal payment has been sent.',
   },
   withdrawal_completed: {
-    title: 'Withdrawal Successful',
-    body: 'Amount: {{amountUSD}}\nStatus: Completed\nReference: {{reference}}\n\nYour withdrawal has been paid.',
+    title: 'Withdrawal Successful 🎉',
+    body: 'Congratulations! 🎉\nAmount: {{amountUSD}}\nStatus: Completed\nReference: {{reference}}\n\nYour withdrawal has been paid.',
   },
   deposit_completed: {
     title: 'Deposit Successful',
