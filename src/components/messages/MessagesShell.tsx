@@ -45,6 +45,9 @@ export default function MessagesShell({ children }: { children: React.ReactNode 
         /* Straight bubbles — clean rounded rectangles, no tails */
         .bubble-in{position:relative}
         .bubble-out{position:relative}
+        /* Sender names: use a font whose lowercase "l" is a straight vertical
+           stroke (iOS San Francisco gives it a curved tail). Keeps spelling. */
+        .msg-name{font-family:'Helvetica Neue',Arial,'Liberation Sans','Roboto',sans-serif}
       `}</style>
       {children}
     </div>

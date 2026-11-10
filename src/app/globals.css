@@ -112,3 +112,6 @@ input[type="number"] {
   -moz-appearance: textfield;
   appearance: textfield;
 }
+
+/* Sender names: font whose lowercase l is a straight vertical stroke */
+.msg-name { font-family: 'Helvetica Neue', Arial, 'Liberation Sans', Roboto, sans-serif; }

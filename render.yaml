@@ -17,7 +17,13 @@ services:
     region: frankfurt
     plan: starter # "free" works for testing (service sleeps when idle; uploads are ephemeral)
     buildCommand: npm ci --include=dev && npx prisma generate && npm run build
-    startCommand: npm run start:prod
+    # Migrations run BEFORE the swap, while the old instance keeps serving.
+    # A failed migration fails the deploy and leaves the old version running
+    # (safe rollback) instead of taking the site down.
+    preDeployCommand: npm run migrate:deploy
+    # Start is now just the Next server, so the new instance binds Render's
+    # PORT in ~400ms, minimising the deploy-swap window.
+    startCommand: npm run start:web
     healthCheckPath: /api/health
     envVars:
       - key: DATABASE_URL

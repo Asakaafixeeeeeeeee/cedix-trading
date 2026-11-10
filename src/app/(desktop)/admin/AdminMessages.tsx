@@ -435,7 +435,7 @@ export default function AdminMessages({ initialSub = 'users' }: { initialSub?: '
                       </span>
                     </td>
                     <td>
-                      <p className="font-medium">{s.name} {s.system && <span className="ml-1 rounded bg-panel2 px-1.5 py-0.5 text-[10px] text-muted">SYSTEM</span>}</p>
+                      <p className="msg-name font-medium">{s.name} {s.system && <span className="ml-1 rounded bg-panel2 px-1.5 py-0.5 text-[10px] text-muted">SYSTEM</span>}</p>
                       {s.phone && <p className="text-muted">{s.phone}</p>}
                     </td>
                     <td className={s.allowReplies ? 'text-up' : 'text-muted'}>{s.allowReplies ? 'Enabled' : 'Read-only'}</td>

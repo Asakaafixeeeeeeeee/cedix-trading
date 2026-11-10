@@ -130,7 +130,7 @@ export default function MessagesThread({ id }: { id: string }) {
           </Link>
           <ConversationAvatar sender={thread?.sender ?? null} size={62} />
           <span className="msg-glass-soft -mt-2 flex items-center gap-0.5 rounded-full px-3 py-1">
-            <span className="max-w-[180px] truncate text-[13px] font-semibold text-[#111]">{thread?.name ?? ''}</span>
+            <span className="msg-name max-w-[180px] truncate text-[13px] font-semibold text-[#111]">{thread?.name ?? ''}</span>
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" strokeWidth="3" strokeLinecap="round">
               <path d="M9 6l6 6-6 6" />
             </svg>

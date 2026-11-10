@@ -222,7 +222,7 @@ export default function MessagesHome() {
                   <ConversationAvatar sender={c.sender} />
                   <span className="flex min-w-0 flex-1 flex-col border-b border-[#e5e5ea] py-1.5">
                     <span className="flex items-baseline justify-between gap-2">
-                      <span className="truncate text-[15px] font-semibold">{c.name}</span>
+                      <span className="msg-name truncate text-[15px] font-semibold">{c.name}</span>
                       <span className="flex shrink-0 items-center gap-1 text-[12px] text-[#8e8e93]">
                         {c.last ? iosTime(c.last.createdAt) : ''}
                         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#c7c7cc" strokeWidth="2.5" strokeLinecap="round">
