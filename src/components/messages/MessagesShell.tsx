@@ -1,5 +1,6 @@
 'use client';
 import { useEffect } from 'react';
+import MessageNotifier from './MessageNotifier';
 
 /**
  * Shell for the Messages PWA:
@@ -48,7 +49,19 @@ export default function MessagesShell({ children }: { children: React.ReactNode 
         /* Sender names: use a font whose lowercase "l" is a straight vertical
            stroke (iOS San Francisco gives it a curved tail). Keeps spelling. */
         .msg-name{font-family:'Helvetica Neue',Arial,'Liberation Sans','Roboto',sans-serif}
+        /* iOS notification banner — frosted glass over the page content */
+        .msg-notif{
+          background:linear-gradient(180deg,rgba(243,243,245,.78),rgba(236,236,240,.72));
+          -webkit-backdrop-filter:blur(22px) saturate(1.8);
+          backdrop-filter:blur(22px) saturate(1.8);
+          border:1px solid rgba(255,255,255,.6);
+          box-shadow:
+            inset 0 1px 1px rgba(255,255,255,.85),
+            0 12px 34px rgba(0,0,0,.22),
+            0 3px 10px rgba(0,0,0,.12);
+        }
       `}</style>
+      <MessageNotifier />
       {children}
     </div>
   );
