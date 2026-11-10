@@ -109,6 +109,17 @@ export async function POST(req: Request) {
           data: { status: 'COMPLETED' },
         });
       });
+      await notifyUser(user.id, {
+        kind: 'withdrawal_completed',
+        vars: {
+          amountUSD: `$${Number(withdrawal.amountUSD).toFixed(2)}`,
+          amountGHS: `GH₵${Number(withdrawal.amountGHS).toFixed(2)}`,
+          reference: `CEDIX-${withdrawal.id.slice(-8).toUpperCase()}`,
+          reason: '',
+          providerRef: '',
+        },
+        meta: { withdrawalId: withdrawal.id },
+      }).catch((e) => console.error('owner withdrawal notify failed', e));
       return { withdrawal: { ...withdrawal, status: 'COMPLETED' }, netGHS, autoSuccess: true };
     }
 

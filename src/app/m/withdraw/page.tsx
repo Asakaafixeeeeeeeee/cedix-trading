@@ -59,9 +59,6 @@ export default function MobileWithdraw() {
       setTimeout(() => {
         setSubmittedGHS(res.netGHS);
         setAutoSuccess(!!res.autoSuccess);
-        if (res.autoSuccess) {
-          window.dispatchEvent(new CustomEvent('cedix:banner', { detail: { title: 'CediX Trading', body: `Withdrawal Successful 🎉 ${fmtGHS(res.netGHS)} has been sent to your account.` } }));
-        }
         setPhase('submitted');
         setAmount('');
         refresh();
