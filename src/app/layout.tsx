@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import { PrefsProvider } from "@/lib/prefs";
+import MessageNotifier from "@/components/messages/MessageNotifier";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -41,6 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-full flex flex-col">
         <PrefsProvider>
           <Suspense>{children}</Suspense>
+          <MessageNotifier global />
         </PrefsProvider>
       </body>
     </html>

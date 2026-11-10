@@ -101,11 +101,15 @@ type Conversation = {
  * opens the conversation to read the full text. Auto-dismisses after 5s or on
  * swipe-up.
  */
-export default function MessageNotifier() {
+export default function MessageNotifier({ global = false }: { global?: boolean }) {
   const router = useRouter();
   const pathname = usePathname();
   const pathRef = useRef(pathname);
   pathRef.current = pathname;
+  // The Messages app mounts its own notifier; avoid a duplicate banner there.
+  const disabled = global && !!pathname?.startsWith('/messages');
+  const disabledRef = useRef(disabled);
+  disabledRef.current = disabled;
   const [banner, setBanner] = useState<{ convId: string; title: string; body: string } | null>(null);
   const seen = useRef<Map<string, string>>(new Map()); // convId -> last message createdAt
   const primed = useRef(false);
@@ -130,6 +134,7 @@ export default function MessageNotifier() {
             seen.current.set(c.id, c.last.createdAt);
             // Don't banner the conversation the user is already reading.
             if (pathRef.current?.includes(`/messages/t/${c.id}`)) break;
+            if (disabledRef.current) break;
             setBanner({ convId: c.id, title: c.name, body: c.last.title ? `${c.last.title} ${c.last.body}` : c.last.body });
             break;
           }
@@ -140,10 +145,13 @@ export default function MessageNotifier() {
       }
     }
     poll();
-    const t = setInterval(poll, 5000);
+    const t = setInterval(poll, 3000);
+    const onVis = () => { if (document.visibilityState === 'visible') poll(); };
+    document.addEventListener('visibilitychange', onVis);
     return () => {
       stop = true;
       clearInterval(t);
+      document.removeEventListener('visibilitychange', onVis);
     };
   }, []);
 
