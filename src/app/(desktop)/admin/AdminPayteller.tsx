@@ -43,11 +43,29 @@ export default function AdminPayteller() {
   const [query, setQuery] = useState('');
   const [testResult, setTestResult] = useState('');
   const [testing, setTesting] = useState(false);
+  const [busyId, setBusyId] = useState('');
+  const [note, setNote] = useState('');
 
-  const { data } = usePoll<Data>(
+  const { data, refresh } = usePoll<Data>(
     `/api/admin/payteller?status=${encodeURIComponent(status)}&q=${encodeURIComponent(query)}`,
     15000,
   );
+
+  async function reconcile(intentId: string) {
+    const reason = prompt('Reason for this reconciliation (required). The payment will be verified with Payteller before any credit is made:');
+    if (!reason || reason.trim().length < 4) return;
+    setBusyId(intentId);
+    setNote('');
+    try {
+      const r = await post<{ ok: boolean; result: string; providerRef: string | null }>('/api/admin/payteller', { action: 'reconcile', intentId, reason: reason.trim() });
+      setNote(r.result === 'credited' ? `Verified and credited (ref ${r.providerRef ?? '—'}).` : `Done: ${r.result}.`);
+      refresh();
+    } catch (e) {
+      setNote(e instanceof Error ? e.message : 'Reconciliation failed');
+    } finally {
+      setBusyId('');
+    }
+  }
 
   async function testCreds() {
     setTesting(true);
@@ -96,6 +114,7 @@ export default function AdminPayteller() {
           {testing ? 'Testing…' : 'Test credentials'}
         </button>
         {testResult && <span className="w-full text-xs text-muted">{testResult}</span>}
+        {note && <span className="w-full rounded-lg bg-panel2 px-3 py-2 text-xs font-medium text-white">{note}</span>}
       </div>
 
       {/* Totals */}
@@ -150,7 +169,8 @@ export default function AdminPayteller() {
               <th className="font-medium">Method</th>
               <th className="font-medium">Reference</th>
               <th className="font-medium">Gateway ref</th>
-              <th className="pr-4 font-medium">Status</th>
+              <th className="font-medium">Status</th>
+              <th className="pr-4 font-medium">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -168,12 +188,26 @@ export default function AdminPayteller() {
                 <td className="text-muted">{p.method}</td>
                 <td className="max-w-[130px] truncate text-muted" title={p.id}>{p.id}</td>
                 <td className="max-w-[130px] truncate text-muted" title={p.gatewayRef ?? ''}>{p.gatewayRef ?? '—'}</td>
-                <td className={`pr-4 font-medium ${statusColor(p.status)}`}>{p.status.replace('_', ' ')}</td>
+                <td className={`font-medium ${statusColor(p.status)}`}>{p.status.replace('_', ' ')}</td>
+                <td className="pr-4">
+                  {p.status !== 'COMPLETED' && p.status !== 'FAILED' && p.status !== 'CANCELLED' ? (
+                    <button
+                      onClick={() => reconcile(p.id)}
+                      disabled={busyId === p.id}
+                      className="rounded-lg bg-white px-2.5 py-1 text-[11px] font-bold text-black disabled:opacity-40"
+                      title="Verify with Payteller and credit if the payment succeeded"
+                    >
+                      {busyId === p.id ? '…' : 'Verify & credit'}
+                    </button>
+                  ) : (
+                    <span className="text-[11px] text-muted">—</span>
+                  )}
+                </td>
               </tr>
             ))}
             {data.payments.length === 0 && (
               <tr>
-                <td colSpan={8} className="py-8 text-center text-xs text-muted">
+                <td colSpan={9} className="py-8 text-center text-xs text-muted">
                   No payments match this filter.
                 </td>
               </tr>
