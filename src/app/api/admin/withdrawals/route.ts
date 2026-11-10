@@ -1,7 +1,7 @@
 import { api } from '@/lib/api';
 import { prisma } from '@/lib/db';
 import { requireElevatedAdmin } from '@/lib/auth';
-import { notifyUser, sendMomoSms } from '@/lib/notify';
+import { notifyUser, sendMomoSms, buildMomoReceipt } from '@/lib/notify';
 
 /**
  * Admin: WITHDRAWAL MANAGEMENT — review pipeline.
@@ -106,18 +106,39 @@ export async function PATCH(req: Request) {
         });
       });
       await audit('complete');
+      // 1. CediX Trading — USD withdrawal confirmation.
       notifyUser(wd.userId, {
         kind: 'withdrawal_completed',
         vars: { ...vars, providerRef: wd.providerRef ?? '' },
         meta: { withdrawalId: wd.id },
       }).catch(() => {});
-      // MobileMoney SMS-style receipt — provider reference is the REAL one
-      // recorded by the operator when the payout was sent.
-      const txnLine = wd.providerRef ? `Transaction Id: ${wd.providerRef}. ` : '';
-      sendMomoSms(
-        wd.userId,
-        `Cash In made for GHS${Number(wd.amountGHS).toFixed(2)} to ${wd.destination}. ${txnLine}TRANSACTION FEE IS 0. CediX Trading withdrawal ${reference} completed.`,
-      ).catch(() => {});
+      // 2. MobileMoney — GHS receipt only (never USD). Built from verified
+      //    records; provider transaction id is the real recorded reference.
+      //    Awaited so a delivery failure is surfaced, not silently swallowed.
+      const receipt = await buildMomoReceipt({
+        amountGHS: Number(wd.amountGHS),
+        destination: wd.destination,
+        providerRef: wd.providerRef,
+        feeGHS: 0,
+      });
+      const momo = await sendMomoSms(wd.userId, receipt).catch((e) => ({ delivered: false, reason: String(e) }));
+      await audit('momo_receipt', { delivered: momo.delivered, reason: momo.reason ?? '' });
+      return { ok: true, momoReceipt: momo.delivered };
+    }
+
+    // Resend the MobileMoney GHS receipt for an already-completed withdrawal
+    // (fixes a receipt that failed to deliver). No duplicate CediX message.
+    if (action === 'resend-momo') {
+      if (wd.status !== 'COMPLETED') throw new Error('Only completed withdrawals have a MobileMoney receipt');
+      const receipt = await buildMomoReceipt({
+        amountGHS: Number(wd.amountGHS),
+        destination: wd.destination,
+        providerRef: wd.providerRef,
+        feeGHS: 0,
+      });
+      const momo = await sendMomoSms(wd.userId, receipt);
+      await audit('momo_resend', { delivered: momo.delivered, reason: momo.reason ?? '' });
+      if (!momo.delivered) throw new Error(`Could not deliver: ${momo.reason ?? 'unknown'}. Ensure the user has activated Messages.`);
       return { ok: true };
     }
 

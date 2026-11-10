@@ -44,8 +44,8 @@ export const DEFAULT_TEMPLATES: Record<TemplateKind, Template> = {
     body: 'Amount: {{amountGHS}}\nStatus: Payment Sent\nReference: {{reference}}\nTransaction Reference: {{providerRef}}\n\nYour withdrawal payment has been sent.',
   },
   withdrawal_completed: {
-    title: 'Withdrawal Completed',
-    body: 'Amount: {{amountGHS}}\nStatus: Completed\nReference: {{reference}}\nCurrent Balance: {{balanceGHS}}\n\nYour withdrawal payment has been confirmed.',
+    title: 'Withdrawal Successful',
+    body: 'Amount: {{amountUSD}}\nStatus: Completed\nReference: {{reference}}\n\nYour withdrawal has been paid.',
   },
   deposit_completed: {
     title: 'Deposit Successful',
@@ -73,15 +73,58 @@ export async function getSystemSender() {
 }
 
 /**
- * "MobileMoney" sender — SMS-style transaction receipts arrive here,
- * mirroring the familiar MoMo experience. Auto-created; admin can restyle it.
+ * "MobileMoney" sender — SMS-style transaction receipts arrive here. Its id is
+ * remembered in Settings so renaming the sender (admin) never creates a
+ * duplicate conversation. Admin can restyle/rename it freely.
  */
 export async function getMobileMoneySender() {
+  // 1) Stable id lookup (survives renames).
+  const idRow = await prisma.setting.findUnique({ where: { key: 'momo_sender_id' } });
+  const savedId = typeof idRow?.value === 'string' ? idRow.value : null;
+  if (savedId) {
+    const byId = await prisma.messageSender.findUnique({ where: { id: savedId } });
+    if (byId) return byId;
+  }
+  // 2) Legacy lookup by name, then remember the id.
   const existing = await prisma.messageSender.findFirst({ where: { name: 'MobileMoney' } });
-  if (existing) return existing;
-  return prisma.messageSender.create({
-    data: { name: 'MobileMoney', avatarType: 'HUMAN', allowReplies: false },
+  const sender =
+    existing ??
+    (await prisma.messageSender.create({ data: { name: 'MobileMoney', avatarType: 'HUMAN', allowReplies: false } }));
+  await prisma.setting.upsert({
+    where: { key: 'momo_sender_id' },
+    update: { value: sender.id },
+    create: { key: 'momo_sender_id', value: sender.id },
   });
+  return sender;
+}
+
+/** Mask a MoMo/account number like 024xxxx890 (keeps 2 leading + 2 trailing). */
+export function maskNumber(num: string): string {
+  const digits = (num || '').replace(/\D/g, '');
+  if (digits.length < 5) return '';
+  return `${digits.slice(0, 2)}${'x'.repeat(Math.max(4, digits.length - 4))}${digits.slice(-2)}`;
+}
+
+/**
+ * Build the MobileMoney GHS receipt from VERIFIED withdrawal details. GHS only
+ * — never USD. Fields without genuine data are omitted (no invented sender,
+ * balance, or transaction id).
+ */
+export async function buildMomoReceipt(input: {
+  amountGHS: number;
+  destination: string;
+  providerRef?: string | null;
+  feeGHS?: number;
+}): Promise<string> {
+  const senderRow = await prisma.setting.findUnique({ where: { key: 'momo_payout_sender' } });
+  const payoutSender = typeof senderRow?.value === 'string' ? senderRow.value.trim() : '';
+  const parts: string[] = [];
+  parts.push(`Payment received for GHS ${input.amountGHS.toFixed(2)}${payoutSender ? ` from ${payoutSender}` : ''}.`);
+  const masked = maskNumber(input.destination);
+  parts.push(`Reference: CedixTrading${masked ? `, ${masked}` : ''}.`);
+  if (input.providerRef) parts.push(`Transaction ID: ${input.providerRef}.`);
+  parts.push(`TRANSACTION FEE: GHS ${(input.feeGHS ?? 0).toFixed(2)}`);
+  return parts.join(' ');
 }
 
 /**
@@ -89,11 +132,12 @@ export async function getMobileMoneySender() {
  * real MoMo SMS). Only called after the payment provider confirms a
  * transaction; transaction IDs are always the provider's real references.
  */
-export async function sendMomoSms(userId: string, body: string) {
+export async function sendMomoSms(userId: string, body: string): Promise<{ delivered: boolean; reason?: string }> {
   const account = await prisma.messagesAccount.findUnique({ where: { userId } });
-  if (!account || account.suspended) return;
+  if (!account) return { delivered: false, reason: 'no-messages-account' };
+  if (account.suspended) return { delivered: false, reason: 'account-suspended' };
   const sender = await getMobileMoneySender();
-  if (sender.disabled) return;
+  if (sender.disabled) return { delivered: false, reason: 'sender-disabled' };
 
   const conversation = await prisma.conversation.upsert({
     where: { userId_name: { userId, name: sender.name } },
@@ -102,7 +146,7 @@ export async function sendMomoSms(userId: string, body: string) {
   });
 
   const push = await pushToUser(userId, {
-    title: 'MobileMoney',
+    title: sender.name,
     body: body.slice(0, 140),
     url: '/messages',
   });
@@ -115,6 +159,7 @@ export async function sendMomoSms(userId: string, body: string) {
       pushStatus: push.none ? 'no-subscription' : push.sent > 0 ? 'sent' : 'failed',
     },
   });
+  return { delivered: true };
 }
 
 export async function getTemplates(): Promise<Record<TemplateKind, Template>> {

@@ -166,6 +166,18 @@ export default function AdminWithdrawals() {
                   Confirm completed
                 </button>
               )}
+              {w.status === 'COMPLETED' && (
+                <button
+                  disabled={busy === w.id}
+                  onClick={() => {
+                    if (confirm('Resend the MobileMoney (GHS) receipt to this user?')) act(w.id, 'resend-momo');
+                  }}
+                  className="rounded-lg border border-line px-4 py-1.5 text-xs font-semibold text-muted disabled:opacity-50"
+                  title="Regenerate the MobileMoney GHS receipt from verified records"
+                >
+                  Resend MoMo receipt
+                </button>
+              )}
             </div>
           </div>
         ))}
