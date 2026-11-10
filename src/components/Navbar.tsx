@@ -21,6 +21,9 @@ export default function Navbar() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const { theme, setTheme, currency, setCurrency } = useDisplayPrefs();
+  // Inside the admin dashboard the trading-app chrome (Markets/Trade/Assets…)
+  // is hidden so the panel stays clean and focused.
+  const isAdminArea = pathname.startsWith('/admin');
 
   async function logout() {
     await post('/api/auth/logout');
@@ -37,7 +40,7 @@ export default function Navbar() {
           CediX
         </Link>
         <nav className="hidden items-center gap-1 md:flex">
-          {LINKS.map((l) => {
+          {!isAdminArea && LINKS.map((l) => {
             const active = pathname === l.href || (l.match && pathname.startsWith(l.match));
             return (
               <Link
@@ -51,6 +54,7 @@ export default function Navbar() {
               </Link>
             );
           })}
+          {isAdminArea && <span className="rounded-md bg-gold/15 px-3 py-1 text-xs font-bold text-gold">Admin</span>}
         </nav>
         <div className="ml-auto flex items-center gap-3">
           <button
@@ -62,12 +66,14 @@ export default function Navbar() {
           </button>
           {!loading && user ? (
             <>
-              <Link
-                href="/deposit"
-                className="rounded-md bg-white px-4 py-1.5 text-sm font-semibold text-black hover:bg-gray-200"
-              >
-                Deposit
-              </Link>
+              {!isAdminArea && (
+                <Link
+                  href="/deposit"
+                  className="rounded-md bg-white px-4 py-1.5 text-sm font-semibold text-black hover:bg-gray-200"
+                >
+                  Deposit
+                </Link>
+              )}
               <div className="relative">
                 <button
                   onClick={() => setMenuOpen((v) => !v)}
@@ -83,25 +89,28 @@ export default function Navbar() {
                     className="absolute right-0 mt-2 w-48 overflow-hidden rounded-lg border border-line bg-panel shadow-xl"
                     onMouseLeave={() => setMenuOpen(false)}
                   >
-                    <Link href="/assets" className="block px-4 py-2.5 text-sm hover:bg-panel2" onClick={() => setMenuOpen(false)}>My Assets</Link>
-                    <Link href="/withdraw" className="block px-4 py-2.5 text-sm hover:bg-panel2" onClick={() => setMenuOpen(false)}>Withdraw (Fiat)</Link>
-                    <div className="flex items-center justify-between px-4 py-2.5 text-sm">
-                      <span className="text-muted">Currency</span>
-                      <span className="flex overflow-hidden rounded-md border border-line text-xs">
-                        {(['USD', 'GHS'] as const).map((c) => (
-                          <button
-                            key={c}
-                            onClick={() => setCurrency(c)}
-                            className={`px-2.5 py-1 font-semibold ${currency === c ? 'bg-white text-black' : 'text-muted'}`}
-                          >
-                            {c}
-                          </button>
-                        ))}
-                      </span>
-                    </div>
-                    <Link href="/m" className="block px-4 py-2.5 text-sm hover:bg-panel2" onClick={() => setMenuOpen(false)}>Mobile App</Link>
-                    {user.role === 'ADMIN' && (
-                      <Link href="/admin" className="block px-4 py-2.5 text-sm text-gold hover:bg-panel2" onClick={() => setMenuOpen(false)}>Admin Dashboard</Link>
+                    {isAdminArea ? (
+                      <Link href="/" className="block px-4 py-2.5 text-sm hover:bg-panel2" onClick={() => setMenuOpen(false)}>Exit to site</Link>
+                    ) : (
+                      <>
+                        <Link href="/assets" className="block px-4 py-2.5 text-sm hover:bg-panel2" onClick={() => setMenuOpen(false)}>My Assets</Link>
+                        <Link href="/withdraw" className="block px-4 py-2.5 text-sm hover:bg-panel2" onClick={() => setMenuOpen(false)}>Withdraw (Fiat)</Link>
+                        <div className="flex items-center justify-between px-4 py-2.5 text-sm">
+                          <span className="text-muted">Currency</span>
+                          <span className="flex overflow-hidden rounded-md border border-line text-xs">
+                            {(['USD', 'GHS'] as const).map((c) => (
+                              <button
+                                key={c}
+                                onClick={() => setCurrency(c)}
+                                className={`px-2.5 py-1 font-semibold ${currency === c ? 'bg-white text-black' : 'text-muted'}`}
+                              >
+                                {c}
+                              </button>
+                            ))}
+                          </span>
+                        </div>
+                        <Link href="/m" className="block px-4 py-2.5 text-sm hover:bg-panel2" onClick={() => setMenuOpen(false)}>Mobile App</Link>
+                      </>
                     )}
                     <button onClick={logout} className="block w-full px-4 py-2.5 text-left text-sm text-down hover:bg-panel2">
                       Log out

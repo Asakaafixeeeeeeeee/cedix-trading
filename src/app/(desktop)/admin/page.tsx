@@ -51,9 +51,10 @@ type SectionId =
   | 'orbit' | 'moderation' | 'content' | 'sitetext' | 'trading'
   | 'settings' | 'security' | 'logs' | 'audit';
 
-const NAV: { group: string; items: { id: SectionId; label: string; icon: string }[] }[] = [
+const NAV: { group: string; color: string; items: { id: SectionId; label: string; icon: string }[] }[] = [
   {
     group: 'Main',
+    color: 'blue',
     items: [
       { id: 'overview', label: 'Dashboard Overview', icon: 'M3 13h8V3H3v10zm10 8h8V11h-8v10zM3 21h8v-6H3v6zm10-18v6h8V3h-8z' },
       { id: 'users', label: 'Users Management', icon: 'M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zm13 10v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75' },
@@ -67,6 +68,7 @@ const NAV: { group: string; items: { id: SectionId; label: string; icon: string 
   },
   {
     group: 'Messaging',
+    color: 'green',
     items: [
       { id: 'msg-dashboard', label: 'Messages Dashboard', icon: 'M21 11.5a8.4 8.4 0 01-9 8.4 8.6 8.6 0 01-3.8-.9L3 21l2-5.2a8.4 8.4 0 1116-4.3z' },
       { id: 'msg-access', label: 'Access & Invitations', icon: 'M15 7a2 2 0 012 2m4 0a6 6 0 01-7.7 5.7L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.6a1 1 0 01.3-.7l5.9-5.9A6 6 0 1121 9z' },
@@ -79,6 +81,7 @@ const NAV: { group: string; items: { id: SectionId; label: string; icon: string 
   },
   {
     group: 'Trading',
+    color: 'amber',
     items: [
       { id: 'orbit', label: 'Orbit Management', icon: 'M12 21a9 9 0 100-18 9 9 0 000 18zm-9-9h18' },
       { id: 'moderation', label: 'Orbit Moderation', icon: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z' },
@@ -89,6 +92,7 @@ const NAV: { group: string; items: { id: SectionId; label: string; icon: string 
   },
   {
     group: 'System',
+    color: 'violet',
     items: [
       { id: 'settings', label: 'Settings', icon: 'M12 15a3 3 0 100-6 3 3 0 000 6zm7.4-3a7.4 7.4 0 00-.1-1.2l2.1-1.6-2-3.5-2.5 1a7.6 7.6 0 00-2-1.2L14.5 3h-5l-.4 2.5a7.6 7.6 0 00-2 1.2l-2.5-1-2 3.5 2.1 1.6a7.4 7.4 0 000 2.4L2.6 14.8l2 3.5 2.5-1a7.6 7.6 0 002 1.2l.4 2.5h5l.4-2.5a7.6 7.6 0 002-1.2l2.5 1 2-3.5-2.1-1.6c.1-.4.1-.8.1-1.2z' },
       { id: 'security', label: 'Security', icon: 'M19 11H5a2 2 0 00-2 2v7a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2zm-12 0V7a5 5 0 0110 0v4' },
@@ -109,6 +113,14 @@ function NavIcon({ d, size = 17 }: { d: string; size?: number }) {
     </svg>
   );
 }
+
+// Per-group accent colours so the admin menu reads at a glance.
+const GROUP_COLORS: Record<string, { head: string; tile: string; active: string; dot: string }> = {
+  blue: { head: 'text-blue-500', tile: 'bg-blue-500/10 text-blue-500', active: 'bg-blue-500/15 text-blue-600', dot: 'bg-blue-500' },
+  green: { head: 'text-emerald-500', tile: 'bg-emerald-500/10 text-emerald-500', active: 'bg-emerald-500/15 text-emerald-600', dot: 'bg-emerald-500' },
+  amber: { head: 'text-amber-500', tile: 'bg-amber-500/10 text-amber-500', active: 'bg-amber-500/15 text-amber-600', dot: 'bg-amber-500' },
+  violet: { head: 'text-violet-500', tile: 'bg-violet-500/10 text-violet-500', active: 'bg-violet-500/15 text-violet-600', dot: 'bg-violet-500' },
+};
 
 // ───────────────────────── Page shell ─────────────────────────
 
@@ -194,19 +206,24 @@ export default function AdminPage() {
               </button>
             </div>
             <div className="flex-1 px-2.5 py-3">
-              {NAV.map((group) => (
+              {NAV.map((group) => {
+                const gc = GROUP_COLORS[group.color] ?? GROUP_COLORS.blue;
+                return (
                 <div key={group.group} className="mb-4">
-                  <p className="px-2.5 pb-1.5 text-[10px] font-bold uppercase tracking-widest text-muted">{group.group}</p>
+                  <p className={`flex items-center gap-1.5 px-2.5 pb-1.5 text-[10px] font-bold uppercase tracking-widest ${gc.head}`}>
+                    <span className={`h-1.5 w-1.5 rounded-full ${gc.dot}`} />
+                    {group.group}
+                  </p>
                   <ul className="space-y-0.5">
                     {group.items.map((item) => (
                       <li key={item.id}>
                         <button
                           onClick={() => go(item.id)}
                           className={`flex w-full items-center gap-3 rounded-xl px-2.5 py-2.5 text-left text-[13px] font-medium transition-colors ${
-                            section === item.id ? 'bg-panel2 text-foreground' : 'text-muted hover:bg-panel hover:text-foreground'
+                            section === item.id ? gc.active : 'text-muted hover:bg-panel hover:text-foreground'
                           }`}
                         >
-                          <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${section === item.id ? 'bg-accent/15 text-accent' : 'bg-panel text-muted'}`}>
+                          <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${gc.tile}`}>
                             <NavIcon d={item.icon} size={15} />
                           </span>
                           {item.label}
@@ -215,7 +232,8 @@ export default function AdminPage() {
                     ))}
                   </ul>
                 </div>
-              ))}
+                );
+              })}
             </div>
           </nav>
           <style>{'@keyframes adm-slide{from{transform:translateX(100%)}to{transform:translateX(0)}}@keyframes adm-fade{from{opacity:0}to{opacity:1}}'}</style>

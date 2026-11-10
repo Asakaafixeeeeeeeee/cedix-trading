@@ -277,11 +277,11 @@ export default function MobileHome() {
 }
 
 function MenuSheet({ isAdmin, loggedIn, onClose }: { isAdmin: boolean; loggedIn: boolean; onClose: () => void }) {
+  void isAdmin; // admin access is intentionally not linked from the user app
   const items = [
     { href: '/m/settings', label: 'Settings', icon: <IconGear size={18} /> },
     { href: '/m/assets/history', label: 'Transaction history', icon: <IconClock size={18} /> },
     ...(loggedIn ? [] : [{ href: '/m/login', label: 'Log in / Sign up', icon: <IconChevronRight size={18} /> }]),
-    ...(isAdmin ? [{ href: '/admin/login', label: 'Admin dashboard', icon: <IconChevronRight size={18} /> }] : []),
   ];
   return (
     <div className="fixed inset-0 z-50 bg-black/60" onClick={onClose}>
