@@ -1,7 +1,90 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { jfetch, ConversationAvatar, type SenderInfo } from './shared';
+import { jfetch, type SenderInfo } from './shared';
+
+/**
+ * Notification-banner avatar — matches the iOS contact look exactly: a soft
+ * blue-grey circle with a white person silhouette, and the green Messages app
+ * icon (rounded square + white speech bubble) overlapping the bottom-right.
+ * Drawn as SVG so it stays sharp at any size.
+ */
+function BannerAvatar({ size = 40 }: { size?: number }) {
+  const badge = Math.round(size * 0.52);
+  return (
+    <div className="relative shrink-0" style={{ width: size, height: size }}>
+      <svg width={size} height={size} viewBox="0 0 100 100" aria-hidden>
+        <defs>
+          <linearGradient id="bannerAvBg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#b7c2da" />
+            <stop offset="1" stopColor="#8b95c4" />
+          </linearGradient>
+        </defs>
+        <circle cx="50" cy="50" r="50" fill="url(#bannerAvBg)" />
+        <g fill="#ffffff">
+          <circle cx="50" cy="39" r="17" />
+          <path d="M50 60c-17.5 0-29.7 10-32.7 23.6A49.8 49.8 0 0 0 50 100a49.8 49.8 0 0 0 32.7-16.4C79.7 70 67.5 60 50 60z" />
+        </g>
+      </svg>
+      {/* Green iMessage app icon badge, overlapping bottom-right */}
+      <svg
+        width={badge}
+        height={badge}
+        viewBox="0 0 100 100"
+        className="absolute"
+        style={{ right: -size * 0.08, bottom: -size * 0.04 }}
+        aria-hidden
+      >
+        <defs>
+          <linearGradient id="bannerMsgBg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#5BF675" />
+            <stop offset="1" stopColor="#1FC24B" />
+          </linearGradient>
+        </defs>
+        <rect x="2" y="2" width="96" height="96" rx="26" fill="url(#bannerMsgBg)" stroke="#ffffff" strokeWidth="3" />
+        <path
+          d="M50 26c-15.2 0-27.5 9.9-27.5 22.1 0 6.9 3.9 13 10 17-.6 3.6-2.1 6.9-4.5 9.6-.6.7 0 1.7.9 1.5 5.9-1 10.3-3.4 13.2-5.6 2.5.7 5.2 1 7.9 1 15.2 0 27.5-9.9 27.5-22.1S65.2 26 50 26z"
+          fill="#ffffff"
+        />
+      </svg>
+    </div>
+  );
+}
+
+/**
+ * Play a short marimba-style two-note chime (synthesized with Web Audio —
+ * not a copyrighted sound file) the instant the banner appears. Respects the
+ * user's in-app sound toggle. Fails silently if audio is blocked.
+ */
+function playNoteChime() {
+  try {
+    if (typeof window === 'undefined') return;
+    if (localStorage.getItem('cedix_msg_muted') === '1') return;
+    const AC = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    if (!AC) return;
+    const ctx = new AC();
+    const now = ctx.currentTime;
+    const notes = [
+      { f: 1396.91, t: 0 }, // F6
+      { f: 1864.66, t: 0.13 }, // A#6
+    ];
+    for (const n of notes) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.value = n.f;
+      gain.gain.setValueAtTime(0.0001, now + n.t);
+      gain.gain.exponentialRampToValueAtTime(0.42, now + n.t + 0.008);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + n.t + 0.33);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(now + n.t);
+      osc.stop(now + n.t + 0.38);
+    }
+    setTimeout(() => ctx.close().catch(() => {}), 1200);
+  } catch {
+    /* audio unavailable/blocked — ignore */
+  }
+}
 
 type Conversation = {
   id: string;
@@ -24,7 +107,6 @@ export default function MessageNotifier() {
   const pathRef = useRef(pathname);
   pathRef.current = pathname;
   const [banner, setBanner] = useState<{ convId: string; title: string; body: string } | null>(null);
-  const [sender, setSender] = useState<SenderInfo>(null);
   const seen = useRef<Map<string, string>>(new Map()); // convId -> last message createdAt
   const primed = useRef(false);
 
@@ -48,7 +130,6 @@ export default function MessageNotifier() {
             seen.current.set(c.id, c.last.createdAt);
             // Don't banner the conversation the user is already reading.
             if (pathRef.current?.includes(`/messages/t/${c.id}`)) break;
-            setSender(c.sender);
             setBanner({ convId: c.id, title: c.name, body: c.last.title ? `${c.last.title} ${c.last.body}` : c.last.body });
             break;
           }
@@ -71,7 +152,6 @@ export default function MessageNotifier() {
     <NotificationBanner
       title={banner.title}
       body={banner.body}
-      sender={sender}
       onOpen={() => {
         const id = banner.convId;
         setBanner(null);
@@ -85,14 +165,12 @@ export default function MessageNotifier() {
 export function NotificationBanner({
   title,
   body,
-  sender,
   onOpen,
   onDismiss,
   autoDismissMs = 5000,
 }: {
   title: string;
   body: string;
-  sender: SenderInfo;
   onOpen: () => void;
   onDismiss: () => void;
   autoDismissMs?: number;
@@ -106,8 +184,10 @@ export function NotificationBanner({
     setTimeout(onDismiss, 220);
   };
 
-  // Auto-dismiss after the configured duration (default 5 seconds).
+  // Auto-dismiss after the configured duration (default 5 seconds), and play
+  // the chime the instant the banner appears (simultaneous with the visual).
   useEffect(() => {
+    playNoteChime();
     if (autoDismissMs <= 0) return;
     const t = setTimeout(dismiss, autoDismissMs);
     return () => clearTimeout(t);
@@ -140,15 +220,8 @@ export function NotificationBanner({
         }}
       >
         <div className="flex items-start gap-2.5">
-          {/* Profile icon with small message badge overlay */}
-          <div className="relative shrink-0">
-            <ConversationAvatar sender={sender} size={38} />
-            <span className="absolute -bottom-0.5 -right-0.5 flex h-[17px] w-[17px] items-center justify-center rounded-full bg-[#34c759] ring-2 ring-white/70">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="#fff">
-                <path d="M12 3C6.5 3 2 6.6 2 11c0 2.2 1.1 4.2 2.9 5.6-.2 1-.6 1.9-1.3 2.6-.2.2 0 .6.3.5 1.5-.2 2.8-.7 3.7-1.5.8.2 1.6.3 2.4.3 5.5 0 10-3.6 10-8S17.5 3 12 3z" />
-              </svg>
-            </span>
-          </div>
+          {/* Profile icon matching the iOS contact look (reference image) */}
+          <BannerAvatar size={40} />
           <div className="min-w-0 flex-1">
             <div className="flex items-baseline justify-between gap-2">
               <span className="msg-name truncate text-[15px] font-bold text-[#1c1c1e]">{title}</span>
